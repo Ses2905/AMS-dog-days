@@ -1,0 +1,70 @@
+{
+ "nearDuplicates": [
+  {
+   "first": "Hagan",
+   "last": "Goodwin",
+   "grade": 8,
+   "numbers": [
+    2
+   ],
+   "closest": "hagen goodwin"
+  },
+  {
+   "first": "Brentley",
+   "last": "Carmell",
+   "grade": 8,
+   "numbers": [
+    44
+   ],
+   "closest": "brently carmell"
+  },
+  {
+   "first": "Haeden",
+   "last": "Denton",
+   "grade": 8,
+   "numbers": [
+    58
+   ],
+   "closest": "haedyn denton"
+  }
+ ],
+ "notOnSignOut": [
+  {
+   "first": "Isaiah",
+   "last": "Smith",
+   "grade": 9,
+   "numbers": [
+    36
+   ],
+   "closest": null
+  },
+  {
+   "first": "Adrian",
+   "last": "Minser",
+   "grade": 9,
+   "numbers": [
+    40
+   ],
+   "closest": null
+  },
+  {
+   "first": "Brayden",
+   "last": "Davis",
+   "grade": 8,
+   "numbers": [
+    1,
+    2
+   ],
+   "closest": null
+  },
+  {
+   "first": "Loren",
+   "last": "Painter",
+   "grade": 8,
+   "numbers": [
+    76
+   ],
+   "closest": null
+  }
+ ]
+}

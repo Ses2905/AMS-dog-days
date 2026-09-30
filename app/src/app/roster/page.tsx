@@ -1,4 +1,5 @@
-import { roster } from "@/data/roster";
+import { getPlayers } from "@/lib/db";
+import reviewNotes from "@/data/roster-review.json";
 
 function distance(a: string, b: string) {
   const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
@@ -9,8 +10,9 @@ function distance(a: string, b: string) {
   return d[a.length][b.length];
 }
 
-export default function RosterPage() {
-  const players = [...roster.players].sort((a, b) => a.number - b.number);
+export default async function RosterPage() {
+  const players = await getPlayers();
+  const roster = reviewNotes;
   // Same last name, same grade, first names within 2 letters: probably one kid spelled two ways.
   const lookAlikes = players.flatMap((a, i) =>
     players.slice(i + 1).filter((b) => a.last.toLowerCase() === b.last.toLowerCase() && a.grade === b.grade && distance(a.first.toLowerCase(), b.first.toLowerCase()) <= 2).map((b) => [a, b] as const),
