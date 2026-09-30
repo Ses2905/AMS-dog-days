@@ -5,10 +5,12 @@ import { addPlayerToPosition, addPosition, deletePosition, movePlayer, removePla
 import { analyze, DEPTH_LABEL, UNITS, type DepthPosition, type DepthSlot, type Row, type Unit } from "@/lib/depth";
 import type { Player } from "@/lib/types";
 import { PageHeader } from "./PageHeader";
-import { btnDanger, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { btnDanger, btnIcon, btnOutline, btnPlain, btnPrimary, inputCls, tab } from "./ui";
+import { Icon } from "./Icon";
+import { Pill, type PillTone } from "./Pill";
 
 const ORD = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
-const DEPTH_CHIP: Record<Row["depth"], string> = { short: "bg-red-100 text-red-800", thin: "bg-[#f6efc9] text-[#5b4d0b]", ok: "bg-green-900/10 text-green-900" };
+const DEPTH_TONE: Record<Row["depth"], PillTone> = { short: "red", thin: "gold", ok: "green" };
 
 function PositionCard({ row, players, ideas, editing }: { row: Row; players: Player[]; ideas: Record<string, string[]>; editing: boolean }) {
   const [pick, setPick] = useState("");
@@ -26,7 +28,7 @@ function PositionCard({ row, players, ideas, editing }: { row: Row; players: Pla
       <div className="flex flex-wrap items-center gap-2">
         <h2>{p.name}</h2>
         <span className="text-sm text-neutral-600">{p.starters} starter{p.starters === 1 ? "" : "s"}</span>
-        <span className={`ml-auto rounded-full px-3 py-0.5 text-xs font-bold ${DEPTH_CHIP[row.depth]}`}>{DEPTH_LABEL[row.depth]}</span>
+        <Pill tone={DEPTH_TONE[row.depth]} className="ml-auto">{DEPTH_LABEL[row.depth]}</Pill>
       </div>
       {editing && (
         <div className="grid gap-2 rounded-lg bg-wash p-3 sm:grid-cols-[1fr_auto_auto_auto]">
@@ -43,13 +45,13 @@ function PositionCard({ row, players, ideas, editing }: { row: Row; players: Pla
               <span className="font-display w-10 shrink-0 text-lg font-semibold text-neutral-500">{ORD[rank - 1] ?? `${rank}th`}</span>
               <span className="min-w-0 flex-1">
                 <span className="font-display text-xl font-semibold">#{player.number}</span> <span className="font-medium">{player.first} {player.last}</span> <span className="text-xs text-neutral-500">{player.grade}th</span>
-                {unavailable && <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-800">{unavailable === "limited" ? "Limited" : unavailable === "out" ? "Out" : "Excused"}</span>}
+                {unavailable && <Pill tone="red" className="ml-2">{unavailable === "limited" ? "Limited" : unavailable === "out" ? "Out" : "Excused"}</Pill>}
                 {alsoAt.length > 0 && <span className="ml-2 text-xs text-neutral-600">also {alsoAt.join(", ")}</span>}
               </span>
               <span className="flex gap-1">
-                <button className={`${btnPlain} min-w-12 px-0`} aria-label={`Move ${player.last} up`} disabled={pending || rank === 1} onClick={() => run(() => movePlayer(p.id, player.id, -1))}>↑</button>
-                <button className={`${btnPlain} min-w-12 px-0`} aria-label={`Move ${player.last} down`} disabled={pending || rank === row.players.length} onClick={() => run(() => movePlayer(p.id, player.id, 1))}>↓</button>
-                <button className={`${btnDanger} px-3`} aria-label={`Remove ${player.last}`} disabled={pending} onClick={() => run(() => removePlayerFromPosition(p.id, player.id))}>✕</button>
+                <button className={btnIcon} aria-label={`Move ${player.last} up`} disabled={pending || rank === 1} onClick={() => run(() => movePlayer(p.id, player.id, -1))}>↑</button>
+                <button className={btnIcon} aria-label={`Move ${player.last} down`} disabled={pending || rank === row.players.length} onClick={() => run(() => movePlayer(p.id, player.id, 1))}>↓</button>
+                <button className={`${btnIcon} !text-red-700`} aria-label={`Remove ${player.last}`} disabled={pending} onClick={() => run(() => removePlayerFromPosition(p.id, player.id))}>✕</button>
               </span>
             </li>
           ))}
@@ -82,12 +84,12 @@ export function DepthChartView({ positions, slots, players, ideas, date }: { pos
   return (
     <div className="space-y-4">
       <PageHeader title="Depth Chart" subtitle={`${flagged} of ${rows.length} positions need attention · ${unplaced.length} players not placed yet`}>
-        <button className={btnOutline} onClick={() => setEditing(!editing)}>{editing ? "Done Editing" : "Edit Positions"}</button>
+        <button className={btnOutline} onClick={() => setEditing(!editing)}>{editing ? "Done Editing" : <><Icon name="pencil" />Edit Positions</>}</button>
       </PageHeader>
 
       <div role="tablist" className="flex gap-2 overflow-x-auto">
         {UNITS.map((u) => (
-          <button key={u.value} role="tab" aria-selected={unit === u.value} onClick={() => setUnit(u.value)} className={`min-h-12 whitespace-nowrap rounded-lg px-4 font-semibold ${unit === u.value ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>{u.label}</button>
+          <button key={u.value} role="tab" aria-selected={unit === u.value} onClick={() => setUnit(u.value)} className={tab(unit === u.value)}>{u.label}</button>
         ))}
       </div>
 
@@ -100,7 +102,7 @@ export function DepthChartView({ positions, slots, players, ideas, date }: { pos
         <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
           <h2>Add a Position to {UNITS.find((u) => u.value === unit)!.label}</h2>
           <div className="grid gap-2 sm:grid-cols-[1fr_auto_auto]">
-            <input className={`${inputCls} mt-0`} value={name} maxLength={30} onChange={(e) => setName(e.target.value)} placeholder="Nose Guard, Slot, Kick Returner" aria-label="New position name" />
+            <input className={`${inputCls} mt-0`} value={name} maxLength={30} onChange={(e) => setName(e.target.value)} placeholder="e.g. Nose Guard, Slot, Kick Returner" aria-label="New position name" />
             <input className={`${inputCls} mt-0 sm:w-24`} type="number" min={1} max={11} value={starters} onChange={(e) => setStarters(e.target.value)} aria-label="Starters" />
             <button className={btnPrimary} disabled={pending || !name.trim()} onClick={() => start(async () => { const r = await addPosition({ unit, name, starters }); if (r.error) setError(r.error); else { setError(""); setName(""); setStarters("1"); } })}>Add</button>
           </div>

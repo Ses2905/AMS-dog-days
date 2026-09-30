@@ -9,6 +9,8 @@ import { GameForm } from "./GameForm";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { btnOutline, btnPrimary } from "./ui";
+import { Icon } from "./Icon";
+import { Pill } from "./Pill";
 
 type Filters = { q: string; when: "all" | "upcoming" | "past"; site: "all" | "home" | "away"; level: "all" | "jr" | "jrjv" | "jv" | "varsity" };
 const NONE: Filters = { q: "", when: "upcoming", site: "all", level: "all" };
@@ -29,13 +31,13 @@ export function GamesView({ games, today }: { games: Game[]; today: string }) {
   return (
     <div className="space-y-4">
       <PageHeader title={`Games · ${games.length}`} subtitle={upcoming > 0 ? `${upcoming} coming up` : "Nothing scheduled yet"}>
-        <Link href="/calendar?show=game" className={btnOutline}>Calendar</Link>
-        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add game"}</button>
+        <Link href="/calendar?show=game" className={btnOutline}><Icon name="calendar" />Calendar</Link>
+        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? <><Icon name="x" />Close</> : <><Icon name="plus" />Add Game</>}</button>
       </PageHeader>
 
       {adding && (
         <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-          <h2>Add a game</h2>
+          <h2>Add a Game</h2>
           <GameForm defaultDate={today} onDone={() => setAdding(false)} />
         </section>
       )}
@@ -61,14 +63,14 @@ export function GamesView({ games, today }: { games: Game[]; today: string }) {
             <li key={g.id} className="border-b border-neutral-200 last:border-0">
               <Link href={`/games/${g.id}`} className="flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-wash">
                 <span className="min-w-0 flex-1">
-                  <span className="font-display flex flex-wrap items-center gap-2 text-xl font-semibold uppercase tracking-wide">{vsLabel(g)}<span className="rounded-full bg-neutral-200 px-2 py-0.5 font-sans text-xs font-semibold normal-case tracking-normal text-neutral-700">{levelLabel(g.level)}</span></span>
+                  <span className="font-display flex flex-wrap items-center gap-2 text-xl font-semibold uppercase tracking-wide">{vsLabel(g)}<Pill>{levelLabel(g.level)}</Pill></span>
                   <span className="block text-sm text-neutral-600">{prettyDate(g.date)}{g.time ? ` · ${g.time}` : ""}{g.location ? ` · ${g.location}` : ""}{g.kind !== "game" ? ` · ${g.kind}` : ""}</span>
                   {sameNight.length > 0 && <span className="mt-1 block text-xs font-semibold text-[#6b5b12]">Same night: {sameNight.map((o) => `${levelLabel(o.level)}${o.time ? ` ${o.time}` : ""}`).join(", ")}</span>}
                 </span>
                 {res ? (
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${res.startsWith("W") ? "bg-green-600/10 text-green-900" : res.startsWith("L") ? "bg-red-100 text-red-800" : "bg-neutral-200 text-neutral-700"}`}>{res}</span>
+                  <Pill tone={res.startsWith("W") ? "green" : res.startsWith("L") ? "red" : "grey"}>{res}</Pill>
                 ) : (
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${p.done === p.total ? "bg-green-600/10 text-green-900" : "bg-neutral-200 text-neutral-800"}`}>Prep {p.done}/{p.total}</span>
+                  <Pill tone={p.done === p.total ? "green" : "grey"}>Prep {p.done}/{p.total}</Pill>
                 )}
               </Link>
             </li>

@@ -9,15 +9,12 @@ import { prettyDate } from "@/lib/time";
 import type { Player } from "@/lib/types";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
+import { Pill, type PillTone } from "./Pill";
 import { PlayerForm } from "./PlayerForm";
-import { btnOutline, btnPrimary } from "./ui";
+import { btnOutline, btnPlain, btnPrimary } from "./ui";
+import { Icon } from "./Icon";
 
-const chip: Record<Status, string> = {
-  available: "bg-green-600/10 text-green-900",
-  limited: "bg-[#f1ecd3] text-[#6b5b12]",
-  out: "bg-red-100 text-red-800",
-  excused: "bg-neutral-200 text-neutral-700",
-};
+const STATUS_TONE: Record<Status, PillTone> = { available: "green", limited: "gold", out: "red", excused: "grey" };
 
 function Row({ p, today }: { p: Player; today: string }) {
   const [open, setOpen] = useState(false);
@@ -45,7 +42,7 @@ function Row({ p, today }: { p: Player; today: string }) {
           {p.otherNumbers.length > 0 && <span className="block text-xs text-neutral-500">also #{p.otherNumbers.join(", #")}</span>}
           {shown !== "available" && p.statusNote && <span className="block truncate text-xs text-neutral-600">{p.statusNote}{p.statusUntil ? ` · through ${prettyDate(p.statusUntil)}` : ""}</span>}
         </span>
-        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${chip[shown]}`}>{STATUS_LABEL[shown]}</span>
+        <Pill tone={STATUS_TONE[shown]}>{STATUS_LABEL[shown]}</Pill>
       </button>
       {open && (
         <div className="space-y-3 bg-wash px-3 py-3">
@@ -59,7 +56,7 @@ function Row({ p, today }: { p: Player; today: string }) {
           {status !== "available" && (
             <div className="grid gap-2 sm:grid-cols-2">
               <label className="text-sm font-medium">Note (optional)
-                <input className="mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ankle, family trip…" />
+                <input className="mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base" value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. Ankle, family trip…" />
               </label>
               <label className="text-sm font-medium">Through (optional)
                 <input type="date" className="mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base" value={until} onChange={(e) => setUntil(e.target.value)} />
@@ -68,9 +65,9 @@ function Row({ p, today }: { p: Player; today: string }) {
           )}
           <div className="flex flex-wrap items-center gap-2">
             <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
-            <Link href={`/roster/${p.id}/edit`} className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium">Edit details</Link>
-            <button onClick={() => setOpen(false)} className="min-h-12 rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium">Cancel</button>
-            <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : "Save"}</button>
+            <Link href={`/roster/${p.id}/edit`} className={btnPlain}><Icon name="pencil" />Edit Details</Link>
+            <button onClick={() => setOpen(false)} className={btnPlain}>Cancel</button>
+            <button onClick={save} disabled={pending} className={btnPrimary}>{pending ? "Saving…" : <><Icon name="check" />Save</>}</button>
           </div>
         </div>
       )}
@@ -95,15 +92,15 @@ export function TeamView({ players, today, children }: { players: Player[]; toda
   return (
     <div className="space-y-4">
       <PageHeader title={`Team · ${players.length} players`}>
-        <Link href="/roster/high-school" className={btnOutline}>High school</Link>
-        <Link href="/depth" className={btnOutline}>Depth chart</Link>
+        <Link href="/roster/high-school" className={btnOutline}>High School</Link>
+        <Link href="/depth" className={btnOutline}>Depth Chart</Link>
         <Link href="/coaches" className={btnOutline}>Coaches</Link>
-        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add player"}</button>
+        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? <><Icon name="x" />Close</> : <><Icon name="plus" />Add Player</>}</button>
       </PageHeader>
 
       {adding && (
         <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-          <h2>Add a player</h2>
+          <h2>Add a Player</h2>
           <PlayerForm players={players} onDone={() => setAdding(false)} />
         </section>
       )}

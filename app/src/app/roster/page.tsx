@@ -28,7 +28,7 @@ export default async function RosterPage() {
       <AvailabilitySummary players={players} date={today} />
 
       <section className="rounded-xl border border-gold-500 bg-[#f8f4e3] p-4">
-        <h2 className="font-semibold">Needs your review before this roster is final</h2>
+        <h2 className="font-semibold">Needs Your Review Before This Roster Is Final</h2>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
           <li>
             <b>{flagged.length} players</b> have a different jersey number on another list (shown as “also #”). Confirm the right one.

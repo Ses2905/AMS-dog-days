@@ -9,6 +9,7 @@ import type { WorkflowResult } from "@/lib/ai/run";
 import { prettyDate } from "@/lib/time";
 import { Prose } from "./Prose";
 import { btnDanger, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { Icon } from "./Icon";
 
 type Choice = { id: string; label: string };
 
@@ -61,7 +62,7 @@ export function WorkflowsPanel({ games, players, saved }: { games: Choice[]; pla
           {w.subject !== "none" && (
             <label className="block text-sm font-semibold">{w.subjectHint}
               <select className={inputCls} value={subject} onChange={(e) => setSubject(e.target.value)}>
-                <option value="">{w.subjectHint.includes("optional") ? "No specific game" : "Choose one"}</option>
+                <option value="">{w.subjectHint.includes("optional") ? "No specific game" : "Choose One"}</option>
                 {options.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
               </select>
             </label>
@@ -77,11 +78,11 @@ export function WorkflowsPanel({ games, players, saved }: { games: Choice[]; pla
               <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Draft. Check it before you use it.</p>
               <Prose text={res.body} />
               <div className="flex flex-wrap items-center gap-2">
-                <button className={btnOutline} onClick={copy}>Copy</button>
-                <button className={btnOutline} disabled={pending} onClick={keep}>Save Result</button>
-                {res.kind === "script" && <button className={btnPrimary} disabled={pending || !!scriptId} onClick={toScript}>Add to Scripts</button>}
-                <button className={btnPlain} disabled={pending} onClick={run}>Try Again</button>
-                {note && <span className="text-sm font-semibold text-green-900">{note}{scriptId && <Link className="underline" href={`/scripts/${scriptId}`}>Open it</Link>}</span>}
+                <button className={btnOutline} onClick={copy}><Icon name="copy" />Copy</button>
+                <button className={btnOutline} disabled={pending} onClick={keep}><Icon name="check" />Save Result</button>
+                {res.kind === "script" && <button className={btnPrimary} disabled={pending || !!scriptId} onClick={toScript}><Icon name="plus" />Add to Scripts</button>}
+                <button className={btnPlain} disabled={pending} onClick={run}><Icon name="retry" />Try Again</button>
+                {note && <span className="text-sm font-semibold text-green-900">{note}{scriptId && <Link className="underline" href={`/scripts/${scriptId}`}>Open It<Icon name="chevron-right" /></Link>}</span>}
               </div>
             </div>
           )}

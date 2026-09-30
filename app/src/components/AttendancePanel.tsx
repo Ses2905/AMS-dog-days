@@ -5,7 +5,7 @@ import { markEveryonePresent, setAttendance } from "@/app/practice/[id]/attendan
 import { MARKS, MARK_LABEL, tally, type Mark } from "@/lib/attendance";
 import { statusOn, STATUS_LABEL } from "@/lib/availability";
 import type { Player } from "@/lib/types";
-import { btnOutline } from "./ui";
+import { btnOutline, chip } from "./ui";
 
 const ON: Record<Mark, string> = { present: "bg-green-900 text-white", late: "bg-gold-500 text-green-900", absent: "bg-red-700 text-white", excused: "bg-neutral-500 text-white" };
 
@@ -51,9 +51,9 @@ export function AttendancePanel({ practiceId, date, players, initial }: { practi
       <p className="text-xs text-neutral-600">Skips anyone marked out or excused on the roster. Tap a mark again to clear it.</p>
       <div className="flex flex-wrap gap-2" role="group" aria-label="Filter attendance list">
         {([["all", "All"], [9, "9th"], [8, "8th"]] as const).map(([v, label]) => (
-          <button key={label} aria-pressed={grade === v} onClick={() => setGrade(v)} className={`min-h-10 rounded-full px-4 text-sm font-semibold ${grade === v ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>{label}</button>
+          <button key={label} aria-pressed={grade === v} onClick={() => setGrade(v)} className={chip(grade === v)}>{label}</button>
         ))}
-        <button aria-pressed={onlyUnmarked} onClick={() => setOnlyUnmarked(!onlyUnmarked)} className={`min-h-10 rounded-full px-4 text-sm font-semibold ${onlyUnmarked ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>Not Marked ({t.unmarked})</button>
+        <button aria-pressed={onlyUnmarked} onClick={() => setOnlyUnmarked(!onlyUnmarked)} className={chip(onlyUnmarked)}>Not Marked ({t.unmarked})</button>
       </div>
       {error && <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
       <ul className="divide-y divide-neutral-200">

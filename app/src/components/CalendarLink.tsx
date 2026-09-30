@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { resetCalendarLink } from "@/app/settings/actions";
 import { btnDanger, btnOutline } from "./ui";
+import { Icon } from "./Icon";
 
 /** The private subscribe link, with copy, reset, and how to add it to the iPhone and Google calendars. */
 export function CalendarLink({ url }: { url: string }) {
@@ -15,7 +16,7 @@ export function CalendarLink({ url }: { url: string }) {
       <p className="text-sm text-neutral-700">Add every practice and game to the calendar app on a phone. It updates by itself. Anyone with this link can see the schedule (no player names), so keep it private.</p>
       <input readOnly value={url} onFocus={(e) => e.currentTarget.select()} aria-label="Private calendar link" className="min-h-12 w-full rounded-lg border border-neutral-300 bg-wash px-3 text-sm" />
       <div className="flex flex-wrap items-center gap-2">
-        <button className={btnOutline} onClick={copy}>Copy Link</button>
+        <button className={btnOutline} onClick={copy}><Icon name="copy" />Copy Link</button>
         <button className={btnDanger} disabled={pending} onClick={() => { if (window.confirm("Make a new link? The old one stops working and phones using it will need the new one.")) start(async () => { const r = await resetCalendarLink(); setNote(r.error || "New link made. Copy it again."); }); }}>Make a New Link</button>
         {note && <span className="text-sm font-semibold text-green-900">{note}</span>}
       </div>

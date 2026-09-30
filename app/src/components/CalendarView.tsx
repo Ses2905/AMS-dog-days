@@ -6,10 +6,12 @@ import { prettyDate } from "@/lib/time";
 import type { Practice } from "@/lib/types";
 import type { SlotStatus } from "@/lib/week";
 import { PageHeader } from "./PageHeader";
-import { btnPlain } from "./ui";
+import { btnIcon, btnPlain, chip } from "./ui";
+import { Icon } from "./Icon";
+import { Pill, type PillTone } from "./Pill";
 
 const STATUS_LABEL: Record<SlotStatus, string> = { done: "Done", "in-progress": "In progress", "later-today": "Later today", planned: "Planned", "needs-plan": "Needs a plan", "no-plan": "No plan on file" };
-const STATUS_STYLE: Record<SlotStatus, string> = { done: "bg-green-600/10 text-green-900", "in-progress": "bg-gold-500 text-green-900", "later-today": "bg-neutral-200 text-neutral-800", planned: "bg-neutral-200 text-neutral-800", "needs-plan": "bg-red-100 text-red-800", "no-plan": "bg-neutral-100 text-neutral-500" };
+const STATUS_TONE: Record<SlotStatus, PillTone> = { done: "green", "in-progress": "gold", "later-today": "grey", planned: "grey", "needs-plan": "red", "no-plan": "quiet" };
 
 type Params = { view: CalView; show: CalKind; level: string; anchor: string };
 const href = (p: Params, patch: Partial<Params>) => {
@@ -23,7 +25,7 @@ const href = (p: Params, patch: Partial<Params>) => {
 };
 
 function Chip({ on, to, children }: { on: boolean; to: string; children: React.ReactNode }) {
-  return <Link href={to} aria-current={on ? "true" : undefined} className={`inline-flex min-h-10 items-center rounded-full px-4 text-sm font-semibold ${on ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>{children}</Link>;
+  return <Link href={to} aria-current={on ? "true" : undefined} className={chip(on)}>{children}</Link>;
 }
 
 function Row({ item }: { item: CalItem }) {
@@ -33,13 +35,13 @@ function Row({ item }: { item: CalItem }) {
       <Link href={item.href} className={`flex min-h-14 items-center gap-3 px-4 py-2 hover:bg-wash ${game ? "bg-[#f1ecd3]" : ""}`}>
         <span className="min-w-0 flex-1">
           <span className="flex flex-wrap items-center gap-2">
-            {game ? <span className="rounded-full bg-gold-500 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-green-900">{item.badge}</span> : null}
+            {game ? <Pill tone="gold">{item.badge}</Pill> : null}
             <span className={game ? "font-display text-xl font-semibold uppercase tracking-wide" : "font-medium"}>{item.title}</span>
-            {item.status && <span className={`rounded-full px-3 py-0.5 text-xs font-semibold ${STATUS_STYLE[item.status]}`}>{STATUS_LABEL[item.status]}</span>}
+            {item.status && <Pill tone={STATUS_TONE[item.status]}>{STATUS_LABEL[item.status]}</Pill>}
           </span>
           <span className="block text-sm text-neutral-600">{item.detail}</span>
         </span>
-        <span className="text-sm font-semibold text-green-900">{item.empty ? "Plan it" : "Open"}</span>
+        <span className="text-sm font-semibold text-green-900">{item.empty ? "Plan It" : "Open"}</span>
       </Link>
     </li>
   );
@@ -62,20 +64,28 @@ export function CalendarView({ view, show, level, anchor, practices, games, now 
         <Chip on={view === "month"} to={href(p, { view: "month" })}>Month</Chip>
       </PageHeader>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <Link href={href(p, { anchor: shiftAnchor(view, anchor, -1) })} className={`${btnPlain} min-w-12`} aria-label={`Previous ${view}`}>←</Link>
-        <Link href={href(p, { anchor: now.today })} className={btnPlain}>Today</Link>
-        <Link href={href(p, { anchor: shiftAnchor(view, anchor, 1) })} className={`${btnPlain} min-w-12`} aria-label={`Next ${view}`}>→</Link>
-        <span className="mx-1 hidden h-6 w-px bg-neutral-300 sm:block" aria-hidden />
-        <Chip on={show === "all"} to={href(p, { show: "all" })}>All</Chip>
-        <Chip on={show === "practice"} to={href(p, { show: "practice" })}>Practices</Chip>
-        <Chip on={show === "game"} to={href(p, { show: "game" })}>Games</Chip>
+      <div className="space-y-3 rounded-xl bg-white p-3 shadow-sm">
+        <div className="flex items-center gap-2">
+          <Link href={href(p, { anchor: shiftAnchor(view, anchor, -1) })} className={btnIcon} aria-label={`Previous ${view}`}><Icon name="chevron-left" /></Link>
+          <Link href={href(p, { anchor: now.today })} className={btnPlain}>Today</Link>
+          <Link href={href(p, { anchor: shiftAnchor(view, anchor, 1) })} className={btnIcon} aria-label={`Next ${view}`}><Icon name="chevron-right" /></Link>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="min-w-16 text-xs font-semibold uppercase tracking-wide text-neutral-500">Show</span>
+          <div className="flex gap-2 overflow-x-auto py-0.5">
+            <Chip on={show === "all"} to={href(p, { show: "all" })}>All</Chip>
+            <Chip on={show === "practice"} to={href(p, { show: "practice" })}>Practices</Chip>
+            <Chip on={show === "game"} to={href(p, { show: "game" })}>Games</Chip>
+          </div>
+        </div>
         {show !== "practice" && (
-          <>
-            <span className="mx-1 hidden h-6 w-px bg-neutral-300 sm:block" aria-hidden />
-            <Chip on={level === "all"} to={href(p, { level: "all" })}>Every team</Chip>
-            {LEVELS.map((l) => <Chip key={l.value} on={level === l.value} to={href(p, { level: l.value })}>{l.label}</Chip>)}
-          </>
+          <div className="flex items-center gap-2">
+            <span className="min-w-16 text-xs font-semibold uppercase tracking-wide text-neutral-500">Team</span>
+            <div className="flex gap-2 overflow-x-auto py-0.5">
+              <Chip on={level === "all"} to={href(p, { level: "all" })}>Every Team</Chip>
+              {LEVELS.map((l) => <Chip key={l.value} on={level === l.value} to={href(p, { level: l.value })}>{l.label}</Chip>)}
+            </div>
+          </div>
         )}
       </div>
 
@@ -109,7 +119,7 @@ export function CalendarView({ view, show, level, anchor, practices, games, now 
           <section key={d} className="overflow-hidden rounded-xl bg-white shadow-sm">
             <h2 className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2 text-lg">
               {prettyDate(d)}
-              {d === now.today && <span className="rounded-full bg-gold-500 px-2 py-0.5 font-sans text-xs font-semibold normal-case tracking-normal text-green-900">Today</span>}
+              {d === now.today && <Pill tone="gold">Today</Pill>}
             </h2>
             {(byDay.get(d) ?? []).length === 0 ? <p className="px-4 py-3 text-sm text-neutral-600">Nothing scheduled.</p> : <ul className="divide-y divide-neutral-200">{byDay.get(d)!.map((it) => <Row key={it.key} item={it} />)}</ul>}
           </section>

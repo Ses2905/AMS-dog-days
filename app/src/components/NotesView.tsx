@@ -9,6 +9,8 @@ import { prettyDate } from "@/lib/time";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { btnDanger, btnPlain, btnPrimary, inputCls } from "./ui";
+import { Icon } from "./Icon";
+import { Pill } from "./Pill";
 
 type Choice = { id: string; label: string };
 type Lookups = { players: Choice[]; coaches: Choice[]; practices: Choice[]; games: Choice[] };
@@ -42,7 +44,7 @@ function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initi
         ))}
       </div>
       <label className="block text-sm font-medium">{kind === "action" ? "What needs to happen?" : "What do you want to remember?"}
-        <textarea className={`${inputCls} min-h-28 py-2`} value={body} onChange={(e) => setBody(e.target.value)} autoFocus={!note} placeholder={kind === "action" ? "Send Pea Ridge film to Coursey" : "Tap the microphone on your keyboard to talk instead of type"} />
+        <textarea className={`${inputCls} min-h-28 py-2`} value={body} onChange={(e) => setBody(e.target.value)} autoFocus={!note} placeholder={kind === "action" ? "e.g. Send Pea Ridge film to Coach Coursey" : "Type, or tap the microphone on your keyboard to talk"} />
       </label>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-medium">About a player (optional)
@@ -72,9 +74,9 @@ function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initi
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
-        {note && <button className={btnDanger} disabled={pending} onClick={remove}>Delete</button>}
+        {note && <button className={btnDanger} disabled={pending} onClick={remove}><Icon name="trash" />Delete</button>}
         <button className={btnPlain} onClick={onDone}>Cancel</button>
-        <button className={`${btnPrimary} px-6`} disabled={pending} onClick={save}>{pending ? "Saving…" : "Save"}</button>
+        <button className={btnPrimary} disabled={pending} onClick={save}>{pending ? "Saving…" : <><Icon name="check" />Save</>}</button>
       </div>
     </div>
   );
@@ -102,14 +104,14 @@ function Row({ note, lookups, today }: { note: Note; lookups: Lookups; today: st
       <div className="flex items-start gap-1 px-2 py-1">
         {action ? (
           <button onClick={toggle} disabled={pending} aria-label={done ? "Mark as not done" : "Mark as done"} aria-pressed={done} className="flex min-h-12 min-w-12 items-center justify-center">
-            <span className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-sm font-bold ${done ? "border-green-900 bg-green-900 text-white" : "border-neutral-400 bg-white"}`}>{done ? "✓" : ""}</span>
+            <span className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-sm font-bold ${done ? "border-green-900 bg-green-900 text-white" : "border-neutral-400 bg-white"}`}>{done ? <Icon name="check" size={16} /> : null}</span>
           </button>
         ) : <span className="min-w-3" />}
         <button className="min-h-14 min-w-0 flex-1 py-2 pr-2 text-left" aria-expanded={open} onClick={() => setOpen(!open)}>
           <p className={`whitespace-pre-wrap ${done ? "text-neutral-500 line-through" : ""}`}>{note.body}</p>
           <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-600">
-            <span className={`rounded-full px-2 py-0.5 font-semibold ${action ? "bg-gold-500 text-green-900" : "bg-neutral-200 text-neutral-700"}`}>{action ? "Action" : "Note"}</span>
-            {note.category && <span className="rounded-full bg-green-900/10 px-2 py-0.5 font-semibold text-green-900">{categoryLabel(note.category)}</span>}
+            <Pill tone={action ? "gold" : "grey"}>{action ? "Action" : "Note"}</Pill>
+            {note.category && <Pill tone="green">{categoryLabel(note.category)}</Pill>}
             {action && note.due && !done && <span className={overdue ? "font-semibold text-red-800" : ""}>{overdue ? "Overdue · " : "Due "}{prettyDate(note.due)}</span>}
             {meta.map((m) => <span key={m}>{m}</span>)}
             <span>{prettyDate(note.created.slice(0, 10))}</span>
@@ -135,13 +137,13 @@ export function NotesView({ notes, lookups, today, initial }: { notes: Note[]; l
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Notes & actions" subtitle={open > 0 ? `${open} open action item${open === 1 ? "" : "s"}` : "No open action items"}>
-        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add note"}</button>
+      <PageHeader title="Notes & Actions" subtitle={open > 0 ? `${open} open action item${open === 1 ? "" : "s"}` : "No open action items"}>
+        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? <><Icon name="x" />Close</> : <><Icon name="plus" />Add Note</>}</button>
       </PageHeader>
 
       {adding && (
         <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-          <h2>New note</h2>
+          <h2>New Note</h2>
           <NoteForm note={null} initial={initial} lookups={lookups} onDone={() => setAdding(false)} />
         </section>
       )}

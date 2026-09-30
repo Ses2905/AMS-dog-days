@@ -5,7 +5,8 @@ import { createNote, deleteNote } from "@/app/notes/actions";
 import type { Note, NoteCategory } from "@/lib/db-types";
 import { NOTE_CATEGORIES } from "@/lib/notes";
 import { prettyDate } from "@/lib/time";
-import { btnDanger, btnPrimary, inputCls } from "./ui";
+import { btnDanger, btnPrimary, chip, inputCls } from "./ui";
+import { Icon } from "./Icon";
 
 /** Running notes on one player, grouped by what they are about. Parent contact is kept apart and marked private. */
 export function PlayerNotes({ playerId, notes }: { playerId: string; notes: Note[] }) {
@@ -27,13 +28,13 @@ export function PlayerNotes({ playerId, notes }: { playerId: string; notes: Note
       <div className="space-y-2">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Kind of note">
           {NOTE_CATEGORIES.map((c) => (
-            <button key={c.value} aria-pressed={category === c.value} onClick={() => setCategory(c.value)} className={`min-h-12 rounded-lg px-3 text-sm font-semibold ${category === c.value ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>{c.label}</button>
+            <button key={c.value} aria-pressed={category === c.value} onClick={() => setCategory(c.value)} className={chip(category === c.value)}>{c.label}</button>
           ))}
         </div>
         <textarea className={`${inputCls} min-h-24 py-2`} value={body} onChange={(e) => setBody(e.target.value)} placeholder={hint} aria-label={`New ${category} note`} />
         <div className="flex items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
-          <button className={btnPrimary} disabled={pending || !body.trim()} onClick={add}>{pending ? "Saving…" : "Add Note"}</button>
+          <button className={btnPrimary} disabled={pending || !body.trim()} onClick={add}>{pending ? "Saving…" : <><Icon name="plus" />Add Note</>}</button>
         </div>
       </div>
       {NOTE_CATEGORIES.map((c) => {

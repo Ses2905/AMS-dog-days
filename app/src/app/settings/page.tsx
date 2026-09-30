@@ -6,11 +6,14 @@ import { PageHeader } from "@/components/PageHeader";
 import { createClient } from "@/lib/supabase/server";
 import { aiStatus } from "@/lib/ai/config";
 import { getCoaches, getDocuments, getGames, getPlayers, getScripts, getToolLinks } from "@/lib/db";
+import { Icon } from "@/components/Icon";
+import { Pill } from "@/components/Pill";
+import { btnOutline } from "@/components/ui";
 
 function Card({ href, title, detail, status }: { href: string; title: string; detail: string; status?: string }) {
   return (
     <Link href={href} className="flex min-h-24 flex-col justify-center gap-1 rounded-xl bg-white p-4 shadow-sm hover:shadow-md">
-      <span className="flex items-center gap-2"><span className="font-display text-xl font-semibold uppercase tracking-wide">{title}</span>{status && <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-semibold text-neutral-700">{status}</span>}</span>
+      <span className="flex items-center gap-2"><span className="font-display text-xl font-semibold uppercase tracking-wide">{title}</span>{status && <Pill tone={status === "On" ? "green" : "grey"}>{status}</Pill>}</span>
       <span className="text-sm text-neutral-600">{detail}</span>
     </Link>
   );
@@ -42,7 +45,7 @@ export default async function SettingsPage() {
       </section>
       <section className="flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="min-w-0 flex-1"><h2>Download Everything</h2><p className="text-sm text-neutral-600">All players, practices, games, scores, notes, scripts and the depth chart in one file. Your data is yours.</p></div>
-        <a href="/settings/export" download className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">Download</a>
+        <a href="/settings/export" download className={btnOutline}><Icon name="download" />Download</a>
       </section>
       {token && host && <CalendarLink url={`${proto}://${host}/cal/${token}.ics`} />}
       <section className="space-y-2">

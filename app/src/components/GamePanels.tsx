@@ -10,6 +10,7 @@ import { GameForm } from "./GameForm";
 import { LinksEditor } from "./LinksEditor";
 import { PageHeader } from "./PageHeader";
 import { btnOutline, btnPrimary } from "./ui";
+import { Icon } from "./Icon";
 
 /** Title, date and place, with an Edit panel. */
 export function GameHeader({ game }: { game: Game }) {
@@ -21,12 +22,12 @@ export function GameHeader({ game }: { game: Game }) {
         title={vsLabel(game)}
         subtitle={`${prettyDate(game.date)}${game.time ? ` · ${game.time}` : ""}${game.location ? ` · ${game.location}` : ""}${game.kind !== "game" ? ` · ${game.kind}` : ""}${res ? ` · ${res}` : ""}`}
       >
-        <Link href="/games" className={btnOutline}>All games</Link>
-        <button className={btnPrimary} onClick={() => setEditing(!editing)}>{editing ? "Close" : "Edit"}</button>
+        <Link href="/games" className={btnOutline}><Icon name="arrow-left" />All Games</Link>
+        <button className={btnPrimary} onClick={() => setEditing(!editing)}>{editing ? <><Icon name="x" />Close</> : <><Icon name="pencil" />Edit</>}</button>
       </PageHeader>
       {editing && (
         <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-          <h2>Edit game</h2>
+          <h2>Edit Game</h2>
           <GameForm game={game} onDone={() => setEditing(false)} />
         </section>
       )}
@@ -49,13 +50,13 @@ export function GameChecklist({ gameId, initial }: { gameId: string; initial: Re
   };
   return (
     <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
-      <div className="flex items-center gap-3"><h2>Game prep</h2><span className="ml-auto text-sm font-semibold text-neutral-600">{p.done} of {p.total} ready</span></div>
+      <div className="flex items-center gap-3"><h2>Game Prep</h2><span className="ml-auto text-sm font-semibold text-neutral-600">{p.done} of {p.total} ready</span></div>
       <div className="h-2 overflow-hidden rounded-full bg-neutral-200"><div className="h-full bg-green-900 transition-all" style={{ width: `${(p.done / p.total) * 100}%` }} /></div>
       <ul>
         {CHECKLIST.map((c) => (
           <li key={c.key}>
             <button onClick={() => toggle(c.key)} disabled={pending} aria-pressed={!!checked[c.key]} className="flex min-h-12 w-full items-center gap-3 text-left">
-              <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${checked[c.key] ? "border-green-900 bg-green-900 text-white" : "border-neutral-400 bg-white"}`}>{checked[c.key] ? "✓" : ""}</span>
+              <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${checked[c.key] ? "border-green-900 bg-green-900 text-white" : "border-neutral-400 bg-white"}`}>{checked[c.key] ? <Icon name="check" size={16} /> : null}</span>
               <span className={checked[c.key] ? "text-neutral-500 line-through" : ""}>{c.label}</span>
             </button>
           </li>
@@ -67,5 +68,5 @@ export function GameChecklist({ gameId, initial }: { gameId: string; initial: Re
 }
 
 export function GameLinks({ gameId, initial }: { gameId: string; initial: GameLink[] }) {
-  return <LinksEditor initial={initial} save={(links) => saveLinks(gameId, links)} title="Film & links" hint="Hudl, Drive, scouting reports" empty="Paste a Hudl playlist or a Drive link and it will open right from here." />;
+  return <LinksEditor initial={initial} save={(links) => saveLinks(gameId, links)} title="Film & Links" hint="Hudl, Drive, scouting reports" empty="Paste a Hudl playlist or a Drive link and it will open right from here." />;
 }

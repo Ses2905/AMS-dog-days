@@ -21,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${body.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
         <SiteHeader signOut={signOut} />
-        <main className="mx-auto max-w-6xl px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-5 sm:pt-8">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 pb-28 pt-5 sm:pt-8 md:pb-10">{children}</main>
       </body>
     </html>
   );

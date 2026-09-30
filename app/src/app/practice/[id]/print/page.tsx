@@ -6,6 +6,7 @@ import { PrintButton } from "@/components/PrintButton";
 import { AvailabilitySummary } from "@/components/AvailabilitySummary";
 import { getPlayers, getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
+import { Icon } from "@/components/Icon";
 
 export default async function PrintPage({ params }: PageProps<"/practice/[id]/print">) {
   const { id } = await params;
@@ -15,7 +16,7 @@ export default async function PrintPage({ params }: PageProps<"/practice/[id]/pr
   return (
     <div className="space-y-3">
       <div className="no-print flex items-center gap-3">
-        <Link href={`/practice/${practice.id}`} className="text-green-600 underline">Back</Link>
+        <Link href={`/practice/${practice.id}`} className="text-green-600 underline"><Icon name="arrow-left" />Back</Link>
         <PrintButton />
         <span className="text-sm text-neutral-500">Landscape, letter. Choose “Save as PDF” to share.</span>
       </div>

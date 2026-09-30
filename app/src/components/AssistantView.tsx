@@ -10,7 +10,8 @@ import type { SavedOutput } from "@/lib/db";
 import { PageHeader } from "./PageHeader";
 import { WorkflowsPanel } from "./WorkflowsPanel";
 import { PracticeGrid } from "./PracticeGrid";
-import { btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { btnOutline, btnPlain, btnPrimary, inputCls, tab as tabCls } from "./ui";
+import { Icon } from "./Icon";
 
 const TABS = [{ id: "ask", label: "Ask" }, { id: "playbooks", label: "Playbooks" }, { id: "draft", label: "Draft a Practice" }, { id: "transcript", label: "Read a Transcript" }] as const;
 type Tab = (typeof TABS)[number]["id"];
@@ -31,7 +32,7 @@ function Ask() {
   return (
     <div className="space-y-3">
       <label className="block text-sm font-semibold">Ask about your practices, games, notes and roster
-        <textarea className={`${inputCls} min-h-24`} maxLength={1000} value={q} onChange={(e) => setQ(e.target.value)} placeholder="What's still open for the Farmington game? Who's out this week?" />
+        <textarea className={`${inputCls} min-h-24`} maxLength={1000} value={q} onChange={(e) => setQ(e.target.value)} placeholder="e.g. What's still open for the Farmington game? Who's out this week?" />
       </label>
       <button className={btnPrimary} disabled={pending || !q.trim()} onClick={go}>{pending ? "Thinking…" : "Ask"}</button>
       <Err msg={err} />
@@ -81,7 +82,7 @@ function Draft({ today, defaultStart }: { today: string; defaultStart: Record<st
         <label className="text-sm font-semibold">Minutes<input type="number" step={5} min={15} max={180} className={inputCls} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} /></label>
       </div>
       <label className="block text-sm font-semibold">What should this practice accomplish?
-        <textarea className={`${inputCls} min-h-24`} maxLength={1500} value={goals} onChange={(e) => setGoals(e.target.value)} placeholder="Install the new screen, clean up red zone, light on contact before Friday." />
+        <textarea className={`${inputCls} min-h-24`} maxLength={1500} value={goals} onChange={(e) => setGoals(e.target.value)} placeholder="e.g. Install the new screen, clean up red zone, light on contact before Friday." />
       </label>
       <button className={btnPrimary} disabled={pending || !goals.trim()} onClick={go}>{pending ? "Drafting…" : "Draft It"}</button>
       <Err msg={err} />
@@ -96,8 +97,8 @@ function Draft({ today, defaultStart }: { today: string; defaultStart: Record<st
             <p className="font-semibold text-green-900">Added. <Link className="underline" href={`/practice/${saved}/edit`}>Open it to edit</Link></p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              <button className={btnPrimary} disabled={saving} onClick={save}>{saving ? "Adding…" : "Add to My Practices"}</button>
-              <button className={btnPlain} disabled={pending} onClick={go}>Try Again</button>
+              <button className={btnPrimary} disabled={saving} onClick={save}>{saving ? "Adding…" : <><Icon name="plus" />Add to My Practices</>}</button>
+              <button className={btnPlain} disabled={pending} onClick={go}><Icon name="retry" />Try Again</button>
             </div>
           )}
         </div>
@@ -185,7 +186,7 @@ export function AssistantView({ ready, today, defaultStart, games, players, save
         <>
           <div role="tablist" className="flex gap-2 overflow-x-auto">
             {TABS.map((t) => (
-              <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} className={`min-h-12 whitespace-nowrap rounded-lg px-4 font-semibold ${tab === t.id ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>{t.label}</button>
+              <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} className={tabCls(tab === t.id)}>{t.label}</button>
             ))}
           </div>
           {tab === "ask" && <Ask />}

@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { PageHeader } from "@/components/PageHeader";
-import { btnOutline } from "@/components/ui";
+import { btnOutline, btnPrimary } from "@/components/ui";
 import { getPractices } from "@/lib/db";
 import { SESSION_CHOICES } from "@/lib/new-practice";
 import { prettyDate } from "@/lib/time";
 import { createPractice } from "./actions";
+import { Icon } from "@/components/Icon";
 
 export default async function NewPracticePage({ searchParams }: PageProps<"/practice/new">) {
   await connection();
@@ -24,7 +25,7 @@ export default async function NewPracticePage({ searchParams }: PageProps<"/prac
   const field = "mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base";
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <PageHeader title="Plan a practice"><Link href="/practice" className={btnOutline}>Week view</Link></PageHeader>
+      <PageHeader title="Plan a Practice"><Link href="/practice" className={btnOutline}><Icon name="arrow-left" />Week View</Link></PageHeader>
       <form action={createPractice} className="space-y-4 rounded-xl bg-white p-4 shadow-sm">
         <label className="block text-sm font-medium">Date
           <input type="date" name="date" defaultValue={date} required className={field} />
@@ -35,7 +36,7 @@ export default async function NewPracticePage({ searchParams }: PageProps<"/prac
           </select>
         </label>
         <label className="block text-sm font-medium">Or type a different name (optional)
-          <input name="custom" maxLength={30} defaultValue={sessionParam && !isStandard ? sessionParam : ""} className={field} placeholder="Two-a-day, Walk-thru…" />
+          <input name="custom" maxLength={30} defaultValue={sessionParam && !isStandard ? sessionParam : ""} className={field} placeholder="e.g. Two-a-day, Walk-thru…" />
         </label>
         <label className="block text-sm font-medium">Copy the periods from
           <select name="from" defaultValue={chosenFrom?.id ?? ""} className={field}>
@@ -50,11 +51,11 @@ export default async function NewPracticePage({ searchParams }: PageProps<"/prac
           <p role="alert" className="text-sm text-red-700">
             {error}{" "}
             {typeof existing === "string" && practices.some((p) => p.id === existing) && (
-              <Link href={`/practice/${existing}`} className="font-semibold underline">Open it</Link>
+              <Link href={`/practice/${existing}`} className="font-semibold underline">Open It<Icon name="chevron-right" /></Link>
             )}
           </p>
         )}
-        <button className="min-h-12 w-full rounded-lg bg-green-900 font-semibold text-white">Create practice</button>
+        <button className={`${btnPrimary} w-full`}>Create Practice</button>
       </form>
     </div>
   );

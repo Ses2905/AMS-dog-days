@@ -8,6 +8,8 @@ import { AttendancePanel } from "@/components/AttendancePanel";
 import type { Mark } from "@/lib/attendance";
 import { getAttendance, getDocuments, getNotes, getPlayers, getPractice, getScripts } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
+import { Icon } from "@/components/Icon";
+import { Pill } from "@/components/Pill";
 
 export default async function PracticePage({ params }: PageProps<"/practice/[id]">) {
   const { id } = await params;
@@ -21,9 +23,9 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
   return (
     <div className="space-y-4">
       <PageHeader title={`${prettyDate(practice.date)} · ${practice.session}`} subtitle={practice.team}>
-        <Link href={`/practice/new?from=${practice.id}`} className={btnOutline}>Copy to a new day</Link>
-        <Link href={`/practice/${practice.id}/edit`} className={btnOutline}>Edit</Link>
-        <Link href={`/practice/${practice.id}/print`} className={btnPrimary}>Print / PDF</Link>
+        <Link href={`/practice/new?from=${practice.id}`} className={btnOutline}><Icon name="copy" />Copy to a New Day</Link>
+        <Link href={`/practice/${practice.id}/edit`} className={btnOutline}><Icon name="pencil" />Edit</Link>
+        <Link href={`/practice/${practice.id}/print`} className={btnPrimary}><Icon name="printer" />Print / PDF</Link>
       </PageHeader>
       {practice.imported && (
         <p className="rounded-lg border border-gold-500 bg-[#f8f4e3] px-3 py-2 text-sm">
@@ -38,7 +40,7 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
       <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Scripts{scripts.length > 0 ? ` · ${scripts.length}` : ""}</h2>
-          <Link href={`/scripts?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}>Add script</Link>
+          <Link href={`/scripts?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}><Icon name="plus" />Add Script</Link>
         </div>
         {scripts.length === 0 ? <p className="text-sm text-neutral-600">Plan the plays you will run in team periods and open them on the field.</p> : (
           <ul className="divide-y divide-neutral-200">{scripts.map((s) => <li key={s.id}><Link href={`/scripts/${s.id}`} className="flex min-h-12 items-center justify-between gap-2 font-medium text-green-600 underline"><span className="truncate">{s.name}</span><span className="text-sm font-normal text-neutral-600">{s.rows.length} plays</span></Link></li>)}</ul>
@@ -54,14 +56,14 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
       <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Documents{docs.length > 0 ? ` · ${docs.length}` : ""}</h2>
-          <Link href={`/documents?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}>Add document</Link>
+          <Link href={`/documents?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}><Icon name="plus" />Add Document</Link>
         </div>
         {docs.length === 0 ? (
           <p className="text-sm text-neutral-600">Drill diagrams, install sheets or a printed plan you want to keep with this practice.</p>
         ) : (
           <ul className="divide-y divide-neutral-200">
             {docs.map((d) => (
-              <li key={d.id}><a href={`/documents/${d.id}/file`} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center gap-2 font-medium text-green-600 underline"><span className="truncate">{d.name}</span><span aria-hidden className="text-xs">↗</span></a></li>
+              <li key={d.id}><a href={`/documents/${d.id}/file`} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center gap-2 font-medium text-green-600 underline"><span className="truncate">{d.name}</span><Icon name="external" size={14} /></a></li>
             ))}
           </ul>
         )}
@@ -69,10 +71,10 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
 
       <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
-          <h2>Notes from this practice{notes.length > 0 ? ` · ${notes.length}` : ""}</h2>
+          <h2>Notes from This Practice{notes.length > 0 ? ` · ${notes.length}` : ""}</h2>
           <div className="ml-auto flex gap-2">
-            <Link href={`/notes?add=1&kind=action&practice=${practice.id}`} className={btnOutline}>Add action item</Link>
-            <Link href={`/notes?add=1&kind=note&practice=${practice.id}`} className={btnPrimary}>Add note</Link>
+            <Link href={`/notes?add=1&kind=action&practice=${practice.id}`} className={btnOutline}><Icon name="plus" />Add Action Item</Link>
+            <Link href={`/notes?add=1&kind=note&practice=${practice.id}`} className={btnPrimary}><Icon name="plus" />Add Note</Link>
           </div>
         </div>
         {notes.length === 0 ? (
@@ -81,7 +83,7 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
           <ul className="space-y-2">
             {notes.map((n) => (
               <li key={n.id} className="text-sm">
-                <span className={`mr-2 rounded-full px-2 py-0.5 text-xs font-semibold ${n.kind === "action" ? "bg-gold-500 text-green-900" : "bg-neutral-200 text-neutral-700"}`}>{n.kind === "action" ? (n.status === "done" ? "Done" : "Action") : "Note"}</span>
+                <Pill tone={n.kind === "action" ? "gold" : "grey"} className="mr-2">{n.kind === "action" ? (n.status === "done" ? "Done" : "Action") : "Note"}</Pill>
                 <span className={`whitespace-pre-wrap ${n.status === "done" ? "text-neutral-500 line-through" : ""}`}>{n.body}</span>
               </li>
             ))}

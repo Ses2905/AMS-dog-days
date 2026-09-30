@@ -9,6 +9,8 @@ import { createClient } from "@/lib/supabase/client";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { btnDanger, btnPlain, btnPrimary, inputCls } from "./ui";
+import { Icon } from "./Icon";
+import { Pill } from "./Pill";
 
 type Choice = { id: string; label: string };
 type Lookups = { games: Choice[]; practices: Choice[] };
@@ -64,10 +66,10 @@ function Uploader({ lookups, initial, onDone }: { lookups: Lookups; initial: Ini
           <label className="text-sm font-medium">Category
             <select className={inputCls} value={category} onChange={(e) => setCategory(e.target.value as Category)} disabled={busy}>{CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}</select>
           </label>
-          <label className="text-sm font-medium">For a game (optional)
+          <label className="text-sm font-medium">For a Game (optional)
             <select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)} disabled={busy}><option value="">No game</option>{lookups.games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select>
           </label>
-          <label className="text-sm font-medium sm:col-span-2">For a practice (optional)
+          <label className="text-sm font-medium sm:col-span-2">For a Practice (optional)
             <select className={inputCls} value={practiceId} onChange={(e) => setPracticeId(e.target.value)} disabled={busy}><option value="">No practice</option>{lookups.practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select>
           </label>
         </div>
@@ -75,7 +77,7 @@ function Uploader({ lookups, initial, onDone }: { lookups: Lookups; initial: Ini
       <div className="flex flex-wrap items-center gap-2">
         <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error || (busy ? stage : "")}</p>
         <button className={btnPlain} onClick={onDone} disabled={busy}>Cancel</button>
-        <button className={`${btnPrimary} px-6`} onClick={upload} disabled={!file || busy}>{busy ? "Working…" : "Upload"}</button>
+        <button className={btnPrimary} onClick={upload} disabled={!file || busy}>{busy ? "Working…" : "Upload"}</button>
       </div>
     </div>
   );
@@ -94,14 +96,14 @@ function DocEdit({ doc, lookups, onDone }: { doc: Doc; lookups: Lookups; onDone:
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-medium sm:col-span-2">Name<input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} /></label>
         <label className="text-sm font-medium">Category<select className={inputCls} value={category} onChange={(e) => setCategory(e.target.value)}>{CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}</select></label>
-        <label className="text-sm font-medium">For a game<select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)}><option value="">No game</option>{lookups.games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
-        <label className="text-sm font-medium sm:col-span-2">For a practice<select className={inputCls} value={practiceId} onChange={(e) => setPracticeId(e.target.value)}><option value="">No practice</option>{lookups.practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
+        <label className="text-sm font-medium">For a Game<select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)}><option value="">No game</option>{lookups.games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
+        <label className="text-sm font-medium sm:col-span-2">For a Practice<select className={inputCls} value={practiceId} onChange={(e) => setPracticeId(e.target.value)}><option value="">No practice</option>{lookups.practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
         <button className={btnDanger} disabled={pending} onClick={() => { if (window.confirm(`Delete “${doc.name}”? The file is removed for good. This can't be undone.`)) run(() => deleteDocument(doc.id)); }}>Delete</button>
         <button className={btnPlain} onClick={onDone}>Cancel</button>
-        <button className={`${btnPrimary} px-6`} disabled={pending} onClick={() => run(() => updateDocument(doc.id, { name, category, gameId, practiceId }))}>{pending ? "Saving…" : "Save"}</button>
+        <button className={btnPrimary} disabled={pending} onClick={() => run(() => updateDocument(doc.id, { name, category, gameId, practiceId }))}>{pending ? "Saving…" : <><Icon name="check" />Save</>}</button>
       </div>
     </div>
   );
@@ -116,15 +118,15 @@ function Row({ doc, lookups }: { doc: Doc; lookups: Lookups }) {
     <li className="border-b border-neutral-200 last:border-0">
       <div className="flex items-center gap-2 px-3 py-2">
         <a href={`/documents/${doc.id}/file`} target="_blank" rel="noopener noreferrer" className="min-h-14 min-w-0 flex-1 py-1">
-          <span className="block truncate font-medium text-green-600 underline">{doc.name} <span aria-hidden className="text-xs">↗</span></span>
+          <span className="block truncate font-medium text-green-600 underline">{doc.name} <Icon name="external" size={14} /></span>
           <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-600">
-            <span className="rounded-full bg-neutral-200 px-2 py-0.5 font-semibold text-neutral-700">{cat}</span>
+            <Pill>{cat}</Pill>
             <span>{kindOf(doc.mime)} · {formatSize(doc.size)}</span>
             {links.map((l) => <span key={l}>{l}</span>)}
             <span>{prettyDate(doc.created.slice(0, 10))}</span>
           </span>
         </a>
-        <button className={btnPlain} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? "Close" : "Edit"}</button>
+        <button className={btnPlain} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <><Icon name="x" />Close</> : <><Icon name="pencil" />Edit</>}</button>
       </div>
       {open && <div className="bg-wash px-3 py-3"><DocEdit doc={doc} lookups={lookups} onDone={() => setOpen(false)} /></div>}
     </li>
@@ -147,12 +149,12 @@ export function DocumentsView({ docs, lookups, initial }: { docs: Doc[]; lookups
   return (
     <div className="space-y-4">
       <PageHeader title={`Library · ${docs.length}`} subtitle="Playbooks, scouting reports and anything else you want at your fingertips">
-        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add document"}</button>
+        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? <><Icon name="x" />Close</> : <><Icon name="plus" />Add Document</>}</button>
       </PageHeader>
 
       {adding && (
         <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-          <h2>Add a document</h2>
+          <h2>Add a Document</h2>
           <Uploader lookups={lookups} initial={initial} onDone={() => setAdding(false)} />
         </section>
       )}
