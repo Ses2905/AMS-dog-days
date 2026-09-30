@@ -46,5 +46,46 @@ for p in raw:
     coaches=[c for c in p['coaches'] if any(c in (b.get('lanes') or {}) for b in blocks)]
     out.append({'id':f'{d}-{slug}','imported':True,'opponent':'Pea Ridge' if d>='2026-09-28' else None,'date':d,'session':label,'dress':p['dress'].strip().title() if p['dress'].isupper() else p['dress'].strip(),
         'lift':p.get('lift') or None,'coaches':coaches or p['coaches'],'blocks':blocks,'notes':[norm(n) for n in notes]})
+
+# Hand corrections for days the auto-import gets wrong (merged multi-line cells). Still flagged "verify".
+def lanes(*pairs): return dict(pairs)
+FIX = {
+ '2026-09-28-evening': {'notes': ["RVA's to the right: 4/5/6 Bears, Wheel, Aggies, Sun Devil, Longhorns, Smoke/Strike, Buffalo.", 'Coursey: have the Pea Ridge book.']},
+ '2026-09-28-school-day': {'lift': '3x8 Bench, Squat', 'notes': ['Potts and Driscoll: period 3, work on Blade together.', 'Driscoll: on 3 Buzz, make sure they roll down on the outside shoulder and keep contain.']},
+ '2026-09-29-evening': {'lift': '3x5 Bench, Squat, Hang Clean', 'notes': ['Coursey: have the Pea Ridge book.']},
+ '2026-09-29-school-day': {'notes': ["RVA's to the right."]},
+ '2026-10-01-evening': {
+   'notes': ['Coursey: have the Siloam scout book.'],
+   'blocks': [
+    {'start':'6:55','periods':1,'span':'Warm-Up','flex':True},
+    {'start':'7:00','periods':2,'span':'Game Day Routine'},
+    {'start':'7:10','periods':2,'span':'Special Teams, 2 reps each (KO, KOR, Punt, Punt Return)'},
+    {'start':'7:20','periods':2,'span':'Team D (O-line hold pads)'},
+    {'start':'7:30','periods':1,'span':'Offense: 2-point plays at the 3 yard line'},
+    {'start':'7:35','periods':2,'span':'Team O (defense hold pads). Going fast, Coach Dugger on sideline, signs only'},
+    {'start':'7:45','periods':1,'span':'9th Grade End of Practice / Break'},
+    {'start':'7:50','periods':1,'lanes':{'Dugger':'Team O','Barrett':"ABC's",'Coursey':"ABC's",'Potts':"ABC's",'Salsbury':'Steps'}},
+    {'start':'7:55','periods':2,'lanes':{'Dugger':'Steps','Barrett':"ABC's",'Coursey':"ABC's",'Potts':"ABC's",'Salsbury':'Steps'}},
+    {'start':'8:05','periods':1,'lanes':{'Dugger':'DLine','Barrett':'Safeties','Coursey':'LBs','Potts':'EDD Footwork','Salsbury':'DLine'}},
+    {'start':'8:10','periods':1,'lanes':{'Dugger':'DLine','Barrett':'Safeties','Coursey':'LBs','Potts':'Block Shed','Salsbury':'DLine'}},
+    {'start':'8:15','periods':1,'lanes':{'Dugger':'DLine','Barrett':'Safeties','Coursey':'LBs','Potts':'Vice','Salsbury':'DLine'}},
+    {'start':'8:20','periods':1,'span':'End of Practice'},
+    {'start':'8:25','periods':1,'span':'Go get bags ready for those who are going. Everyone else makes sure the locker room is spotless'}]},
+ '2026-10-01-school-day': {
+   'dress': None,
+   'notes': ['End of practice talk: classroom, special teams, being attentive, travel, pregame meals, after-game scuffle.',
+             'Game day: 3:45-3:55 eat; 3:55-4:00 weight room; 4:00-5:30 movie; 5:30-5:45 get dressed (no shoulder pads); 5:45-6:00 walk-thru; 6:10-6:55 pregame.',
+             'Pregame walk-thru groups: 7 ABC\'s / 7 O-line, 7 Ind D / 7 D-line, 7 Team D, 7 Team O.'],
+   'blocks': [
+    {'start':'12:55','periods':1,'span':'Get travel bags and pants','flex':True},
+    {'start':'1:00','periods':3,'span':'Pack travel bags and move to big room'},
+    {'start':'1:15','periods':2,'span':'Walk-thru in indoor (just get lined up)'},
+    {'start':'1:25','periods':2,'span':'EOP talk'},
+    {'start':'1:35','periods':1,'span':'End of Practice'}]},
+}
+for o in out:
+    for k,v in FIX.get(o['id'],{}).items(): o[k]=v
+    if o['id'] in FIX and 'blocks' in FIX[o['id']]:
+        o['coaches']=[c for c in o['coaches'] if any(c in (b.get('lanes') or {}) for b in o['blocks'])] or o['coaches']
 json.dump(out,open(sys.argv[2],'w'),indent=1)
 for o in out: print(o['id'],o['dress'],len(o['blocks']),o['coaches'])

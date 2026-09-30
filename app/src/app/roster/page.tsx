@@ -1,7 +1,20 @@
 import { roster } from "@/data/roster";
 
+function distance(a: string, b: string) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+
 export default function RosterPage() {
   const players = [...roster.players].sort((a, b) => a.number - b.number);
+  // Same last name, same grade, first names within 2 letters: probably one kid spelled two ways.
+  const lookAlikes = players.flatMap((a, i) =>
+    players.slice(i + 1).filter((b) => a.last.toLowerCase() === b.last.toLowerCase() && a.grade === b.grade && distance(a.first.toLowerCase(), b.first.toLowerCase()) <= 2).map((b) => [a, b] as const),
+  );
   const flagged = players.filter((p) => p.otherNumbers.length > 0);
   return (
     <div className="space-y-6">
@@ -13,6 +26,11 @@ export default function RosterPage() {
           <li>
             <b>{flagged.length} players</b> have a different jersey number on another list (shown as “also #”). Confirm the right one.
           </li>
+          {lookAlikes.map(([a, b]) => (
+            <li key={a.id + b.id}>
+              “{a.first} {a.last}” (#{a.number}) and “{b.first} {b.last}” (#{b.number}) are both on the sign-out list. Same kid or two?
+            </li>
+          ))}
           {roster.nearDuplicates.map((d) => (
             <li key={d.first + d.last}>
               “{d.first} {d.last}” looks like the same kid as “{d.closest}” (also #{d.numbers.join(", ")}). Same player?

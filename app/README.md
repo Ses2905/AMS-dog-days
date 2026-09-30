@@ -6,4 +6,4 @@ Next.js app. Run locally: `npm install && npm run dev`, then open http://localho
 - `src/data/roster.json`: roster extracted from his PDF by `../tools/extract_pdfs.py`.
 - `/practice/[id]/print`: landscape, one-page print view (Print, then "Save as PDF" to share).
 
-Next: import the other practice days, move data to a database, availability, attendance.
+Database: Supabase project "Coach OS - Alma Football" (schema in ../supabase/migrations). Copy .env.example to .env.local. Not wired into the pages yet.

@@ -287,14 +287,8 @@
    }
   ],
   "notes": [
-   "RVA'S TO THE RIGHT",
-   "4/5/6 BEARS",
-   "WHEEL COURSEY HAVE Pea Ridge BOOK",
-   "AGGIES",
-   "SUN DEVIL",
-   "LONGHORNS",
-   "SMOKE/STRIKE",
-   "BUFFALO"
+   "RVA's to the right: 4/5/6 Bears, Wheel, Aggies, Sun Devil, Longhorns, Smoke/Strike, Buffalo.",
+   "Coursey: have the Pea Ridge book."
   ]
  },
  {
@@ -304,7 +298,7 @@
   "date": "2026-09-28",
   "session": "School Day",
   "dress": "Greys and helmet",
-  "lift": "3X8",
+  "lift": "3x8 Bench, Squat",
   "coaches": [
    "Dugger",
    "Barrett",
@@ -377,8 +371,8 @@
    }
   ],
   "notes": [
-   "POTTS AND DRISCOLL: PERIOD 3, WORK ON BLADE TOGETHER",
-   "MAKE SURE ON 3 BUZZ THAT THEY ARE ROLLING DOWN ON OUTSIDE SHOULDER AND KEEPING CONTAIN"
+   "Potts and Driscoll: period 3, work on Blade together.",
+   "Driscoll: on 3 Buzz, make sure they roll down on the outside shoulder and keep contain."
   ]
  },
  {
@@ -388,7 +382,7 @@
   "date": "2026-09-29",
   "session": "Evening",
   "dress": "Full",
-  "lift": "n/a",
+  "lift": "3x5 Bench, Squat, Hang Clean",
   "coaches": [
    "Dugger",
    "Barrett",
@@ -473,8 +467,7 @@
    }
   ],
   "notes": [
-   "3x5",
-   "COURSEY HAVE Pea Ridge BOOK"
+   "Coursey: have the Pea Ridge book."
   ]
  },
  {
@@ -535,8 +528,7 @@
    }
   ],
   "notes": [
-   "RVA's to the right",
-   "Inside:"
+   "RVA's to the right."
   ]
  },
  {
@@ -737,110 +729,107 @@
    {
     "start": "6:55",
     "periods": 1,
-    "span": "WARM-UP",
+    "span": "Warm-Up",
     "flex": true
    },
    {
     "start": "7:00",
-    "periods": 3,
-    "span": "SPECIAL TEAMS 2 REPS EACH"
+    "periods": 2,
+    "span": "Game Day Routine"
    },
    {
-    "start": "7:15",
-    "periods": 3,
-    "span": "KO, KOR, PUNT, PUNT RETURN"
+    "start": "7:10",
+    "periods": 2,
+    "span": "Special Teams, 2 reps each (KO, KOR, Punt, Punt Return)"
+   },
+   {
+    "start": "7:20",
+    "periods": 2,
+    "span": "Team D (O-line hold pads)"
    },
    {
     "start": "7:30",
     "periods": 1,
-    "span": "OFFENSE 2 POINT PLAYS @ 3 YARDLINE"
+    "span": "Offense: 2-point plays at the 3 yard line"
    },
    {
     "start": "7:35",
-    "periods": 1,
-    "span": "TEAM O (DEFENSE HOLD PADS)"
-   },
-   {
-    "start": "7:40",
-    "periods": 1,
-    "span": "GOING FAST COACH DUGGER ON SIDELINE (SIGNS ONLY)"
+    "periods": 2,
+    "span": "Team O (defense hold pads). Going fast, Coach Dugger on sideline, signs only"
    },
    {
     "start": "7:45",
     "periods": 1,
-    "span": "9TH GRADE END OF PRACTICE/BREAK"
+    "span": "9th Grade End of Practice / Break"
    },
    {
     "start": "7:50",
     "periods": 1,
     "lanes": {
-     "Dugger": "Team o",
-     "Barrett": "ABC'S",
-     "Coursey": "ABC'S",
-     "Potts": "ABC'S",
-     "Salsbury": "STEPS"
+     "Dugger": "Team O",
+     "Barrett": "ABC's",
+     "Coursey": "ABC's",
+     "Potts": "ABC's",
+     "Salsbury": "Steps"
     }
    },
    {
     "start": "7:55",
     "periods": 2,
     "lanes": {
-     "Dugger": "STEPS",
-     "Barrett": "ABC'S",
-     "Coursey": "ABC'S",
-     "Potts": "ABC'S",
-     "Salsbury": "STEPS"
+     "Dugger": "Steps",
+     "Barrett": "ABC's",
+     "Coursey": "ABC's",
+     "Potts": "ABC's",
+     "Salsbury": "Steps"
     }
    },
    {
     "start": "8:05",
     "periods": 1,
     "lanes": {
-     "Dugger": "DLINE",
-     "Barrett": "SAFETIES",
-     "Coursey": "LBS",
-     "Potts": "EDD FOOTWORK",
-     "Salsbury": "DLINE"
+     "Dugger": "DLine",
+     "Barrett": "Safeties",
+     "Coursey": "LBs",
+     "Potts": "EDD Footwork",
+     "Salsbury": "DLine"
     }
    },
    {
     "start": "8:10",
     "periods": 1,
     "lanes": {
-     "Dugger": "DLINE",
-     "Barrett": "SAFETIES",
-     "Coursey": "LBS",
-     "Potts": "BLOCK SHED",
-     "Salsbury": "DLINE"
+     "Dugger": "DLine",
+     "Barrett": "Safeties",
+     "Coursey": "LBs",
+     "Potts": "Block Shed",
+     "Salsbury": "DLine"
     }
    },
    {
     "start": "8:15",
     "periods": 1,
     "lanes": {
-     "Dugger": "DLINE",
-     "Barrett": "SAFETIES",
-     "Coursey": "LBS",
-     "Potts": "VICE",
-     "Salsbury": "DLINE"
+     "Dugger": "DLine",
+     "Barrett": "Safeties",
+     "Coursey": "LBs",
+     "Potts": "Vice",
+     "Salsbury": "DLine"
     }
    },
    {
     "start": "8:20",
-    "periods": 2,
-    "span": "END OF PRACTICE"
+    "periods": 1,
+    "span": "End of Practice"
    },
    {
-    "start": "8:30",
+    "start": "8:25",
     "periods": 1,
-    "span": "GO GET BAGS READY FOR THOSE WHO ARE GOING"
+    "span": "Go get bags ready for those who are going. Everyone else makes sure the locker room is spotless"
    }
   ],
   "notes": [
-   "GAME DAY ROUTINE",
-   "TEAM D (OLINE HOLD PADS)",
-   "Everyone else will make sure locker room is spotless",
-   "COURSEY HAVE SILOAM SCOUT BOOK"
+   "Coursey: have the Siloam scout book."
   ]
  },
  {
@@ -849,7 +838,7 @@
   "opponent": "Pea Ridge",
   "date": "2026-10-01",
   "session": "School Day",
-  "dress": "",
+  "dress": null,
   "lift": null,
   "coaches": [
    "Dugger",
@@ -864,32 +853,34 @@
    {
     "start": "12:55",
     "periods": 1,
-    "span": "Warm-Up",
+    "span": "Get travel bags and pants",
     "flex": true
    },
    {
     "start": "1:00",
-    "periods": 8,
-    "span": "END OF PRACTICE"
+    "periods": 3,
+    "span": "Pack travel bags and move to big room"
+   },
+   {
+    "start": "1:15",
+    "periods": 2,
+    "span": "Walk-thru in indoor (just get lined up)"
+   },
+   {
+    "start": "1:25",
+    "periods": 2,
+    "span": "EOP talk"
+   },
+   {
+    "start": "1:35",
+    "periods": 1,
+    "span": "End of Practice"
    }
   ],
   "notes": [
-   "Get travel bags and pants",
-   "Pack travel bags and move to big room",
-   "Walk-thru in Indoor (just get lined up)",
-   "EOP Talk",
-   "Classroom",
-   "Special teams",
-   "being attentive",
-   "travel",
-   "pregame meals",
-   "After game scuffle",
-   "3:45-3:55 Eat 7 abcs 7 oline",
-   "3:55-4:00 weightroom 7 ind d 7 dline",
-   "4:00-5:30 Movie 7 team d 7 team d",
-   "5:30-5:45 get dressed (No shoulder pads) 7 team o 7 team o",
-   "5:45-6:00 WALK THRU",
-   "6:10-6:55 Pre game"
+   "End of practice talk: classroom, special teams, being attentive, travel, pregame meals, after-game scuffle.",
+   "Game day: 3:45-3:55 eat; 3:55-4:00 weight room; 4:00-5:30 movie; 5:30-5:45 get dressed (no shoulder pads); 5:45-6:00 walk-thru; 6:10-6:55 pregame.",
+   "Pregame walk-thru groups: 7 ABC's / 7 O-line, 7 Ind D / 7 D-line, 7 Team D, 7 Team O."
   ]
  }
 ]
