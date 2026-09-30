@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { aiStatus } from "@/lib/ai/config";
-import { getAttendance, getCoaches, getDepthChart, getDocuments, getGames, getNotes, getPlayers, getPlays, getPractices, getScripts } from "@/lib/db";
+import { getAttendance, getCoaches, getDepthChart, getHighSchoolPlayers, getDocuments, getGames, getNotes, getPlayers, getPlays, getPractices, getScripts } from "@/lib/db";
 import { runAsk, runDraft, runTranscript, runWorkflow, type Fail, type Ok, type WorkflowResult } from "@/lib/ai/run";
 import { draftToPractice, type DraftResult, type Proposal } from "@/lib/ai/schemas";
 import type { AssistantData, Source } from "@/lib/ai/context";
@@ -20,8 +20,8 @@ async function gate(): Promise<Fail | { ok: true; model: string; data: Assistant
   if (!user) redirect("/login");
   const status = aiStatus();
   if (!status.ready) return { ok: false, error: "The assistant isn't switched on yet." };
-  const [players, practices, games, notes, coaches, docs, attendance, plays, scripts, depth] = await Promise.all([getPlayers(), getPractices(), getGames(), getNotes(), getCoaches(), getDocuments(), getAttendance(), getPlays(), getScripts(), getDepthChart()]);
-  return { ok: true, model: status.model, data: { today: nowInSchool().today, players, practices, games, notes, coaches, docs, attendance, plays, scripts, depth } };
+  const [players, practices, games, notes, coaches, docs, attendance, plays, scripts, depth, hsPlayers] = await Promise.all([getPlayers(), getPractices(), getGames(), getNotes(), getCoaches(), getDocuments(), getAttendance(), getPlays(), getScripts(), getDepthChart(), getHighSchoolPlayers()]);
+  return { ok: true, model: status.model, data: { today: nowInSchool().today, players, practices, games, notes, coaches, docs, attendance, plays, scripts, depth, hsPlayers } };
 }
 
 export async function askAssistant(question: string): Promise<Ok<{ answer: string; sources: Source[] }> | Fail> {

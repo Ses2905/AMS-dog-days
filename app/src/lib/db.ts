@@ -45,12 +45,24 @@ export async function getPractice(id: string): Promise<Practice | undefined> {
   return data ? toPractice(data as PracticeRow) : undefined;
 }
 
-export async function getPlayers(): Promise<Player[]> {
+const toPlayer = (p: Record<string, unknown>): Player => ({
+  id: p.id as string, first: p.first_name as string, last: p.last_name as string, grade: p.grade as number, number: p.number as number,
+  team: (p.team as Player["team"]) ?? "jr", position: (p.position as string | null) ?? undefined, height: (p.height as string | null) ?? undefined, weight: (p.weight as number | null) ?? undefined,
+  otherNumbers: p.other_numbers as number[], status: p.status as Player["status"], statusNote: (p.status_note as string | null) ?? undefined, statusUntil: (p.status_until as string | null) ?? undefined,
+});
+
+async function loadPlayers(team?: Player["team"]): Promise<Player[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("players").select("*").order("number");
+  const q = supabase.from("players").select("*").order("number");
+  const { data, error } = await (team ? q.eq("team", team) : q);
   if (error) throw new Error(`Could not load players: ${error.message}`);
-  return data.map((p) => ({ id: p.id, first: p.first_name, last: p.last_name, grade: p.grade, number: p.number, otherNumbers: p.other_numbers, status: p.status, statusNote: p.status_note ?? undefined, statusUntil: p.status_until ?? undefined }));
+  return data.map(toPlayer);
 }
+/** Jordan's Jr. High roster. Attendance, the depth chart, availability and the assistant all work from this list. */
+export const getPlayers = () => loadPlayers("jr");
+/** The high school roster (varsity and JV), used for scorers and its own roster page. */
+export const getHighSchoolPlayers = () => loadPlayers("hs");
+export const getAllPlayers = () => loadPlayers();
 
 
 export async function getCoaches(): Promise<Coach[]> {

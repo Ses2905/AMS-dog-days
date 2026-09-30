@@ -6,6 +6,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 1. Depth chart, finish it: waiting on Jordan's answer about units vs. position groups, one chart per team level, print view
 
 ## Done Recently
+- High school roster (68 players, varsity and JV) loaded with position, height and weight; scorers in JV and varsity games pick from it
 - One Calendar for everything (week and month, filters by practice/game and by team); Practice and Games tabs are now each their own workflow
 - Depth chart shell: units and editable positions, ranked players, injuries and thin spots flagged, dual roles shown; feeds the Depth Chart Check playbook
 - Playbooks: the coaching skills in /skills run inside the Assistant (scout, game plan, script, briefing, game day, postgame, player development, depth check, family message, plan my week); results can be saved, scripts go straight into Scripts
@@ -26,7 +27,8 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Plaud transcripts: paste or upload straight into "Read a Transcript"
 - Morning summary and weather on Today
 - Full-data export
-- Varsity and JV rosters (varsity roster PDF received, not loaded)
+- High school staff list from the roster PDF (head coach and coordinators) is not loaded; the coaches list is Jr. High only
+- Split the high school roster into varsity and JV once Jordan says who plays where
 - Real logo files for the Tools page (currently colored letter tiles)
 
 ## Ideas to Validate With Jordan (hypotheses, not decisions)

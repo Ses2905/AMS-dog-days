@@ -14,8 +14,8 @@ const boom = (m: string, statusCode?: number) => new MockLanguageModelV4({ doGen
 const data: AssistantData = {
   today: "2026-09-30",
   players: [
-    { id: "p1", first: "Marcus", last: "Hill", grade: 9, number: 12, otherNumbers: [], status: "out", statusNote: "sprained ankle", statusUntil: "2026-10-05" },
-    { id: "p2", first: "Eli", last: "Cook", grade: 8, number: 7, otherNumbers: [], status: "available" },
+    { id: "p1", first: "Marcus", last: "Hill", grade: 9, number: 12, otherNumbers: [], team: "jr", status: "out", statusNote: "sprained ankle", statusUntil: "2026-10-05" },
+    { id: "p2", first: "Eli", last: "Cook", grade: 8, number: 7, otherNumbers: [], team: "jr", status: "available" },
   ],
   practices: [], notes: [], docs: [],
   games: [{ id: "g1", date: "2026-10-01", time: "5:30 PM", level: "jr", opponent: "Pea Ridge", site: "home", location: null, kind: "game", status: "scheduled", scoreUs: null, scoreThem: null, links: [], checklist: {} } as never],

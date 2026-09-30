@@ -2,13 +2,13 @@ import { connection } from "next/server";
 import { GamesView } from "@/components/GamesView";
 import { LinksEditor } from "@/components/LinksEditor";
 import { SeasonStats } from "@/components/SeasonStats";
-import { getGames, getPlayers, getPlays, getScheduleLinks } from "@/lib/db";
+import { getAllPlayers, getGames, getPlays, getScheduleLinks } from "@/lib/db";
 import { saveScheduleLinks } from "./actions";
 import { nowInSchool } from "@/lib/week";
 
 export default async function GamesPage() {
   await connection();
-  const [games, links, plays, players] = await Promise.all([getGames(), getScheduleLinks(), getPlays(), getPlayers()]);
+  const [games, links, plays, players] = await Promise.all([getGames(), getScheduleLinks(), getPlays(), getAllPlayers()]);
   return (
     <div className="space-y-4">
       <GamesView games={games} today={nowInSchool().today} />

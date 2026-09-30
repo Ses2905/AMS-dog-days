@@ -14,6 +14,8 @@ import type { Script } from "../scripts";
 export type AssistantData = {
   today: string; players: Player[]; practices: Practice[]; games: Game[]; notes: Note[]; coaches: Coach[]; docs: Doc[];
   attendance?: AttendanceRow[]; plays?: Play[]; scripts?: Script[]; depth?: { positions: DepthPosition[]; slots: DepthSlot[] };
+  /** High school players, only so scorers in varsity and JV games can be named by number and last name. */
+  hsPlayers?: Player[];
 };
 
 /** Players are only ever referred to by jersey number and last name. First names, contact details and status reasons never go in. */
