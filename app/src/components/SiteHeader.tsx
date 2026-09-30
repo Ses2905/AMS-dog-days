@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const tabs = [
   { href: "/", label: "Today" },
+  { href: "/calendar", label: "Calendar" },
   { href: "/practice", label: "Practice" },
   { href: "/roster", label: "Team" },
   { href: "/games", label: "Games" },
@@ -77,7 +78,7 @@ export function SiteHeader({ signOut }: { signOut: () => Promise<void> }) {
                 key={l.href}
                 href={l.href}
                 aria-current={active(l.href) ? "page" : undefined}
-                className={`font-display flex-1 border-b-4 px-1 pb-2 pt-2.5 text-center text-base font-semibold uppercase tracking-wide transition-colors sm:flex-none sm:px-5 sm:text-lg sm:tracking-wider ${active(l.href) ? "border-gold-500 text-white" : "border-transparent text-white/70 hover:text-white"}`}
+                className={`font-display flex-1 border-b-4 px-0.5 pb-2 pt-2.5 text-center text-[0.875rem] font-semibold uppercase tracking-normal transition-colors sm:flex-none sm:px-5 sm:text-lg sm:tracking-wider ${active(l.href) ? "border-gold-500 text-white" : "border-transparent text-white/70 hover:text-white"}`}
               >
                 {l.label}
               </Link>

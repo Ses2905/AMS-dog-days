@@ -8,7 +8,7 @@ import { prettyDate } from "@/lib/time";
 import { GameForm } from "./GameForm";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
-import { btnPrimary } from "./ui";
+import { btnOutline, btnPrimary } from "./ui";
 
 type Filters = { q: string; when: "all" | "upcoming" | "past"; site: "all" | "home" | "away"; level: "all" | "jr" | "jrjv" | "jv" | "varsity" };
 const NONE: Filters = { q: "", when: "upcoming", site: "all", level: "all" };
@@ -29,6 +29,7 @@ export function GamesView({ games, today }: { games: Game[]; today: string }) {
   return (
     <div className="space-y-4">
       <PageHeader title={`Games · ${games.length}`} subtitle={upcoming > 0 ? `${upcoming} coming up` : "Nothing scheduled yet"}>
+        <Link href="/calendar?show=game" className={btnOutline}>Calendar</Link>
         <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add game"}</button>
       </PageHeader>
 
