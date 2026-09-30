@@ -3,7 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { availabilityOn } from "@/lib/availability";
 import { getGames, getNotes, getPlayers, getPractices } from "@/lib/db";
-import { nextGame, prepProgress, vsLabel } from "@/lib/games";
+import { levelLabel, nextGame, prepProgress, vsLabel } from "@/lib/games";
 import { isOverdue, openActions } from "@/lib/notes";
 import { mondayOf, nowInSchool, slotStatus, weekSlots } from "@/lib/week";
 import { prettyDate } from "@/lib/time";
@@ -71,7 +71,7 @@ export default async function Home() {
 
       {game && prep && (
         <Link href={`/games/${game.id}`} className="block rounded-xl bg-white p-4 shadow-sm hover:shadow">
-          <p className="text-sm text-neutral-600">Next game{game.date === today ? " · today" : ""}</p>
+          <p className="text-sm text-neutral-600">Next game · {levelLabel(game.level)}{game.date === today ? " · today" : ""}</p>
           <p className="font-display text-2xl font-semibold uppercase tracking-wide">{vsLabel(game)}</p>
           <p className="text-sm text-neutral-700">{prettyDate(game.date)}{game.time ? ` · ${game.time}` : ""}{game.location ? ` · ${game.location}` : ""}</p>
           <p className={`mt-1 text-sm font-semibold ${prep.done === prep.total ? "text-green-900" : "text-neutral-700"}`}>Prep {prep.done} of {prep.total} ready</p>

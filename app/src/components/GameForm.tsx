@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { createGame, deleteGame, updateGame } from "@/app/games/actions";
 import type { Game } from "@/lib/db-types";
+import { LEVELS } from "@/lib/games";
 import { btnDanger, btnPlain, btnPrimary, inputCls } from "./ui";
 
 /** Add a game (game = undefined) or edit one. */
@@ -10,6 +11,7 @@ export function GameForm({ game, defaultDate, onDone }: { game?: Game; defaultDa
   const [date, setDate] = useState(game?.date ?? defaultDate ?? "");
   const [time, setTime] = useState(game?.time ?? "");
   const [opponent, setOpponent] = useState(game?.opponent ?? "");
+  const [level, setLevel] = useState<string>(game?.level ?? "jr");
   const [site, setSite] = useState<string>(game?.site ?? "home");
   const [location, setLocation] = useState(game?.location ?? "");
   const [kind, setKind] = useState<string>(game?.kind ?? "game");
@@ -20,7 +22,7 @@ export function GameForm({ game, defaultDate, onDone }: { game?: Game; defaultDa
   const [pending, start] = useTransition();
 
   const save = () => start(async () => {
-    const payload = { date, time, opponent, site, location, kind, status, scoreUs, scoreThem };
+    const payload = { date, time, level, opponent, site, location, kind, status, scoreUs, scoreThem };
     const r = game ? await updateGame(game.id, payload) : await createGame(payload);
     if (r.error) setError(r.error); else { setError(""); onDone(); }
   });
@@ -35,6 +37,9 @@ export function GameForm({ game, defaultDate, onDone }: { game?: Game; defaultDa
         <label className="text-sm font-medium">Opponent<input className={inputCls} value={opponent} onChange={(e) => setOpponent(e.target.value)} autoFocus={!game} placeholder="Pea Ridge" /></label>
         <label className="text-sm font-medium">Date<input type="date" className={inputCls} value={date} onChange={(e) => setDate(e.target.value)} /></label>
         <label className="text-sm font-medium">Time (optional)<input className={inputCls} value={time} onChange={(e) => setTime(e.target.value)} placeholder="7:00 PM" /></label>
+        <label className="text-sm font-medium">Team
+          <select className={inputCls} value={level} onChange={(e) => setLevel(e.target.value)}>{LEVELS.map((l) => <option key={l.value} value={l.value}>{l.label}</option>)}</select>
+        </label>
         <label className="text-sm font-medium">Where
           <select className={inputCls} value={site} onChange={(e) => setSite(e.target.value)}><option value="home">Home</option><option value="away">Away</option><option value="neutral">Neutral</option></select>
         </label>

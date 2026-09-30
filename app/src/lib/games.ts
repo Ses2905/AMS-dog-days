@@ -14,6 +14,10 @@ export const CHECKLIST = [
 export type ChecklistKey = (typeof CHECKLIST)[number]["key"];
 export const isChecklistKey = (k: unknown): k is ChecklistKey => CHECKLIST.some((c) => c.key === k);
 
+export const LEVELS = [{ value: "jr", label: "Jr. High" }, { value: "jv", label: "JV" }, { value: "varsity", label: "Varsity" }] as const;
+export type Level = (typeof LEVELS)[number]["value"];
+export const levelLabel = (l: Level) => LEVELS.find((x) => x.value === l)?.label ?? "Jr. High";
+
 export const SITES = ["home", "away", "neutral"] as const;
 export const KINDS = ["game", "scrimmage", "other"] as const;
 export const STATUSES = ["scheduled", "final", "postponed", "cancelled"] as const;
@@ -33,7 +37,7 @@ export function normalizeTime(raw: string): string | null {
 }
 
 export type GameInput = {
-  date: string; time: string | null; opponent: string; site: (typeof SITES)[number]; location: string | null;
+  date: string; time: string | null; level: Level; opponent: string; site: (typeof SITES)[number]; location: string | null;
   kind: (typeof KINDS)[number]; status: (typeof STATUSES)[number]; scoreUs: number | null; scoreThem: number | null;
 };
 
@@ -55,6 +59,8 @@ export function parseGameInput(input: unknown): { ok: true; value: GameInput } |
     const time = timeRaw ? normalizeTime(timeRaw) : null;
     if (timeRaw && !time) throw new Error("Time should look like 7:00 PM.");
     const site = p.site as GameInput["site"], kind = p.kind as GameInput["kind"], status = p.status as GameInput["status"];
+    const level = (p.level ?? "jr") as Level;
+    if (!LEVELS.some((l) => l.value === level)) throw new Error("Pick Jr. High, JV or Varsity.");
     if (!SITES.includes(site)) throw new Error("Pick home, away or neutral.");
     if (!KINDS.includes(kind)) throw new Error("Pick game, scrimmage or other.");
     if (!STATUSES.includes(status)) throw new Error("Pick a status.");
@@ -63,7 +69,7 @@ export function parseGameInput(input: unknown): { ok: true; value: GameInput } |
     if (status !== "final") { scoreUs = null; scoreThem = null; } // scores only count once it's final
     for (const s of [scoreUs, scoreThem]) if (s !== null && (!Number.isInteger(s) || s < 0 || s > 200)) throw new Error("Scores should be whole numbers, 0 to 200.");
     if ((scoreUs === null) !== (scoreThem === null)) throw new Error("Enter both scores, or leave both blank.");
-    return { ok: true, value: { date, time, opponent, site, location: text(p.location, 80, "Location") || null, kind, status, scoreUs, scoreThem } };
+    return { ok: true, value: { date, time, level, opponent, site, location: text(p.location, 80, "Location") || null, kind, status, scoreUs, scoreThem } };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Could not read the form." };
   }

@@ -4,7 +4,7 @@ import { PageHeader } from "./PageHeader";
 import { btnOutline, btnPlain, btnPrimary } from "./ui";
 import { mondayOf, shiftWeek, slotStatus, suggestSource, weekSlots, type SlotStatus } from "@/lib/week";
 import type { Game } from "@/lib/db-types";
-import { resultLabel, vsLabel } from "@/lib/games";
+import { levelLabel, resultLabel, vsLabel } from "@/lib/games";
 import type { Practice } from "@/lib/types";
 
 const LABEL: Record<SlotStatus, string> = { done: "Done", "in-progress": "In progress", "later-today": "Later today", planned: "Planned", "needs-plan": "Needs a plan", "no-plan": "No plan on file" };
@@ -77,7 +77,7 @@ export function WeekView({ practices, games, monday, now }: { practices: Practic
             {d.games.map((g) => (
               <li key={g.id} className="flex min-h-16 items-center gap-3 bg-[#f1ecd3] px-4 py-2">
                 <div className="min-w-0 flex-1">
-                  <p className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-gold-500 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-green-900">Game</span><span className="font-display text-xl font-semibold uppercase tracking-wide">{vsLabel(g)}</span></p>
+                  <p className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-gold-500 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-green-900">{levelLabel(g.level)} game</span><span className="font-display text-xl font-semibold uppercase tracking-wide">{vsLabel(g)}</span></p>
                   <p className="text-sm text-neutral-700">{[g.time, g.location, resultLabel(g)].filter(Boolean).join(" · ") || "Time to be set"}</p>
                 </div>
                 <Link href={`/games/${g.id}`} className={btnOutline}>Open</Link>

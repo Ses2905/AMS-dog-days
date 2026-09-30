@@ -7,8 +7,9 @@ import type { Game, GameLink } from "@/lib/db-types";
 import { CHECKLIST, prepProgress, resultLabel, vsLabel, type ChecklistKey } from "@/lib/games";
 import { prettyDate } from "@/lib/time";
 import { GameForm } from "./GameForm";
+import { LinksEditor } from "./LinksEditor";
 import { PageHeader } from "./PageHeader";
-import { btnDanger, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { btnOutline, btnPrimary } from "./ui";
 
 /** Title, date and place, with an Edit panel. */
 export function GameHeader({ game }: { game: Game }) {
@@ -66,41 +67,5 @@ export function GameChecklist({ gameId, initial }: { gameId: string; initial: Re
 }
 
 export function GameLinks({ gameId, initial }: { gameId: string; initial: GameLink[] }) {
-  const [links, setLinks] = useState(initial);
-  const [label, setLabel] = useState("");
-  const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
-  const [pending, start] = useTransition();
-
-  const commit = (next: GameLink[], after?: () => void) =>
-    start(async () => {
-      const r = await saveLinks(gameId, next);
-      if (r.error) setError(r.error); else { setError(""); setLinks(next); after?.(); }
-    });
-
-  return (
-    <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-      <div className="flex items-center gap-3"><h2>Film & links</h2><span className="ml-auto text-sm text-neutral-600">Hudl, Drive, scouting reports</span></div>
-      {links.length === 0 ? (
-        <p className="text-sm text-neutral-600">Paste a Hudl playlist or a Drive link and it will open right from here.</p>
-      ) : (
-        <ul className="divide-y divide-neutral-200">
-          {links.map((l, i) => (
-            <li key={`${l.url}-${i}`} className="flex items-center gap-2">
-              <a href={l.url} target="_blank" rel="noopener noreferrer" className="flex min-h-12 min-w-0 flex-1 items-center gap-2 font-medium text-green-600 underline">
-                <span className="truncate">{l.label}</span><span aria-hidden className="text-xs">↗</span>
-              </a>
-              <button className={btnDanger} disabled={pending} aria-label={`Remove ${l.label}`} onClick={() => commit(links.filter((_, j) => j !== i))}>Remove</button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="grid gap-2 sm:grid-cols-[1fr_2fr_auto]">
-        <input className={`${inputCls} mt-0`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Name (optional)" aria-label="Link name" />
-        <input className={`${inputCls} mt-0`} value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Paste a link" aria-label="Link address" inputMode="url" autoCapitalize="none" />
-        <button className={btnPlain} disabled={pending || !url.trim()} onClick={() => commit([...links, { label, url }], () => { setLabel(""); setUrl(""); })}>Add link</button>
-      </div>
-      {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-    </section>
-  );
+  return <LinksEditor initial={initial} save={(links) => saveLinks(gameId, links)} title="Film & links" hint="Hudl, Drive, scouting reports" empty="Paste a Hudl playlist or a Drive link and it will open right from here." />;
 }
