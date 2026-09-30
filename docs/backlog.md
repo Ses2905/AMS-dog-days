@@ -39,6 +39,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 10. **Plaud auto-import** instead of paste.
 
 ## Open Questions for Jordan
+- **Depth chart on the phone or at a desk?** Does he look at it during practice or only when planning? Decides whether it needs a sideline mode, a print view, or both.
 - **Depth chart shape (blocks the build):** does he think in units (offense, defense, special teams) or position groups (QB, RB, OL...)? Does he want one chart per team level? Does he want a two-deep or a full list?
 - Are the 7th grade and Jr. High games one game or two on "5:30 / 7pm" nights?
 - Varsity Aug 18 @ Southside is a Tuesday. Real game or scrimmage?
