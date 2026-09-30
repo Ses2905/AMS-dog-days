@@ -540,9 +540,9 @@ These five are noted for the to-do list, not yet scheduled. Each is mapped to th
 
 ## 21. Build Status (updated)
 
-**Live:** sign-in (Supabase + Vercel); roster and 9 practice plans imported from his PDFs; practice grid, one-page print view, editing, week view (planned, done, missing), plan-it and copy-to-new-day; player availability; roster and coach admin; notes and action items; Games and opponent pages (prep checklist, film and document links, scouting notes, result); one look (Barlow fonts, Alma colors) and one set of list conventions (`docs/ui-conventions.md`).
+**Live:** sign-in (Supabase + Vercel); roster and 9 practice plans imported from his PDFs; practice grid, one-page print view, editing, week view (planned, done, missing), plan-it and copy-to-new-day; player availability; roster and coach admin; notes and action items; Games and opponent pages (prep checklist, film and document links, scouting notes, result); a document Library (uploads to private storage, attach to a game or practice); install-to-home-screen and save-a-shared-link; one look (Barlow fonts, Alma colors) and one set of list conventions (`docs/ui-conventions.md`).
 
-**Next, in order:** document library (uploads, phone share, installable app) -> AI (ask his documents, draft a practice, read a Plaud transcript; asks before changing anything) -> attendance, team script, depth chart. Smaller: morning summary and weather on Today, full-data export, per-player notes over a season.
+**Next, in order:** offline read of today's plan -> AI (ask his documents, draft a practice, read a Plaud transcript; asks before changing anything) -> attendance, team script, depth chart. Smaller: morning summary and weather on Today, full-data export, per-player notes over a season.
 
 **Decided:** private, single user (Jordan); names go to the AI as jersey number and last name only; Hudl and SportsYou are links, not integrations; no public team page; hosting is Next.js on Vercel with Supabase.
 

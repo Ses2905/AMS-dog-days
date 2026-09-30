@@ -30,3 +30,14 @@ export type Game = {
   links: GameLink[];
   checklist: Record<string, boolean>;
 };
+
+export type Doc = {
+  id: string;
+  name: string;
+  category: "playbook" | "scouting" | "practice" | "school" | "other";
+  mime: string;
+  size: number;
+  gameId: string | null;
+  practiceId: string | null;
+  created: string;
+};

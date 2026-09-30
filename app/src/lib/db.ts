@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Coach, Game, Note } from "@/lib/db-types";
+import type { Coach, Doc, Game, Note } from "@/lib/db-types";
 import type { Block, Player, Practice } from "@/lib/types";
 
 type BlockRow = { position: number; start_time: string; periods: number; span: string | null; flex: boolean; lanes: Record<string, string> };
@@ -85,4 +85,11 @@ export async function getGame(id: string): Promise<Game | undefined> {
   const { data, error } = await supabase.from("games").select("*").eq("id", id).maybeSingle();
   if (error) throw new Error(`Could not load the game: ${error.message}`);
   return data ? toGame(data) : undefined;
+}
+
+export async function getDocuments(): Promise<Doc[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("documents").select("id,name,category,mime,size_bytes,game_id,practice_id,created_at").order("created_at", { ascending: false });
+  if (error) throw new Error(`Could not load documents: ${error.message}`);
+  return data.map((d) => ({ id: d.id, name: d.name, category: d.category, mime: d.mime, size: d.size_bytes, gameId: d.game_id, practiceId: d.practice_id, created: d.created_at }));
 }

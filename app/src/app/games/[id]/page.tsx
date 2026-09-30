@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GameChecklist, GameHeader, GameLinks } from "@/components/GamePanels";
 import { btnOutline, btnPrimary } from "@/components/ui";
-import { getGame, getNotes, getPractices } from "@/lib/db";
+import { getDocuments, getGame, getNotes, getPractices } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 const addDays = (iso: string, n: number) => {
@@ -15,7 +15,8 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
   const { id } = await params;
   const game = await getGame(id);
   if (!game) notFound();
-  const [notes, practices] = await Promise.all([getNotes(), getPractices()]);
+  const [notes, practices, allDocs] = await Promise.all([getNotes(), getPractices(), getDocuments()]);
+  const docs = allDocs.filter((d) => d.gameId === game.id);
   const about = notes.filter((n) => n.gameId === game.id);
   const week = practices.filter((p) => p.date >= addDays(game.date, -6) && p.date <= game.date).sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
 
@@ -26,6 +27,22 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
         <GameChecklist gameId={game.id} initial={game.checklist} />
         <GameLinks gameId={game.id} initial={game.links} />
       </div>
+
+      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2>Documents{docs.length > 0 ? ` · ${docs.length}` : ""}</h2>
+          <Link href={`/documents?add=1&game=${game.id}`} className={btnOutline + " ml-auto"}>Add document</Link>
+        </div>
+        {docs.length === 0 ? (
+          <p className="text-sm text-neutral-600">Scouting reports and playbook pages for this opponent. Upload them once and they open right from here.</p>
+        ) : (
+          <ul className="divide-y divide-neutral-200">
+            {docs.map((d) => (
+              <li key={d.id}><a href={`/documents/${d.id}/file`} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center gap-2 font-medium text-green-600 underline"><span className="truncate">{d.name}</span><span aria-hidden className="text-xs">↗</span></a></li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
