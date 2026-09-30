@@ -1,8 +1,25 @@
 # Coach OS | Product Brief & Specs Outline
 
-**Status:** Draft v0.1 for review
+**Status:** Draft v0.2 (rescoped as a personal tool for one Alma Junior High coach)
 **Form factor:** Responsive web app / PWA (desktop, tablet, phone). No native apps until usage proves the need.
-**Audience:** Product, design, engineering, and pilot-program head coaches
+**Audience:** Builder and the coach who will use it
+
+---
+
+## 0. Scope Update (v0.2)
+
+Coach OS is now a **personal operating system for one coach at Alma Junior High**, not a multi-school product. That changes the earlier draft:
+
+| Earlier Assumption | Now |
+|--------------------|-----|
+| Multi-org, multi-role, configurable permissions | **Single user.** One login. Keep a `team_id` on every record so JV / 8th / 9th stay separate, but skip the role matrix. |
+| Pilot staffs, buyer, pricing | **Dropped.** The pilot is him. Success is "did he use it this week instead of the spreadsheet and printout." |
+| Partner integrations (Hudl, SportsYou, Plaud) as architecture pillars | **Links and exports only** for now. Add connectors when he asks for one. |
+| Marketing-grade polish | **Brand-matched and fast to use.** Polish where it saves him time (practice grid, print view). |
+
+**Still true even for a personal tool:** the roster is minors' data, and Feature 4 (public page) puts things on the open web. Rules for that are in Section 18.
+
+**Assumption to confirm:** the AI Gateway features assume a Vercel-style stack (Next.js on Vercel with the AI Gateway). If you host elsewhere, the gateway calls need a different provider setup. Nothing else in the spec depends on it.
 
 ---
 
@@ -366,3 +383,155 @@ Task-level measures over satisfaction scores.
 3. Secure 2-3 pilot staffs.
 4. Draft the football glossary (Language Is Product) and relationship schema.
 5. Design the Home, Practice Planner, and mobile attendance flows first.
+
+---
+
+## 17. Alma Context From Real Files
+
+Source files reviewed: *OFFICIAL Alma Jr. High Roster 26* (15 pages) and *Pea Ridge Jr. High Practice* (11 pages, Sept 28 to Oct 1, 2026). These change design details.
+
+### 17.1 What the Practice Sheets Tell Us
+- **The practice is a grid, not a list.** Rows are numbered periods on a **5-minute grid**. Columns are coaches (Dugger, Barrett, Coursey, Potts, Salsbury, Driscoll, Burns, and others by day). A cell holds what that coach's group does. The Practice Planner should default to this layout: **time down the side, coach lanes across, 5-minute snap.** A vertical list of periods would not match how he already thinks.
+- **Header fields recur every day:** Date, Dress (Helmets, Full, Shells, Greys and helmet), Lift, O/D Meeting, Situations. Make these first-class fields on Practice, not notes.
+- **Some cells span all lanes** (Team O, Break, Halftime, End of Practice, Film). Support a full-width block.
+- **Two sessions per day.** A school-day session (about 12:55 to 1:35) and an evening session (about 6:55 to 8:35). Model these as two Practices on one day.
+- **Footer notes carry real work:** coach-specific instructions ("Potts and Driscoll: period 3, work on Blade together"), RVA direction ("RVAs to the right, 4/5/6 Bears"), motions, and **who carries the opponent scout book** ("Coursey have Pea Ridge book", "Coursey have Siloam scout book"). Make these per-coach assignments on the practice, and show them on that coach's Today view.
+- **A Skelly grid** appears with hash (RH, RM, LM, LH), numbered reps, formation/play, and coverage/front/blitz. This maps directly to Team Script rows. Hash cycling RH, RM, LM, LH repeats. Auto-fill it.
+- **Terminology is his own:** ABC's, IND-O / IND D, Skelly, Mix, RVA, Pursuit, Team O / Team D, Scout O / Scout D, Heavy O, Get Off, Halftime. Seed the drill library and glossary with these exact words.
+- **Play-call vocabulary is compound:** "Trey Kansas City Q Lead war", "Carolina Flash Surf", "Stack Arizona". These are formation plus play plus tag strings. Store as free text with optional parsing later. Do not force structured fields on day one.
+- **Practices are scoped by opponent.** The Thursday file references Siloam; the week is built around Pea Ridge. Practice should link to an Opponent and a Game.
+- **Today (Wed Sept 30) already has a practice in these files**, so a working Home screen that opens tonight's plan is a natural first demo.
+
+### 17.2 What the Roster Tells Us
+The roster file contains **9th, 8th, JV, combined and sign-out lists, plus offense and defense depth pages.** The same kid appears in several lists with different jersey numbers.
+
+Examples seen:
+- Hagen / Hagan Goodwin is #2 on the 8th list and #9 on the combined sign-out.
+- Landen / Landon Quinalty / Quintally is spelled three ways.
+- Haedyn / Haeden Denton and Kasen / Kason Tilton also vary.
+- Numbers do not stay stable across lists (Colton Williams is #60 in one and #56 in another).
+
+**Design implications:**
+1. **A player is not a jersey number.** Store a stable player ID. Jersey number belongs to a team-season roster entry.
+2. **Import needs a duplicate review step.** Match on normalized first and last name, then show near-matches ("Quinalty vs Quintally?") for him to merge. Do not auto-merge.
+3. **Roster entries are per team.** A player can be on 8th, JV and the combined sign-out. Model Team membership separately from Player.
+4. **Blank numbers exist** (open slots in the numbered lists). Skip empty rows on import.
+5. **Roster PDFs list Head Coach Jordan Dugger and assistants Joey Potts and Jacob Coursey**; practice sheets list additional coaches (Barrett, Salsbury, Driscoll, Burns, and others on the first sheet). Seed the coach directory from these and let him fix it.
+6. **The depth pages** show the defense as Bandit, Tackle, Nose, End (front), Star, Mike, Will (backers), Corner, Free Safety, Weak Safety, Corner, and the offense as LT, LG, C, RG, RT, QB and skill positions. Seed the depth chart templates with these labels, not generic ones.
+
+**Import path:** the files are PDFs. Extract text into a staging table, let him confirm column mapping and duplicates, then write to Roster. Do not require him to re-type.
+
+---
+
+## 18. Brand & Visual Direction (Alma Airedales)
+
+Assets are saved in `assets/brand/`:
+
+| File | Use |
+|------|-----|
+| `alma-airedale-football-badge.png` | Login screen, print header, share cards |
+| `alma-gold-a.png` | App icon, favicon, mobile top bar |
+| `airedale-head-color.png` | Empty states, print header on white |
+| `airedale-head-white-on-green.png` | Dark-green splash, PWA loading screen |
+
+### Color Tokens (sampled from the logo files)
+
+The school website (almasd.net) was not reachable from this environment, so these are **sampled from your logo images, not the official brand guide.** Confirm against the school's guide before publishing anything public.
+
+| Token | Approx. Hex | Source | Use |
+|-------|-------------|--------|-----|
+| `--green-900` | `#003810` | Badge background | Nav rail, headers, primary buttons |
+| `--green-600` | `#006030` | Mascot outline | Accents, links, selected states |
+| `--gold-500` | `#C4B259` | Alma "A" | Highlights, active period, primary CTA on dark |
+| `--tan-300` | `#D2B899` | Mascot fur | Subtle fills, card accents |
+| `--ink` | `#111` | Text | Body text |
+| `--paper` | `#FFF` | Background | Cards, print |
+
+### Guidance
+- **Dark green + gold on white.** Use green as structure and gold sparingly as the "this is now" signal (current period, today, next practice).
+- **Outdoor readability:** check gold-on-green and gold-on-white contrast. Gold text on white will fail; use gold as a fill or on green only. Verify with a contrast checker before committing.
+- Use the mascot in the **badge, empty states and print header**. Do not tile it, stretch it or place it behind content.
+- Keep the earlier direction: modern performance tool, not booster-club website. The Airedale is already aggressive enough; keep everything around it calm.
+- **Trademark:** the Nike swoosh appears in the badge file. Do not reuse that badge on anything shared publicly. Use the head and "A" instead.
+
+---
+
+## 19. Feature Backlog (Requested)
+
+These five are noted for the to-do list, not yet scheduled. Each is mapped to the modules it depends on.
+
+| # | Feature | Depends On | Suggested Slot | Size |
+|---|---------|------------|----------------|------|
+| B1 | Print-friendly practice plan | Practice Planner | **MVP-B** (ship with the planner) | S |
+| B2 | Player availability tracking | Roster, Attendance, Practice, Game | **MVP-B** (extends attendance) | M |
+| B3 | Public read-only team page | Calendar, Game, Announcements | Phase 2, after MVP-C | M |
+| B4 | Ask the playbook (grounded Q&A) | Documents, Playbook, AI Gateway | Phase 2 | L |
+| B5 | AI practice plan generator | Practice Planner, Roster, Availability, AI Gateway | Phase 2, after B2 and B4 | L |
+
+**Sequencing logic:** B1 and B2 are cheap, solve a daily annoyance and do not need AI. B5 is only as good as the availability, drill library and past-practice data it draws on, so it comes after B2 and after several real practices are stored. B4 needs his documents uploaded and chunked, so it needs the document layer first.
+
+### B1. Print-Friendly Practice Plan
+**Job:** Bring the plan to the field on paper without a phone.
+- One button: **Print / PDF** from any practice.
+- Layout matches his existing sheet: header (date, dress, lift, O/D meeting, situations), period grid with time down the side and coach lanes across, footer notes.
+- **Landscape, letter size, one page per session.** Fit 30+ periods at 5-minute grid without shrinking below readable size (target 9pt minimum).
+- Black and white safe. Gold and green only as light tints or borders. Alma head in the header.
+- Options: include or omit notes, include the Skelly grid page, one page per coach (that coach's lane only).
+- Use a print stylesheet (`@media print`), not a screenshot. Verify page breaks, no cut-off lanes and blank rows trimmed.
+- **Done when:** he prints Wednesday's practice and it looks as good as or better than the current PDF.
+
+### B2. Player Availability Tracking
+**Job:** Know who is available for each practice and game.
+- Per player: **Available, Limited, Out, Excused** with an optional short reason (illness, injury, family, discipline). Store the minimum; do not store medical detail.
+- Record by date or date range ("out through Friday"), so it persists across practices without re-entering.
+- **Availability view per practice or game:** who is in, limited and out, with counts, by position group.
+- Marking a player Out or Limited **flags them on the depth chart** and on affected periods.
+- Attendance and availability are related but different: availability is expected, attendance is what happened. Show both.
+- History per player for the season.
+- Mobile: two taps from Today to mark a kid out.
+- **Open question:** does he want an "unexcused vs excused" distinction for eligibility or grades? Ask him.
+
+### B3. Public Read-Only Team Page
+**Job:** A link he can share with players and families showing upcoming games and announcements.
+- Read-only page: team name, upcoming games (date, time, opponent, home/away, location), announcements, optional schedule download (ICS).
+- He controls what is published. **Nothing publishes automatically.** Announcements are drafted and explicitly published.
+- Random, unguessable URL (or a chosen slug); a revoke and regenerate option; no login for viewers.
+- **Never show:** player names, photos, jersey numbers tied to names, attendance, availability, injuries, notes, depth chart, practice plans or opponent scouting. This is the rule that protects kids on a public page, even in a personal tool.
+- **Do not index:** add `noindex` and exclude from sitemaps.
+- Branded with the Airedale head and school colors. Mobile-first, since parents will open it on phones.
+- **Open question:** does the school or athletic director need to approve public communications for Alma? Confirm before sharing widely.
+
+### B4. Ask the Playbook (Grounded Q&A)
+**Job:** Ask questions and get answers from his own playbook and documents, with sources.
+- Upload or attach documents (PDFs, Google Docs / Drive exports, scout books, notes). Extract text, split into chunks with page or section references and store embeddings.
+- Chat box: "What's our Cover 3 check vs. trips?" The model receives the question plus the most relevant chunks and answers **only from them**.
+- **Every answer shows sources**: document name, page/section, and the quoted passage, each linking to the original.
+- If nothing relevant is found, say so. **No guessing** and no general-football filler presented as if it came from his playbook.
+- Model calls go through **AI Gateway** so the model can be switched without code changes. Keep the model name and a spend limit in configuration.
+- Scope filter: search all documents, one opponent's documents, or one document.
+- **Quality checks before trusting it:** build 20 to 30 real questions with known answers from his files. Measure how often the correct source is retrieved and how often the answer is fully supported. Ship only when he agrees it is reliable.
+- **Privacy note:** roster names and notes should not be sent to the model unless a question needs them. Default to documents only.
+- **Risk:** playbook PDFs of diagrams have little text. Answers will be weak until plays are also stored as text. Storing plays as named text entries (Playbook module) improves this a lot.
+
+### B5. AI Practice Plan Generator
+**Job:** He gives goals, available time and constraints. The model drafts a practice plan he can edit.
+- **Inputs:** date, session (school-day or evening), total minutes, start time, dress, **goals** (free text plus quick picks such as "install Counter", "red zone", "tackling"), opponent, coaches available and roster constraints (from availability: "no 8th grade after 7:45", "5 players out").
+- **Context the model receives:** his drill library, coach names, recent practices, the opponent's game week notes and availability counts, plus the fixed 5-minute grid and the period format.
+- **Output is structured, not prose:** periods with start time, duration, per-coach lane cell, group and notes, validated against the schema. Reject and retry on invalid output; never show him malformed plans.
+- Lands as a **draft practice** in the same grid editor. **He reviews and edits before it becomes the plan.** Nothing is saved as final automatically.
+- Guardrails: total time must equal available time; each coach appears in one place per period; uses drills from his library first and marks any new drill as "suggested"; includes water/break blocks where his sheets do.
+- Show a short rationale per block ("2 periods of Inside Run because you set Inside Run as a goal") so he can trust or override.
+- Uses **AI Gateway** with the same configuration as B4.
+- **Depends on:** a seeded drill library. Start by importing the drills from his past practice PDFs (Pursuit, Bag Drill, Slant/Wreck, Freeze Frame, Q & 5's Reads, and so on).
+- **Do not:** invent players, use jersey numbers from a stale roster, or override his availability data.
+- **Evaluation:** generate plans for three past weeks and compare with what he actually ran.
+
+---
+
+## 20. Updated Next Steps
+
+1. Confirm hosting (Vercel assumption for AI Gateway) and whether real player names may be sent to a model.
+2. Build **MVP-A** first: roster import from the PDFs with duplicate review, Alma theme and logos.
+3. Build the **Practice Planner grid** from his sheet layout, then **B1 print view** and **B2 availability** alongside it.
+4. Import his drill list and glossary from these practice PDFs so the app speaks his language on day one.
+5. Hold B3, B4 and B5 until he has used MVP-B for a couple of weeks. B5 needs real practice history to be good.
