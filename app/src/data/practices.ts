@@ -1,11 +1,12 @@
 import type { Practice } from "@/lib/types";
+import generated from "./practices.generated.json";
 
 const COACHES = ["Dugger", "Barrett", "Coursey", "Potts", "Salsbury", "Burns"];
 const team = "Alma Jr. High Football";
 
 // Transcribed from "Pea Ridge Jr. High Practice.pdf" (Wednesday, Sept 30, 2026).
 // The remaining days come in through the importer (tools/extract_pdfs.py) next.
-export const practices: Practice[] = [
+const curated: Practice[] = [
   {
     id: "2026-09-30-evening",
     date: "2026-09-30",
@@ -55,6 +56,15 @@ export const practices: Practice[] = [
       "Stack/Slant, RR, Sooie: Safety will move with it.",
     ],
   },
+];
+
+// Hand-checked practices win over imported ones with the same id.
+const team_ = team;
+export const practices: Practice[] = [
+  ...curated,
+  ...(generated as unknown as Omit<Practice, "team">[])
+    .filter((g) => !curated.some((c) => c.id === g.id))
+    .map((g) => ({ ...g, team: team_, opponent: g.opponent ?? undefined, lift: g.lift ?? undefined }) as Practice),
 ];
 
 export const getPractice = (id: string) => practices.find((p) => p.id === id);

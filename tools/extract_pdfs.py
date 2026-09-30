@@ -80,6 +80,7 @@ for pi,p in enumerate(pd):
     title=' '.join(t for t in txt[:2] if t and 'SITUATIONS' not in t)
     date=next((t.replace('DATE:','').strip() for t in txt if t.startswith('DATE:')),'')
     dress=next((t.replace('DRESS:','').strip() for t in txt if t.startswith('DRESS:')),'')
+    lift=next((t.replace('LIFT:','').strip() for t in txt if t.startswith('LIFT:')),'')
     periods=[]; notes=[]
     for r in rows([w for w in ws if w[1]>hy+4]):
         left=[w for w in r if w[0]<100]
@@ -112,6 +113,6 @@ for pi,p in enumerate(pd):
     periods=[q for q in periods if q['span'] or q['lanes'] or q['n']==0 or True]
     last=max((i for i,q in enumerate(periods) if q['span'] or q['lanes']),default=-1)
     periods=periods[:last+1]
-    practices.append({'page':pi+1,'title':title,'date':date,'dress':dress,'coaches':coaches,'periods':periods,'notes':notes})
-json.dump(practices, open(f'{out}/practices.raw.json','w'), indent=1)
+    practices.append({'page':pi+1,'title':title,'date':date,'dress':dress,'lift':lift,'coaches':coaches,'periods':periods,'notes':notes})
+json.dump(practices, open(f'{out}/practices.raw.json','w'), indent=1)  # run with out=scratch dir; build_practices.py converts it
 for pr in practices: print(pr['page'],pr['title'],pr['date'],pr['dress'],len(pr['periods']),pr['coaches'])

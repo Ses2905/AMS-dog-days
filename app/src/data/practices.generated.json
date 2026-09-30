@@ -1,0 +1,895 @@
+[
+ {
+  "id": "2026-08-04-after-school",
+  "imported": true,
+  "opponent": null,
+  "date": "2026-08-04",
+  "session": "After School",
+  "dress": "Helmets",
+  "lift": null,
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Shad",
+   "Jones",
+   "Pointer",
+   "Coursey",
+   "Salsbury",
+   "Mata",
+   "Driscoll",
+   "Potts"
+  ],
+  "blocks": [
+   {
+    "start": "4:25",
+    "periods": 1,
+    "span": "WARM UP",
+    "flex": true
+   },
+   {
+    "start": "4:30",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "ABC's",
+     "Shad": "ABC's",
+     "Jones": "ABC's",
+     "Pointer": "IND-O",
+     "Coursey": "Pursuit",
+     "Salsbury": "Pursuit",
+     "Mata": "Pursuit",
+     "Driscoll": "Pursuit",
+     "Potts": "Pursuit"
+    }
+   },
+   {
+    "start": "4:35",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "ABC's",
+     "Shad": "ABC's",
+     "Jones": "ABC's",
+     "Pointer": "IND-O",
+     "Coursey": "Bag Drill",
+     "Salsbury": "Slant/Wreck",
+     "Mata": "Bag Drill",
+     "Driscoll": "Mix",
+     "Potts": "Mix"
+    }
+   },
+   {
+    "start": "4:40",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "Reads",
+     "Barrett": "Q & 5's Reads",
+     "Shad": "Freeze Frame",
+     "Jones": "Q & 5's Reads",
+     "Pointer": "IND-O",
+     "Coursey": "Mix Pass Drops / Sec",
+     "Salsbury": "Stunts",
+     "Mata": "Mix Pass Drops/Sec",
+     "Driscoll": "Mix with Cor/Back",
+     "Potts": "Mix with Saf/Back"
+    }
+   },
+   {
+    "start": "4:45",
+    "periods": 1,
+    "span": "IND-O"
+   },
+   {
+    "start": "4:50",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "GREEN O",
+     "Shad": "SKELLY",
+     "Pointer": "IND-O",
+     "Mata": "WHITE D SKELLY"
+    }
+   },
+   {
+    "start": "4:55",
+    "periods": 1,
+    "span": "IND-O"
+   },
+   {
+    "start": "5:00",
+    "periods": 1,
+    "span": "BREAK"
+   },
+   {
+    "start": "5:05",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "ABC's",
+     "Shad": "ABC's",
+     "Jones": "ABC's",
+     "Pointer": "DLINE",
+     "Coursey": "Pursuit",
+     "Salsbury": "Pursuit",
+     "Mata": "Pursuit",
+     "Driscoll": "Pursuit",
+     "Potts": "Pursuit"
+    }
+   },
+   {
+    "start": "5:10",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "ABC's",
+     "Shad": "ABC's",
+     "Jones": "ABC's",
+     "Pointer": "DLINE",
+     "Coursey": "Bag Drill",
+     "Salsbury": "Slant/Wreck",
+     "Mata": "Bag Drill",
+     "Driscoll": "Mix",
+     "Potts": "Mix"
+    }
+   },
+   {
+    "start": "5:15",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "Reads",
+     "Barrett": "Q & 5's Reads",
+     "Shad": "Freeze Frame",
+     "Jones": "Q & 5's Reads",
+     "Pointer": "DLINE",
+     "Coursey": "Mix Pass Drops/Sec",
+     "Salsbury": "Stunts",
+     "Mata": "Mix Pass Drops/Sec",
+     "Driscoll": "Mix with Cor/Back",
+     "Potts": "Mix with Saf/Back"
+    }
+   },
+   {
+    "start": "5:20",
+    "periods": 1,
+    "span": "DLINE"
+   },
+   {
+    "start": "5:25",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "WHITE O",
+     "Shad": "SKELLY",
+     "Pointer": "DLINE",
+     "Mata": "WHITE D SKELLY"
+    }
+   },
+   {
+    "start": "5:30",
+    "periods": 2,
+    "span": "DLINE"
+   },
+   {
+    "start": "5:40",
+    "periods": 2,
+    "span": "GREEN TEAM O VS. WHITE TEAM D"
+   },
+   {
+    "start": "5:50",
+    "periods": 2,
+    "span": "BREAK"
+   },
+   {
+    "start": "6:00",
+    "periods": 1,
+    "span": "WHITE TEAM O VS. GREEN TEAM D"
+   }
+  ],
+  "notes": []
+ },
+ {
+  "id": "2026-09-28-evening",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-09-28",
+  "session": "Evening",
+  "dress": "Full",
+  "lift": "n/a",
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury"
+  ],
+  "blocks": [
+   {
+    "start": "6:55",
+    "periods": 1,
+    "span": "WARM UP",
+    "flex": true
+   },
+   {
+    "start": "7:00",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "Team O",
+     "Barrett": "Team O",
+     "Coursey": "Team O",
+     "Potts": "Team O",
+     "Salsbury": "Team O"
+    }
+   },
+   {
+    "start": "7:10",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "Heavy O",
+     "Barrett": "Heavy O",
+     "Coursey": "Heavy O",
+     "Potts": "Heavy O",
+     "Salsbury": "Heavy O"
+    }
+   },
+   {
+    "start": "7:20",
+    "periods": 1,
+    "span": "Specialties KO/KOR"
+   },
+   {
+    "start": "7:25",
+    "periods": 2,
+    "lanes": {
+     "Barrett": "IND D",
+     "Coursey": "D inside",
+     "Potts": "IND D",
+     "Salsbury": "D inside"
+    }
+   },
+   {
+    "start": "7:35",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "Skell D",
+     "Coursey": "Skell D",
+     "Potts": "Skell D",
+     "Salsbury": "IND D"
+    }
+   },
+   {
+    "start": "7:40",
+    "periods": 1,
+    "lanes": {
+     "Barrett": "Skell d",
+     "Coursey": "Skell d",
+     "Potts": "Skell d",
+     "Salsbury": "IND D"
+    }
+   },
+   {
+    "start": "7:45",
+    "periods": 2,
+    "span": "9TH GRADE LEAVE"
+   },
+   {
+    "start": "7:55",
+    "periods": 3,
+    "span": "TEAM O"
+   },
+   {
+    "start": "8:10",
+    "periods": 2,
+    "span": "TEAM D"
+   },
+   {
+    "start": "8:20",
+    "periods": 2,
+    "span": "EOP"
+   },
+   {
+    "start": "8:30",
+    "periods": 1,
+    "span": "GET JERSEYS PANTS AND BAGS"
+   }
+  ],
+  "notes": [
+   "RVA'S TO THE RIGHT",
+   "4/5/6 BEARS",
+   "WHEEL COURSEY HAVE Pea Ridge BOOK",
+   "AGGIES",
+   "SUN DEVIL",
+   "LONGHORNS",
+   "SMOKE/STRIKE",
+   "BUFFALO"
+  ]
+ },
+ {
+  "id": "2026-09-28-school-day",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-09-28",
+  "session": "School Day",
+  "dress": "Greys and helmet",
+  "lift": "3X8",
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury",
+   "Driscoll",
+   "Burns"
+  ],
+  "blocks": [
+   {
+    "start": "12:55",
+    "periods": 1,
+    "span": "WARM UP",
+    "flex": true
+   },
+   {
+    "start": "1:00",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "IND D",
+     "Barrett": "IND D",
+     "Coursey": "READ G",
+     "Potts": "FOOTWORK",
+     "Salsbury": "SPILL SQUEEZE SQUAT",
+     "Driscoll": "3/6",
+     "Burns": "IND D"
+    }
+   },
+   {
+    "start": "1:05",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "IND D",
+     "Barrett": "IND D",
+     "Coursey": "SCRAPING",
+     "Potts": "TAMPA/CLEO",
+     "Salsbury": "SPILL SQUEEZE SQUAT",
+     "Driscoll": "3 BUZZ",
+     "Burns": "IND D"
+    }
+   },
+   {
+    "start": "1:10",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "IND D",
+     "Barrett": "IND D",
+     "Coursey": "PASS DROPS",
+     "Potts": "RR W S",
+     "Salsbury": "DOLLAR",
+     "Driscoll": "RR W C",
+     "Burns": "IND D"
+    }
+   },
+   {
+    "start": "1:20",
+    "periods": 1,
+    "span": "LIFT: 3X8"
+   },
+   {
+    "start": "1:25",
+    "periods": 2,
+    "span": "BENCH, SQUAT"
+   },
+   {
+    "start": "1:35",
+    "periods": 1,
+    "span": "END OF PRACTICE"
+   }
+  ],
+  "notes": [
+   "POTTS AND DRISCOLL: PERIOD 3, WORK ON BLADE TOGETHER",
+   "MAKE SURE ON 3 BUZZ THAT THEY ARE ROLLING DOWN ON OUTSIDE SHOULDER AND KEEPING CONTAIN"
+  ]
+ },
+ {
+  "id": "2026-09-29-evening",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-09-29",
+  "session": "Evening",
+  "dress": "Full",
+  "lift": "n/a",
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury"
+  ],
+  "blocks": [
+   {
+    "start": "6:55",
+    "periods": 1,
+    "span": "Line-up Warm-up",
+    "flex": true
+   },
+   {
+    "start": "7:00",
+    "periods": 1,
+    "span": "LSU TACKLE"
+   },
+   {
+    "start": "7:05",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "TEAM O",
+     "Barrett": "TEAM O",
+     "Coursey": "SCOUT D",
+     "Potts": "SCOUT D",
+     "Salsbury": "SCOUT D"
+    }
+   },
+   {
+    "start": "7:15",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "HEAVY TEAM O",
+     "Barrett": "HEAVY TEAM O",
+     "Coursey": "SCOUT D",
+     "Potts": "SCOUT D",
+     "Salsbury": "SCOUT D"
+    }
+   },
+   {
+    "start": "7:25",
+    "periods": 1,
+    "span": "KO/KOR"
+   },
+   {
+    "start": "7:30",
+    "periods": 3,
+    "lanes": {
+     "Dugger": "SCOUT O",
+     "Barrett": "SCOUT O",
+     "Coursey": "TEAM D",
+     "Potts": "TEAM D",
+     "Salsbury": "TEAM D"
+    }
+   },
+   {
+    "start": "7:45",
+    "periods": 2,
+    "span": "9TH GRADE END OF PRACTICE/BREAK"
+   },
+   {
+    "start": "7:55",
+    "periods": 1,
+    "span": "LIFT"
+   },
+   {
+    "start": "8:00",
+    "periods": 4,
+    "span": "BENCH, SQUAT, HANG CLEAN"
+   },
+   {
+    "start": "8:20",
+    "periods": 3,
+    "span": "FILM"
+   },
+   {
+    "start": "8:35",
+    "periods": 1,
+    "span": "END OF PRACTICE"
+   }
+  ],
+  "notes": [
+   "3x5",
+   "COURSEY HAVE Pea Ridge BOOK"
+  ]
+ },
+ {
+  "id": "2026-09-29-school-day",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-09-29",
+  "session": "School Day",
+  "dress": "Shells",
+  "lift": null,
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts"
+  ],
+  "blocks": [
+   {
+    "start": "12:55",
+    "periods": 1,
+    "span": "WARM UP",
+    "flex": true
+   },
+   {
+    "start": "1:00",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "IND O",
+     "Barrett": "ABC'S",
+     "Coursey": "ABC'S",
+     "Potts": "ABC'S"
+    }
+   },
+   {
+    "start": "1:05",
+    "periods": 3,
+    "lanes": {
+     "Dugger": "IND O",
+     "Barrett": "RVA",
+     "Coursey": "RVA",
+     "Potts": "RVA"
+    }
+   },
+   {
+    "start": "1:20",
+    "periods": 3,
+    "lanes": {
+     "Dugger": "TEAM",
+     "Barrett": "TEAM",
+     "Coursey": "TEAM",
+     "Potts": "TEAM"
+    }
+   },
+   {
+    "start": "1:35",
+    "periods": 1,
+    "span": "END OF PRACTICE"
+   }
+  ],
+  "notes": [
+   "RVA's to the right",
+   "Inside:"
+  ]
+ },
+ {
+  "id": "2026-09-30-evening",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-09-30",
+  "session": "Evening",
+  "dress": "shell",
+  "lift": "n/a",
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury"
+  ],
+  "blocks": [
+   {
+    "start": "6:55",
+    "periods": 1,
+    "span": "WARM-UP",
+    "flex": true
+   },
+   {
+    "start": "7:00",
+    "periods": 3,
+    "lanes": {
+     "Dugger": "TEAM O",
+     "Barrett": "TEAM O",
+     "Coursey": "SCOUT D",
+     "Potts": "SCOUT D",
+     "Salsbury": "SCOUT D"
+    }
+   },
+   {
+    "start": "7:15",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "HEAVY TEAM O",
+     "Barrett": "HEAVY TEAM O",
+     "Coursey": "SCOUT D",
+     "Potts": "SCOUT D",
+     "Salsbury": "SCOUT D"
+    }
+   },
+   {
+    "start": "7:25",
+    "periods": 1,
+    "span": "PUNT/PUNT RETURN"
+   },
+   {
+    "start": "7:30",
+    "periods": 3,
+    "lanes": {
+     "Dugger": "Scout O",
+     "Barrett": "Scout O",
+     "Coursey": "TEAM D",
+     "Potts": "TEAM D",
+     "Salsbury": "TEAM D"
+    }
+   },
+   {
+    "start": "7:45",
+    "periods": 3,
+    "span": "\"HALFTIME\""
+   },
+   {
+    "start": "8:00",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "INDO",
+     "Barrett": "ABC'S",
+     "Coursey": "ABC'S",
+     "Potts": "ABC'S",
+     "Salsbury": "O INDO"
+    }
+   },
+   {
+    "start": "8:05",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "INSIDE",
+     "Barrett": "RVA",
+     "Coursey": "RVA",
+     "Potts": "RVA",
+     "Salsbury": "O INSIDE"
+    }
+   },
+   {
+    "start": "8:15",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "IND D",
+     "Barrett": "IND D",
+     "Coursey": "IND D",
+     "Potts": "IND D",
+     "Salsbury": "IND D"
+    }
+   },
+   {
+    "start": "8:25",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "D INSIDE",
+     "Barrett": "SKELL",
+     "Coursey": "SKELL",
+     "Potts": "SKELL",
+     "Salsbury": "D INSIDE"
+    }
+   },
+   {
+    "start": "8:35",
+    "periods": 1,
+    "span": "END OF PRACTICE"
+   }
+  ],
+  "notes": [
+   "LOGO DRILL (BARRETT AND SALS)",
+   "COURSEY HAVE Pea Ridge SCOUT BOOK",
+   "RVA'S TO THE LEFT",
+   "2/4/5/6 BAYLOR",
+   "WHEEL",
+   "A&M",
+   "ARIZONA",
+   "COLORADO",
+   "TEXAS",
+   "SMOKE/STRIKE"
+  ]
+ },
+ {
+  "id": "2026-09-30-school-day",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-09-30",
+  "session": "School Day",
+  "dress": "Shells",
+  "lift": "3X5",
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury",
+   "Driscoll",
+   "Burns"
+  ],
+  "blocks": [
+   {
+    "start": "12:55",
+    "periods": 1,
+    "span": "WARM UP",
+    "flex": true
+   },
+   {
+    "start": "1:00",
+    "periods": 4,
+    "span": "TEAM D"
+   },
+   {
+    "start": "1:20",
+    "periods": 1,
+    "span": "LIFT: 3X5"
+   },
+   {
+    "start": "1:25",
+    "periods": 2,
+    "span": "SQUAT AND POWER CLEAN"
+   },
+   {
+    "start": "1:35",
+    "periods": 1,
+    "span": "END OF PRACTICE"
+   }
+  ],
+  "notes": [
+   "MOTIONS: DOUBLES TO TRIPS - 3/6",
+   "STACK/SLANT - RR - STAR WILL TAKE BACK MOTION",
+   "STACK/SLANT - RR - SOOIE - SAFETY WILL MOVE WITH IT"
+  ]
+ },
+ {
+  "id": "2026-10-01-evening",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-10-01",
+  "session": "Evening",
+  "dress": "Shells",
+  "lift": "n/a",
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury"
+  ],
+  "blocks": [
+   {
+    "start": "6:55",
+    "periods": 1,
+    "span": "WARM-UP",
+    "flex": true
+   },
+   {
+    "start": "7:00",
+    "periods": 3,
+    "span": "SPECIAL TEAMS 2 REPS EACH"
+   },
+   {
+    "start": "7:15",
+    "periods": 3,
+    "span": "KO, KOR, PUNT, PUNT RETURN"
+   },
+   {
+    "start": "7:30",
+    "periods": 1,
+    "span": "OFFENSE 2 POINT PLAYS @ 3 YARDLINE"
+   },
+   {
+    "start": "7:35",
+    "periods": 1,
+    "span": "TEAM O (DEFENSE HOLD PADS)"
+   },
+   {
+    "start": "7:40",
+    "periods": 1,
+    "span": "GOING FAST COACH DUGGER ON SIDELINE (SIGNS ONLY)"
+   },
+   {
+    "start": "7:45",
+    "periods": 1,
+    "span": "9TH GRADE END OF PRACTICE/BREAK"
+   },
+   {
+    "start": "7:50",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "Team o",
+     "Barrett": "ABC'S",
+     "Coursey": "ABC'S",
+     "Potts": "ABC'S",
+     "Salsbury": "STEPS"
+    }
+   },
+   {
+    "start": "7:55",
+    "periods": 2,
+    "lanes": {
+     "Dugger": "STEPS",
+     "Barrett": "ABC'S",
+     "Coursey": "ABC'S",
+     "Potts": "ABC'S",
+     "Salsbury": "STEPS"
+    }
+   },
+   {
+    "start": "8:05",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "DLINE",
+     "Barrett": "SAFETIES",
+     "Coursey": "LBS",
+     "Potts": "EDD FOOTWORK",
+     "Salsbury": "DLINE"
+    }
+   },
+   {
+    "start": "8:10",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "DLINE",
+     "Barrett": "SAFETIES",
+     "Coursey": "LBS",
+     "Potts": "BLOCK SHED",
+     "Salsbury": "DLINE"
+    }
+   },
+   {
+    "start": "8:15",
+    "periods": 1,
+    "lanes": {
+     "Dugger": "DLINE",
+     "Barrett": "SAFETIES",
+     "Coursey": "LBS",
+     "Potts": "VICE",
+     "Salsbury": "DLINE"
+    }
+   },
+   {
+    "start": "8:20",
+    "periods": 2,
+    "span": "END OF PRACTICE"
+   },
+   {
+    "start": "8:30",
+    "periods": 1,
+    "span": "GO GET BAGS READY FOR THOSE WHO ARE GOING"
+   }
+  ],
+  "notes": [
+   "GAME DAY ROUTINE",
+   "TEAM D (OLINE HOLD PADS)",
+   "Everyone else will make sure locker room is spotless",
+   "COURSEY HAVE SILOAM SCOUT BOOK"
+  ]
+ },
+ {
+  "id": "2026-10-01-school-day",
+  "imported": true,
+  "opponent": "Pea Ridge",
+  "date": "2026-10-01",
+  "session": "School Day",
+  "dress": "",
+  "lift": null,
+  "coaches": [
+   "Dugger",
+   "Barrett",
+   "Coursey",
+   "Potts",
+   "Salsbury",
+   "Driscoll",
+   "Burns"
+  ],
+  "blocks": [
+   {
+    "start": "12:55",
+    "periods": 1,
+    "span": "Warm-Up",
+    "flex": true
+   },
+   {
+    "start": "1:00",
+    "periods": 8,
+    "span": "END OF PRACTICE"
+   }
+  ],
+  "notes": [
+   "Get travel bags and pants",
+   "Pack travel bags and move to big room",
+   "Walk-thru in Indoor (just get lined up)",
+   "EOP Talk",
+   "Classroom",
+   "Special teams",
+   "being attentive",
+   "travel",
+   "pregame meals",
+   "After game scuffle",
+   "3:45-3:55 Eat 7 abcs 7 oline",
+   "3:55-4:00 weightroom 7 ind d 7 dline",
+   "4:00-5:30 Movie 7 team d 7 team d",
+   "5:30-5:45 get dressed (No shoulder pads) 7 team o 7 team o",
+   "5:45-6:00 WALK THRU",
+   "6:10-6:55 Pre game"
+  ]
+ }
+]

@@ -9,7 +9,7 @@ export function PracticeGrid({ practice, compact = false }: { practice: Practice
   const cell = compact ? "px-1.5 py-[3px] text-[10px] leading-tight" : "px-3 py-2 text-sm";
   const startNumber = blocks.reduce<number[]>((acc, b, i) => [...acc, i === 0 ? 0 : acc[i - 1] + (blocks[i - 1].flex ? 0 : blocks[i - 1].periods)], []);
   return (
-    <table className="w-full border-collapse table-fixed">
+    <table className="w-full border-collapse table-fixed uppercase">
       <thead>
         <tr className="bg-green-900 text-white [print-color-adjust:exact] [-webkit-print-color-adjust:exact]">
           <th className={`${cell} w-14 text-left`}>Time</th>

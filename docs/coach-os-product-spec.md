@@ -464,7 +464,7 @@ These five are noted for the to-do list, not yet scheduled. Each is mapped to th
 |---|---------|------------|----------------|------|
 | B1 | Print-friendly practice plan | Practice Planner | **MVP-B** (ship with the planner) | S |
 | B2 | Player availability tracking | Roster, Attendance, Practice, Game | **MVP-B** (extends attendance) | M |
-| B3 | Public read-only team page | Calendar, Game, Announcements | Phase 2, after MVP-C | M |
+| B3 | Public read-only team page | Calendar, Game, Announcements | **Parked.** App is private and not shared publicly; revisit only if he wants a family-facing schedule | M |
 | B4 | Ask the playbook (grounded Q&A) | Documents, Playbook, AI Gateway | Phase 2 | L |
 | B5 | AI practice plan generator | Practice Planner, Roster, Availability, AI Gateway | Phase 2, after B2 and B4 | L |
 
@@ -499,7 +499,7 @@ These five are noted for the to-do list, not yet scheduled. Each is mapped to th
 - **Never show:** player names, photos, jersey numbers tied to names, attendance, availability, injuries, notes, depth chart, practice plans or opponent scouting. This is the rule that protects kids on a public page, even in a personal tool.
 - **Do not index:** add `noindex` and exclude from sitemaps.
 - Branded with the Airedale head and school colors. Mobile-first, since parents will open it on phones.
-- **Open question:** does the school or athletic director need to approve public communications for Alma? Confirm before sharing widely.
+- **Status: parked.** The app is not shared publicly and he runs the program, so no school approval step applies. If revived, keep the never-show list above.
 
 ### B4. Ask the Playbook (Grounded Q&A)
 **Job:** Ask questions and get answers from his own playbook and documents, with sources.
@@ -535,3 +535,11 @@ These five are noted for the to-do list, not yet scheduled. Each is mapped to th
 3. Build the **Practice Planner grid** from his sheet layout, then **B1 print view** and **B2 availability** alongside it.
 4. Import his drill list and glossary from these practice PDFs so the app speaks his language on day one.
 5. Hold B3, B4 and B5 until he has used MVP-B for a couple of weeks. B5 needs real practice history to be good.
+
+---
+
+## 21. Build Status (as of this update)
+
+- **Done:** Alma theme and logos; roster page with review flags; practice grid (screen and one-page landscape print) for all nine sessions in his PDF (Aug 4, Sept 28 to Oct 1). Wednesday Sept 30 is hand-checked; the rest are auto-imported and marked "verify".
+- **Decided:** private, single-user; hosting is Next.js on Vercel with Supabase for data and login; public team page parked.
+- **Next:** database and editing, then availability (B2), attendance, team script.

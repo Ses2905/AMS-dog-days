@@ -13,6 +13,8 @@ export type Block = {
 
 export type Practice = {
   id: string;
+  /** Read from his PDF by the importer and not yet checked by him. */
+  imported?: boolean;
   /** ISO date, YYYY-MM-DD. */
   date: string;
   session: string;
