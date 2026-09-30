@@ -95,6 +95,7 @@ export function TeamView({ players, today, children }: { players: Player[]; toda
   return (
     <div className="space-y-4">
       <PageHeader title={`Team · ${players.length} players`}>
+        <Link href="/depth" className={btnOutline}>Depth chart</Link>
         <Link href="/coaches" className={btnOutline}>Coaches</Link>
         <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add player"}</button>
       </PageHeader>

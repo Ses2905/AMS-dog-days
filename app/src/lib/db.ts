@@ -1,3 +1,4 @@
+import type { DepthPosition, DepthSlot } from "./depth";
 import type { Script, ScriptRow } from "./scripts";
 import type { Play } from "./plays";
 import type { AttendanceRow } from "./attendance";
@@ -155,4 +156,15 @@ export async function getSavedOutputs(): Promise<SavedOutput[]> {
   const { data, error } = await supabase.from("saved_outputs").select("*").order("created_at", { ascending: false }).limit(50);
   if (error) throw new Error(`Could not load saved results: ${error.message}`);
   return data.map((r) => ({ id: r.id, workflow: r.workflow, title: r.title, body: r.body, gameId: r.game_id, playerId: r.player_id, created: r.created_at }));
+}
+
+export async function getDepthChart(): Promise<{ positions: DepthPosition[]; slots: DepthSlot[] }> {
+  const supabase = await createClient();
+  const [pos, slots] = await Promise.all([supabase.from("depth_positions").select("*").order("sort"), supabase.from("depth_slots").select("*")]);
+  if (pos.error) throw new Error(`Could not load the depth chart: ${pos.error.message}`);
+  if (slots.error) throw new Error(`Could not load the depth chart: ${slots.error.message}`);
+  return {
+    positions: pos.data.map((p) => ({ id: p.id, unit: p.unit, name: p.name, starters: p.starters, sort: p.sort })),
+    slots: slots.data.map((s) => ({ positionId: s.position_id, playerId: s.player_id, rank: s.rank })),
+  };
 }

@@ -26,6 +26,7 @@ export default async function SettingsPage() {
           <Card href="/roster" title="Players" detail={`${players.length} on the roster. Names, numbers, grades, availability, coach notes.`} />
           <Card href="/coaches" title="Coaches" detail={`${coaches.filter((c) => c.active).length} active. These names become the columns on a practice plan.`} />
           <Card href="/games" title="Schedule" detail={`${games.length} games. Add, edit and keep the Hudl and school schedule links.`} />
+          <Card href="/depth" title="Depth Chart" detail="Who plays where, by position, with backups and injuries flagged." />
           <Card href="/scripts" title="Scripts" detail={`${scripts.length} scripts of plays by situation.`} />
           <Card href="/documents" title="Library" detail={`${docs.length} documents and film links.`} />
         </div>

@@ -4,6 +4,7 @@ import { statusOn } from "../availability";
 import { levelLabel, vsLabel } from "../games";
 import { leaders, playLabel, quarterLabel, totals } from "../plays";
 import { prettyDate } from "../time";
+import { analyze } from "../depth";
 import { buildContext, playerRef, practiceLines, type AssistantData } from "./context";
 import { SKILL_TEXT } from "./skills";
 
@@ -24,7 +25,7 @@ export const WORKFLOWS: Workflow[] = [
   { id: "gameday", skill: "game-day-command-center", title: "Game Day Packet", blurb: "Timeline, responsibilities, alerts and sideline checklist on one page.", subject: "game", subjectHint: "Which game?", inputLabel: "Anything specific for game day?", placeholder: "Bus leaves at 3:15, two coaches at the JV game first", kind: "document", scope: "full" },
   { id: "postgame", skill: "postgame-review", title: "Postgame Review", blurb: "What worked, what didn't, and no more than five priorities for next week.", subject: "game", subjectHint: "Which game?", inputLabel: "Your notes or the Plaud transcript", placeholder: "Paste what you remember, or the recording transcript", kind: "document", scope: "full" },
   { id: "player", skill: "player-development", title: "Player Development Plan", blurb: "One to three priorities, drills and cues for a player.", subject: "player", subjectHint: "Which player?", inputLabel: "What have you seen?", placeholder: "Great effort, keeps dropping his eyes on the block, needs a better first step", kind: "document", scope: "full" },
-  { id: "depth", skill: "roster-depth-chart-manager", title: "Depth Chart Check", blurb: "Thin spots, missing backups and who is out. Works from your roster and position notes.", subject: "none", subjectHint: "", inputLabel: "Anything to focus on?", placeholder: "Who could back up at center? Any position we're short on?", kind: "document", scope: "full" },
+  { id: "depth", skill: "roster-depth-chart-manager", title: "Depth Chart Check", blurb: "Thin spots, missing backups and who is out, from your depth chart and position notes.", subject: "none", subjectHint: "", inputLabel: "Anything to focus on?", placeholder: "Who could back up at center? Any position we're short on?", kind: "document", scope: "full" },
   { id: "comms", skill: "parent-player-comms", title: "Message to Families", blurb: "A clear announcement drafted from the facts you give. No player details.", subject: "game", subjectHint: "About which game? (optional)", inputLabel: "What do families need to know?", placeholder: "Bus times, what to wear, senior night reminder", kind: "document", scope: "schedule" },
 ];
 
@@ -72,10 +73,16 @@ export function focusContext(kind: Subject, id: string, data: AssistantData): st
   return "";
 }
 
-/** The depth chart check has no depth chart to read yet, so it gets each player's position-idea notes. */
+/** The depth chart as the coach has entered it, plus position-idea notes for players who are not placed. */
 export function positionIdeas(data: AssistantData): string {
   const lines = data.notes.filter((n) => n.category === "position" && n.playerId).map((n) => `${playerRef(data.players.find((p) => p.id === n.playerId) ?? { number: 0, last: "?" })}: ${clip(oneLine(n.body), 200)}`);
-  return lines.length ? `POSITION IDEAS FROM COACH NOTES\n${lines.join("\n")}` : "";
+  const chart = data.depth && data.depth.positions.length
+    ? (() => {
+        const { rows, unplaced } = analyze(data.depth.positions, data.depth.slots, data.players, data.today);
+        return `DEPTH CHART (as entered by the coach)\n${rows.map((r) => `${r.position.name} (${r.position.starters} starting, ${r.depth}): ${r.players.map((x) => `${x.rank}. ${playerRef(x.player)}${x.unavailable ? ` [${x.unavailable}]` : ""}`).join(", ") || "nobody listed"}`).join("\n")}\nNot placed: ${unplaced.map(playerRef).join(", ") || "none"}`;
+      })()
+    : "";
+  return [chart, lines.length ? `POSITION IDEAS FROM COACH NOTES\n${lines.join("\n")}` : ""].filter(Boolean).join("\n\n");
 }
 
 export function workflowContext(w: Workflow, subjectId: string, data: AssistantData, budget: number): string {
