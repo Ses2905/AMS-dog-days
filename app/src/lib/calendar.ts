@@ -9,7 +9,7 @@ export type CalKind = "all" | "practice" | "game";
 export type CalItem = {
   kind: "practice" | "game";
   key: string; date: string; sort: number;
-  title: string; detail: string; badge: string;
+  title: string; detail: string; place?: string; badge: string;
   href: string;
   /** "6:55 PM", or "TBA" for a game with no time. */
   time: string;
@@ -84,7 +84,7 @@ export function calendarItems(view: CalView, anchor: string, practices: Practice
     for (const g of games) {
       if (g.date < days[0] || g.date > days[days.length - 1]) continue;
       if (level !== "all" && g.level !== level) continue;
-      items.push({ kind: "game", key: `g-${g.id}`, date: g.date, sort: clockMinutes(g.time), title: vsLabel(g), detail: [g.time, g.location].filter(Boolean).join(" · ") || "Time to be set", badge: levelLabel(g.level), href: `/games/${g.id}`, time: fmtMinutes(clockMinutes(g.time)), level: g.level });
+      items.push({ kind: "game", key: `g-${g.id}`, date: g.date, sort: clockMinutes(g.time), title: vsLabel(g), detail: [g.time, g.location].filter(Boolean).join(" · ") || "Time to be set", place: g.location ?? undefined, badge: levelLabel(g.level), href: `/games/${g.id}`, time: fmtMinutes(clockMinutes(g.time)), level: g.level });
     }
   }
   return items.sort((a, b) => a.date.localeCompare(b.date) || a.sort - b.sort || a.key.localeCompare(b.key));
