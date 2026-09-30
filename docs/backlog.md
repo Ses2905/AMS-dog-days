@@ -6,6 +6,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 1. Depth chart, finish it: waiting on Jordan's answer about units vs. position groups, one chart per team level, print view
 
 ## Done Recently
+- Calendar link (Settings): private subscribe URL for the iPhone and Google calendars; updates itself; can be reset
 - High school roster (68 players, varsity and JV) loaded with position, height and weight; scorers in JV and varsity games pick from it
 - One Calendar for everything (week and month, filters by practice/game and by team); Practice and Games tabs are now each their own workflow
 - Depth chart shell: units and editable positions, ranked players, injuries and thin spots flagged, dual roles shown; feeds the Depth Chart Check playbook
@@ -15,7 +16,6 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Attendance: tap Present / Late / Absent / Excused on a practice page, "Everyone Present", Today prompt, per-player history
 
 ## After That
-- Calendar: subscribe from Google Calendar / iPhone (ICS feed), export to the school calendar
 - Calendar: weather and travel time on game days
 - Playbooks: run on a schedule (Monday plan-my-week), and feed saved results back in as context
 - Playbooks: real depth chart data once the depth chart exists

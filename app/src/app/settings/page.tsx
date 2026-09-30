@@ -1,6 +1,9 @@
+import { headers } from "next/headers";
 import Link from "next/link";
 import { connection } from "next/server";
+import { CalendarLink } from "@/components/CalendarLink";
 import { PageHeader } from "@/components/PageHeader";
+import { createClient } from "@/lib/supabase/server";
 import { aiStatus } from "@/lib/ai/config";
 import { getCoaches, getDocuments, getGames, getPlayers, getScripts, getToolLinks } from "@/lib/db";
 
@@ -17,6 +20,12 @@ export default async function SettingsPage() {
   await connection();
   const [players, coaches, games, docs, tools, scripts] = await Promise.all([getPlayers(), getCoaches(), getGames(), getDocuments(), getToolLinks(), getScripts()]);
   const ai = aiStatus();
+  const supabase = await createClient();
+  const tokenRow = await supabase.from("settings").select("value").eq("key", "calendar_token").maybeSingle();
+  const token = typeof tokenRow.data?.value === "string" ? tokenRow.data.value : "";
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "";
+  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   return (
     <div className="space-y-6">
       <PageHeader title="Settings" subtitle="The data everything else runs on" />
@@ -31,6 +40,7 @@ export default async function SettingsPage() {
           <Card href="/documents" title="Library" detail={`${docs.length} documents and film links.`} />
         </div>
       </section>
+      {token && host && <CalendarLink url={`${proto}://${host}/cal/${token}.ics`} />}
       <section className="space-y-2">
         <h2 className="text-xl">Connections</h2>
         <div className="grid gap-3 sm:grid-cols-2">
