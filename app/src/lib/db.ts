@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Coach, Doc, Game, Note } from "@/lib/db-types";
+import type { Coach, Doc, Game, GameLink, Note } from "@/lib/db-types";
 import type { Block, Player, Practice } from "@/lib/types";
 
 type BlockRow = { position: number; start_time: string; periods: number; span: string | null; flex: boolean; lanes: Record<string, string> };
@@ -67,7 +67,7 @@ export async function getNotes(): Promise<Note[]> {
 }
 
 const toGame = (g: Record<string, unknown>): Game => ({
-  id: g.id as string, date: g.date as string, time: (g.start_time as string | null) ?? null, opponent: g.opponent as string,
+  id: g.id as string, date: g.date as string, time: (g.start_time as string | null) ?? null, level: (g.level as Game["level"]) ?? "jr", opponent: g.opponent as string,
   site: g.site as Game["site"], location: (g.location as string | null) ?? null, kind: g.kind as Game["kind"], status: g.status as Game["status"],
   scoreUs: (g.score_us as number | null) ?? null, scoreThem: (g.score_them as number | null) ?? null,
   links: (g.links as Game["links"]) ?? [], checklist: (g.checklist as Game["checklist"]) ?? {},
@@ -92,4 +92,11 @@ export async function getDocuments(): Promise<Doc[]> {
   const { data, error } = await supabase.from("documents").select("id,name,category,mime,size_bytes,game_id,practice_id,created_at").order("created_at", { ascending: false });
   if (error) throw new Error(`Could not load documents: ${error.message}`);
   return data.map((d) => ({ id: d.id, name: d.name, category: d.category, mime: d.mime, size: d.size_bytes, gameId: d.game_id, practiceId: d.practice_id, created: d.created_at }));
+}
+
+export async function getScheduleLinks(): Promise<GameLink[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("settings").select("value").eq("key", "schedule_links").maybeSingle();
+  if (error) throw new Error(`Could not load the schedule links: ${error.message}`);
+  return ((data?.value as GameLink[] | undefined) ?? []).filter((l) => l && typeof l.url === "string");
 }

@@ -20,6 +20,7 @@ export type Game = {
   id: string;
   date: string;
   time: string | null;
+  level: "jr" | "jv" | "varsity";
   opponent: string;
   site: "home" | "away" | "neutral";
   location: string | null;

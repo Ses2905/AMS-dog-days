@@ -17,7 +17,7 @@ const done = () => revalidatePath("/", "layout");
 const validId = (id: unknown): id is string => typeof id === "string" && id.length > 0 && id.length <= 120;
 
 const columns = (v: NonNullable<ReturnType<typeof parseGameInput> & { ok: true }>["value"]) => ({
-  date: v.date, start_time: v.time, opponent: v.opponent, site: v.site, location: v.location, kind: v.kind, status: v.status,
+  date: v.date, start_time: v.time, level: v.level, opponent: v.opponent, site: v.site, location: v.location, kind: v.kind, status: v.status,
   score_us: v.scoreUs, score_them: v.scoreThem,
 });
 
@@ -76,6 +76,17 @@ export async function saveLinks(id: string, links: unknown): Promise<Result> {
   const { data, error } = await supabase.from("games").update({ links: parsed.value }).eq("id", id).select("id");
   if (error) return { error: `Could not save the links: ${error.message}` };
   if (!data || data.length === 0) return { error: "That game wasn't found." };
+  done();
+  return { error: "" };
+}
+
+/** The links to the Hudl and school athletics schedule pages, shown at the top of the Games tab. */
+export async function saveScheduleLinks(links: unknown): Promise<Result> {
+  const parsed = parseLinks(links);
+  if (!parsed.ok) return { error: parsed.error };
+  const supabase = await authed();
+  const { error } = await supabase.from("settings").upsert({ key: "schedule_links", value: parsed.value, updated_at: new Date().toISOString() });
+  if (error) return { error: `Could not save the links: ${error.message}` };
   done();
   return { error: "" };
 }
