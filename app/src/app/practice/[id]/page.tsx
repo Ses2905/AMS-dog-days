@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PracticeGrid, PracticeMeta } from "@/components/PracticeGrid";
-import { getPractice, practices } from "@/data/practices";
+import { getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
-
-export function generateStaticParams() {
-  return practices.map((p) => ({ id: p.id }));
-}
 
 export default async function PracticePage({ params }: PageProps<"/practice/[id]">) {
   const { id } = await params;
-  const practice = getPractice(id);
+  const practice = await getPractice(id);
   if (!practice) notFound();
   return (
     <div className="space-y-4">

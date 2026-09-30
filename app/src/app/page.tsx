@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
-import { practices } from "@/data/practices";
-import { roster } from "@/data/roster";
+import { getPlayers, getPractices } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
@@ -10,11 +9,12 @@ const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Ameri
 export default async function Home() {
   await connection();
   const today = todayIso();
+  const [practices, players] = await Promise.all([getPractices(), getPlayers()]);
   const sorted = [...practices].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   const todays = sorted.filter((p) => p.date === today);
   const next = todays[0] ?? sorted.find((p) => p.date > today);
-  const grade9 = roster.players.filter((p) => p.grade === 9).length;
-  const grade8 = roster.players.filter((p) => p.grade === 8).length;
+  const grade9 = players.filter((p) => p.grade === 9).length;
+  const grade8 = players.filter((p) => p.grade === 8).length;
 
   return (
     <div className="space-y-6">
@@ -62,7 +62,7 @@ export default async function Home() {
       <section className="grid gap-4 sm:grid-cols-2">
         <Link href="/roster" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
           <h2 className="font-semibold">Team</h2>
-          <p className="text-sm text-neutral-600">{roster.players.length} players · {grade9} ninth · {grade8} eighth</p>
+          <p className="text-sm text-neutral-600">{players.length} players · {grade9} ninth · {grade8} eighth</p>
         </Link>
         <Link href="/practice" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
           <h2 className="font-semibold">All Practices</h2>

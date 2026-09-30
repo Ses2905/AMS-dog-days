@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { practices } from "@/data/practices";
+import { getPractices } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
-export default function PracticeList() {
+export default async function PracticeList() {
+  const practices = await getPractices();
   const sorted = [...practices].sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
   return (
     <div className="space-y-4">

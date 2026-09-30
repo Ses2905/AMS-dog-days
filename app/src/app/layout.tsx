@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
+import { signOut } from "./login/actions";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
@@ -24,15 +25,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
         <header className="no-print bg-green-900 text-white">
-          <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 px-4 py-2">
             <Image src="/brand/alma-gold-a.png" alt="Alma" width={44} height={26} priority />
             <span className="whitespace-nowrap text-sm font-semibold tracking-wide">COACH OS</span>
-            <nav className="ml-auto flex gap-1">
+            <nav className="ml-auto flex flex-wrap gap-1">
               {nav.map((n) => (
                 <Link key={n.href} href={n.href} className="rounded-md px-3 py-2 text-sm font-medium hover:bg-white/10">
                   {n.label}
                 </Link>
               ))}
+              <form action={signOut}>
+                <button className="rounded-md px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10">Sign out</button>
+              </form>
             </nav>
           </div>
         </header>

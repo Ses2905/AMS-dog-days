@@ -1,4 +1,4 @@
-"""Convert practices.raw.json (from extract_pdfs.py) into app/src/data/practices.generated.json.
+"""Convert practices.raw.json (from extract_pdfs.py) into data/seed/practices.generated.json.
 Usage: python3 tools/build_practices.py <practices.raw.json> <out.json>"""
 import sys, json, re
 raw=json.load(open(sys.argv[1]))
