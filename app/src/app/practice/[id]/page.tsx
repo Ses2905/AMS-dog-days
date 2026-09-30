@@ -4,14 +4,17 @@ import { PracticeGrid, PracticeMeta } from "@/components/PracticeGrid";
 import { AvailabilitySummary } from "@/components/AvailabilitySummary";
 import { PageHeader } from "@/components/PageHeader";
 import { btnOutline, btnPrimary } from "@/components/ui";
-import { getDocuments, getNotes, getPlayers, getPractice } from "@/lib/db";
+import { AttendancePanel } from "@/components/AttendancePanel";
+import type { Mark } from "@/lib/attendance";
+import { getAttendance, getDocuments, getNotes, getPlayers, getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 export default async function PracticePage({ params }: PageProps<"/practice/[id]">) {
   const { id } = await params;
   const practice = await getPractice(id);
   if (!practice) notFound();
-  const [players, allNotes, allDocs] = await Promise.all([getPlayers(), getNotes(), getDocuments()]);
+  const [players, allNotes, allDocs, attendance] = await Promise.all([getPlayers(), getNotes(), getDocuments(), getAttendance()]);
+  const marks: Record<string, Mark> = Object.fromEntries(attendance.filter((a) => a.practiceId === practice.id).map((a) => [a.playerId, a.mark]));
   const docs = allDocs.filter((d) => d.practiceId === practice.id);
   const notes = allNotes.filter((n) => n.practiceId === practice.id);
   return (
@@ -31,6 +34,7 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
       <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
         <div className="min-w-[640px]"><PracticeGrid practice={practice} /></div>
       </div>
+      <AttendancePanel practiceId={practice.id} date={practice.date} players={players} initial={marks} />
       {practice.notes.length > 0 && (
         <section className="rounded-xl bg-white p-4 shadow-sm">
           <h2 className="mb-2 font-semibold">Notes</h2>

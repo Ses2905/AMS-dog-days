@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { availabilityOn } from "@/lib/availability";
-import { getGames, getNotes, getPlayers, getPractices } from "@/lib/db";
+import { getAttendance, getGames, getNotes, getPlayers, getPractices } from "@/lib/db";
 import { levelLabel, nextGame, prepProgress, vsLabel } from "@/lib/games";
 import { isOverdue, openActions } from "@/lib/notes";
 import { mondayOf, nowInSchool, slotStatus, weekSlots } from "@/lib/week";
@@ -13,7 +13,7 @@ const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Ameri
 export default async function Home() {
   await connection();
   const today = todayIso();
-  const [practices, players, notes, games] = await Promise.all([getPractices(), getPlayers(), getNotes(), getGames()]);
+  const [practices, players, notes, games, attendance] = await Promise.all([getPractices(), getPlayers(), getNotes(), getGames(), getAttendance()]);
   const game = nextGame(games, today);
   const prep = game ? prepProgress(game.checklist) : null;
   const actions = openActions(notes, today);
@@ -48,6 +48,16 @@ export default async function Home() {
           )}
         </div>
       </section>
+
+      {todays.map((p) => {
+        const marked = attendance.filter((a) => a.practiceId === p.id).length;
+        return (
+          <Link key={p.id} href={`/practice/${p.id}#attendance`} className="flex min-h-16 items-center gap-3 rounded-xl bg-white p-4 shadow-sm hover:shadow">
+            <span className="min-w-0 flex-1"><span className="block font-semibold">Attendance · {p.session}</span><span className="block text-sm text-neutral-600">{marked === 0 ? "Not taken yet" : `${marked} of ${players.length} marked`}</span></span>
+            <span className={`rounded-full px-3 py-1 text-sm font-semibold ${marked >= players.length ? "bg-green-900 text-white" : "bg-gold-500 text-green-900"}`}>{marked >= players.length ? "Done" : "Take it"}</span>
+          </Link>
+        );
+      })}
 
       {todays.length > 1 && (
         <section className="rounded-xl bg-white p-4 shadow-sm">
