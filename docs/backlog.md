@@ -25,6 +25,18 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Varsity and JV rosters (varsity roster PDF received, not loaded)
 - Real logo files for the Tools page (currently colored letter tiles)
 
+## Ideas to Validate With Jordan (hypotheses, not decisions)
+1. **Playing-time log:** quarters or snaps per player per game. Answers "why doesn't my kid play" with data.
+2. **Equipment and paperwork:** helmet, pads and jersey check-out and return; physical, insurance and consent forms on file.
+3. **Game-week hub:** one page per opponent week (games at every level, scripts, prep, availability, weather).
+4. **Heat and weather:** forecast on Today, with a heat-index reminder before practice.
+5. **Next-level handoff:** 9th graders moving up get a one-page profile for the high school staff (position notes, strengths, what to work on).
+6. **Eligibility check:** coach-entered weekly grade or eligibility status, flagged before game day.
+7. **Injury log:** what happened, when, whether clearance was received (recorded, never decided by the app).
+8. **Monday staff digest:** auto-built summary of last week and this week for the coaches.
+9. **Recognition:** player of the week and a family-friendly recap.
+10. **Plaud auto-import** instead of paste.
+
 ## Open Questions for Jordan
 - Are the 7th grade and Jr. High games one game or two on "5:30 / 7pm" nights?
 - Varsity Aug 18 @ Southside is a Tuesday. Real game or scrimmage?
@@ -32,6 +44,9 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Which practices tagged "verify" are wrong?
 - Tools he uses that are missing from the Tools page
 - What he wants recorded about a player beyond performance, position ideas, challenges, opportunities and parent contact
+
+## Won't Build (for now)
+- Play diagram designer, league-wide social, payments, extra logins, anything that makes lineup or eligibility decisions for him
 
 ## Parked
 - Public read-only team page (the app stays private)
