@@ -108,7 +108,7 @@ export function ScriptEditor({ script, practices, games }: { script: Script; pra
 
       <button className={btnOutline} onClick={add}>Add play</button>
 
-      <div className="fixed inset-x-0 bottom-0 z-10 border-t border-neutral-300 bg-white/95 px-4 py-3 backdrop-blur no-print">
+      <div className="fixed inset-x-0 bottom-0 z-10 border-t border-neutral-300 bg-white/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur no-print">
         <div className="mx-auto flex max-w-6xl items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 truncate text-sm text-red-700">{error || (saved ? "" : dirty ? "Unsaved changes" : "")}</p>
           {saved && !error && <span className="text-sm font-semibold text-green-900">Saved</span>}

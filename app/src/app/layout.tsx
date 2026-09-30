@@ -11,18 +11,17 @@ export const metadata: Metadata = {
   title: "Coach OS | Alma Football",
   description: "Practice planning and roster for Alma Jr. High Football",
   manifest: "/manifest.webmanifest",
-  icons: { apple: "/icons/apple-touch-icon.png" },
   appleWebApp: { capable: true, title: "Coach OS", statusBarStyle: "black-translucent" },
 };
 
-export const viewport: Viewport = { themeColor: "#003810" };
+export const viewport: Viewport = { themeColor: "#003810", viewportFit: "cover" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${body.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
         <SiteHeader signOut={signOut} />
-        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-5 sm:pt-8">{children}</main>
       </body>
     </html>
   );
