@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useSyncExternalStore } from "react";
+import { clearOutbox } from "@/lib/outbox-store";
 import { Icon } from "./Icon";
 
 const KEY = "coach-os-synced";
@@ -14,10 +15,11 @@ const readSaved = () => { try { return window.localStorage.getItem(KEY); } catch
 /** Called on Sign Out: the saved pages belong to the person who was signed in. */
 export function clearOfflineCopies() {
   try { window.localStorage.removeItem(KEY); } catch { /* private mode */ }
+  clearOutbox();
   navigator.serviceWorker?.controller?.postMessage({ type: "clear" });
 }
 
-/** Keeps a copy of today's pages on the phone, and says so plainly when there is no signal. Reading works offline; saving does not. */
+/** Keeps a copy of today's pages on the phone, and says so plainly when there is no signal. Reading and attendance work offline; other saving does not. */
 export function OfflineSync() {
   const path = usePathname();
   const signedIn = !path.startsWith("/login");
@@ -59,7 +61,7 @@ export function OfflineSync() {
   return (
     <div role="status" className="no-print sticky top-0 z-30 bg-gold-500 px-4 py-2 text-center text-sm font-semibold text-green-900">
       <Icon name="wifi-off" size={16} className="mr-2 inline align-[-3px]" />
-      You&apos;re offline. {when ? `Showing pages saved at ${when}.` : "Only pages you opened before will show."} You can read plans and scripts; saving waits for a signal.
+      You&apos;re offline. {when ? `Showing pages saved at ${when}.` : "Only pages you opened before will show."} You can read plans and scripts and take attendance; other changes need a signal.
     </div>
   );
 }
