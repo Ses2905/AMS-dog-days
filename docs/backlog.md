@@ -42,6 +42,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 10. **Plaud auto-import** instead of paste.
 
 ## Open Questions for Jordan
+- **Calendar sync:** which calendar does he live in (iPhone, Google, the school's)? Would he want games and practices to show up there automatically (a read-only subscribe link), and does he want reminders (say, 1 hour before practice, the night before a game)?
 - **Depth chart on the phone or at a desk?** Does he look at it during practice or only when planning? Decides whether it needs a sideline mode, a print view, or both.
 - **Depth chart shape (blocks the build):** does he think in units (offense, defense, special teams) or position groups (QB, RB, OL...)? Does he want one chart per team level? Does he want a two-deep or a full list?
 - Are the 7th grade and Jr. High games one game or two on "5:30 / 7pm" nights?
