@@ -50,3 +50,15 @@ export async function savePractice(id: string, payload: unknown): Promise<{ erro
   revalidatePath("/", "layout");
   redirect(`/practice/${id}`);
 }
+
+export async function deletePractice(id: string): Promise<{ error: string }> {
+  if (typeof id !== "string" || id.length === 0 || id.length > 100) return { error: "Unknown practice." };
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  // Period rows are removed with the practice (on delete cascade).
+  const { error } = await supabase.from("practices").delete().eq("id", id);
+  if (error) return { error: `Could not delete: ${error.message}` };
+  revalidatePath("/", "layout");
+  redirect("/practice");
+}

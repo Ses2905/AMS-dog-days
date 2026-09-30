@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
+import { availabilityOn } from "@/lib/availability";
 import { getPlayers, getPractices } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
@@ -13,6 +14,7 @@ export default async function Home() {
   const sorted = [...practices].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   const todays = sorted.filter((p) => p.date === today);
   const next = todays[0] ?? sorted.find((p) => p.date > today);
+  const avail = availabilityOn(players, next?.date ?? today);
   const grade9 = players.filter((p) => p.grade === 9).length;
   const grade8 = players.filter((p) => p.grade === 8).length;
 
@@ -63,6 +65,7 @@ export default async function Home() {
         <Link href="/roster" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
           <h2 className="font-semibold">Team</h2>
           <p className="text-sm text-neutral-600">{players.length} players · {grade9} ninth · {grade8} eighth</p>
+          <p className="mt-1 text-sm">{avail.out.length + avail.limited.length + avail.excused.length === 0 ? "Everyone available" : `${avail.out.length} out · ${avail.limited.length} limited · ${avail.excused.length} excused`}{next && next.date !== today ? " for next practice" : " today"}</p>
         </Link>
         <Link href="/practice" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
           <h2 className="font-semibold">All Practices</h2>

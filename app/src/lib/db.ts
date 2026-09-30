@@ -44,5 +44,5 @@ export async function getPlayers(): Promise<Player[]> {
   const supabase = await createClient();
   const { data, error } = await supabase.from("players").select("*").order("number");
   if (error) throw new Error(`Could not load players: ${error.message}`);
-  return data.map((p) => ({ id: p.id, first: p.first_name, last: p.last_name, grade: p.grade, number: p.number, otherNumbers: p.other_numbers }));
+  return data.map((p) => ({ id: p.id, first: p.first_name, last: p.last_name, grade: p.grade, number: p.number, otherNumbers: p.other_numbers, status: p.status, statusNote: p.status_note ?? undefined, statusUntil: p.status_until ?? undefined }));
 }

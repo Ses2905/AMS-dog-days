@@ -3,13 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PracticeGrid, PracticeMeta } from "@/components/PracticeGrid";
 import { PrintButton } from "@/components/PrintButton";
-import { getPractice } from "@/lib/db";
+import { AvailabilitySummary } from "@/components/AvailabilitySummary";
+import { getPlayers, getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 export default async function PrintPage({ params }: PageProps<"/practice/[id]/print">) {
   const { id } = await params;
   const practice = await getPractice(id);
   if (!practice) notFound();
+  const players = await getPlayers();
   return (
     <div className="space-y-3">
       <div className="no-print flex items-center gap-3">
@@ -26,6 +28,7 @@ export default async function PrintPage({ params }: PageProps<"/practice/[id]/pr
           </div>
         </header>
         <PracticeMeta practice={practice} compact />
+        <AvailabilitySummary players={players} date={practice.date} compact />
         <div className="mt-2"><PracticeGrid practice={practice} compact /></div>
         {practice.notes.length > 0 && (
           <footer className="mt-2 text-[10px] leading-snug">

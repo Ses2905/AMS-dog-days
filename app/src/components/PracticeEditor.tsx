@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { savePractice } from "@/app/practice/[id]/edit/actions";
+import { deletePractice, savePractice } from "@/app/practice/[id]/edit/actions";
 import { startTimes, type EditPayload } from "@/lib/practice-edit";
 import { addMinutes } from "@/lib/time";
 import type { Practice } from "@/lib/types";
@@ -147,6 +147,15 @@ export function PracticeEditor({ practice }: { practice: Practice }) {
       <div className="fixed inset-x-0 bottom-0 border-t border-neutral-200 bg-white/95 p-3 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
+          <button
+            className={`${btn} text-red-700`}
+            disabled={pending}
+            onClick={() => {
+              if (window.confirm("Delete this whole practice? This can't be undone.")) startSave(async () => { const r = await deletePractice(practice.id); if (r?.error) setError(r.error); });
+            }}
+          >
+            Delete
+          </button>
           <Link href={`/practice/${practice.id}`} className={btn}>Cancel</Link>
           <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : "Save"}</button>
         </div>
