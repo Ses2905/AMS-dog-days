@@ -538,8 +538,12 @@ These five are noted for the to-do list, not yet scheduled. Each is mapped to th
 
 ---
 
-## 21. Build Status (as of this update)
+## 21. Build Status (updated)
 
-- **Done:** Alma theme and logos; roster page with review flags; practice grid (screen and one-page landscape print) for all nine sessions in his PDF (Aug 4, Sept 28 to Oct 1). Wednesday Sept 30 is hand-checked; the rest are auto-imported and marked "verify".
-- **Decided:** private, single-user; hosting is Next.js on Vercel with Supabase for data and login; public team page parked.
-- **Next:** database and editing, then availability (B2), attendance, team script.
+**Live:** sign-in (Supabase + Vercel); roster and 9 practice plans imported from his PDFs; practice grid, one-page print view, editing, week view (planned, done, missing), plan-it and copy-to-new-day; player availability; roster and coach admin; notes and action items; Games and opponent pages (prep checklist, film and document links, scouting notes, result); one look (Barlow fonts, Alma colors) and one set of list conventions (`docs/ui-conventions.md`).
+
+**Next, in order:** document library (uploads, phone share, installable app) -> AI (ask his documents, draft a practice, read a Plaud transcript; asks before changing anything) -> attendance, team script, depth chart. Smaller: morning summary and weather on Today, full-data export, per-player notes over a season.
+
+**Decided:** private, single user (Jordan); names go to the AI as jersey number and last name only; Hudl and SportsYou are links, not integrations; no public team page; hosting is Next.js on Vercel with Supabase.
+
+**Parked:** public team page, play-design tools, native app, wearables.

@@ -39,10 +39,10 @@ export function slotStatus(practice: Practice | undefined, date: string, today: 
 }
 
 export type Slot = { session: string; practice?: Practice };
-export type Day = { date: string; slots: Slot[] };
+export type Day<G = never> = { date: string; slots: Slot[]; games: G[] };
 
-export function weekSlots(monday: string, practices: Practice[]): Day[] {
-  const days: Day[] = [];
+export function weekSlots<G extends { date: string }>(monday: string, practices: Practice[], games: G[] = []): Day<G>[] {
+  const days: Day<G>[] = [];
   for (let i = 0; i < 7; i++) {
     const date = addDays(monday, i);
     const onDay = practices.filter((p) => p.date === date);
@@ -50,7 +50,8 @@ export function weekSlots(monday: string, practices: Practice[]): Day[] {
     const unique = [...new Set(sessions)];
     const slots = unique.map((session) => ({ session, practice: onDay.find((p) => p.session === session) }));
     slots.sort((a, b) => (a.practice ? practiceWindow(a.practice).start : EXPECTED_SESSIONS.indexOf(a.session) * 1000) - (b.practice ? practiceWindow(b.practice).start : EXPECTED_SESSIONS.indexOf(b.session) * 1000));
-    if (slots.length > 0) days.push({ date, slots });
+    const gamesToday = games.filter((g) => g.date === date);
+    if (slots.length > 0 || gamesToday.length > 0) days.push({ date, slots, games: gamesToday });
   }
   return days;
 }

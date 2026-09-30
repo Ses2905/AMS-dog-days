@@ -10,6 +10,23 @@ export type Note = {
   owner: string | null;
   playerId: string | null;
   practiceId: string | null;
+  gameId: string | null;
   source: "manual" | "plaud";
   created: string;
+};
+
+export type GameLink = { label: string; url: string };
+export type Game = {
+  id: string;
+  date: string;
+  time: string | null;
+  opponent: string;
+  site: "home" | "away" | "neutral";
+  location: string | null;
+  kind: "game" | "scrimmage" | "other";
+  status: "scheduled" | "final" | "postponed" | "cancelled";
+  scoreUs: number | null;
+  scoreThem: number | null;
+  links: GameLink[];
+  checklist: Record<string, boolean>;
 };
