@@ -17,7 +17,7 @@ const done = () => revalidatePath("/", "layout");
 const validId = (id: unknown): id is string => typeof id === "string" && id.length > 0 && id.length <= 100;
 
 const columns = (v: NonNullable<ReturnType<typeof parseNoteInput> & { ok: true }>["value"]) => ({
-  kind: v.kind, body: v.body, player_id: v.playerId, practice_id: v.practiceId, game_id: v.gameId, owner: v.owner, due_date: v.due,
+  kind: v.kind, category: v.category, body: v.body, player_id: v.playerId, practice_id: v.practiceId, game_id: v.gameId, owner: v.owner, due_date: v.due,
 });
 
 export async function createNote(payload: unknown): Promise<Result> {

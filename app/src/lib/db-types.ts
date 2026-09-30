@@ -1,6 +1,8 @@
 /** Plain types shared by server and client code (kept out of db.ts, which imports server-only code). */
 export type Coach = { id: string; first: string | null; last: string; role: string; active: boolean };
 
+export type NoteCategory = "performance" | "position" | "challenge" | "opportunity" | "parent";
+
 export type Note = {
   id: string;
   kind: "note" | "action";
@@ -11,6 +13,7 @@ export type Note = {
   playerId: string | null;
   practiceId: string | null;
   gameId: string | null;
+  category: NoteCategory | null;
   source: "manual" | "plaud";
   created: string;
 };

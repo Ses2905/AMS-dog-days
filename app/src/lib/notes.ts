@@ -1,6 +1,16 @@
-import type { Note } from "./db-types";
+import type { Note, NoteCategory } from "./db-types";
 
-export type NoteInput = { kind: "note" | "action"; body: string; playerId: string | null; practiceId: string | null; gameId: string | null; owner: string | null; due: string | null };
+/** What a coach wants to keep on a player. Parent notes are private: they are never shown to the assistant. */
+export const NOTE_CATEGORIES: { value: NoteCategory; label: string; hint: string }[] = [
+  { value: "performance", label: "Performance", hint: "How he is playing, what you saw" },
+  { value: "position", label: "Position Ideas", hint: "Where he could play down the road" },
+  { value: "challenge", label: "Challenges", hint: "What is holding him back" },
+  { value: "opportunity", label: "Areas of Opportunity", hint: "What to work on next" },
+  { value: "parent", label: "Parent Contact", hint: "Calls, emails, concerns. Private." },
+];
+export const categoryLabel = (c: NoteCategory | null) => NOTE_CATEGORIES.find((x) => x.value === c)?.label ?? "";
+
+export type NoteInput = { kind: "note" | "action"; category: NoteCategory | null; body: string; playerId: string | null; practiceId: string | null; gameId: string | null; owner: string | null; due: string | null };
 
 const validDate = (s: string) => {
   const d = new Date(`${s}T00:00:00Z`);
@@ -23,10 +33,13 @@ export function parseNoteInput(input: unknown): { ok: true; value: NoteInput } |
     const due = typeof p.due === "string" ? p.due.trim() : "";
     if (due && !validDate(due)) throw new Error("That due date doesn't look right.");
     const action = p.kind === "action";
+    const category = p.category == null || p.category === "" ? null : (NOTE_CATEGORIES.find((c) => c.value === p.category)?.value ?? null);
+    if (p.category && !category) throw new Error("Pick a category from the list.");
+    if (category && (action || !optId(p.playerId, "Player"))) throw new Error("A category only applies to a note about a player.");
     return {
       ok: true,
       value: {
-        kind: p.kind, body,
+        kind: p.kind, category, body,
         playerId: optId(p.playerId, "Player"), practiceId: optId(p.practiceId, "Practice"), gameId: optId(p.gameId, "Game"),
         // Owner and due date only make sense for action items.
         owner: action ? optId(p.owner, "Owner") : null,

@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { createNote, deleteNote, setNoteDone, updateNote } from "@/app/notes/actions";
 import type { Note } from "@/lib/db-types";
 import { filterNotes, NO_NOTE_FILTERS, sortNotes, type NoteFilters, type NoteSort } from "@/lib/lists";
-import { isOverdue } from "@/lib/notes";
+import { categoryLabel, isOverdue, NOTE_CATEGORIES } from "@/lib/notes";
 import { prettyDate } from "@/lib/time";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
@@ -19,13 +19,14 @@ function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initi
   const [playerId, setPlayerId] = useState(note?.playerId ?? "");
   const [practiceId, setPracticeId] = useState(note?.practiceId ?? initial?.practiceId ?? "");
   const [gameId, setGameId] = useState(note?.gameId ?? initial?.gameId ?? "");
+  const [category, setCategory] = useState<string>(note?.category ?? "");
   const [owner, setOwner] = useState(note?.owner ?? "");
   const [due, setDue] = useState(note?.due ?? "");
   const [error, setError] = useState("");
   const [pending, start] = useTransition();
 
   const save = () => start(async () => {
-    const payload = { kind, body, playerId, practiceId, gameId, owner, due };
+    const payload = { kind, category: kind === "note" && playerId ? category : "", body, playerId, practiceId, gameId, owner, due };
     const r = note ? await updateNote(note.id, payload) : await createNote(payload);
     if (r.error) setError(r.error); else { setError(""); onDone(); }
   });
@@ -53,6 +54,11 @@ function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initi
         <label className="text-sm font-medium">About a game (optional)
           <select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)}><option value="">No game</option>{lookups.games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select>
         </label>
+        {kind === "note" && playerId && (
+          <label className="text-sm font-medium">Kind of player note (optional)
+            <select className={inputCls} value={category} onChange={(e) => setCategory(e.target.value)}><option value="">General</option>{NOTE_CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}</select>
+          </label>
+        )}
         {kind === "action" && (
           <>
             <label className="text-sm font-medium">Who owns it (optional)
@@ -103,6 +109,7 @@ function Row({ note, lookups, today }: { note: Note; lookups: Lookups; today: st
           <p className={`whitespace-pre-wrap ${done ? "text-neutral-500 line-through" : ""}`}>{note.body}</p>
           <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-600">
             <span className={`rounded-full px-2 py-0.5 font-semibold ${action ? "bg-gold-500 text-green-900" : "bg-neutral-200 text-neutral-700"}`}>{action ? "Action" : "Note"}</span>
+            {note.category && <span className="rounded-full bg-green-900/10 px-2 py-0.5 font-semibold text-green-900">{categoryLabel(note.category)}</span>}
             {action && note.due && !done && <span className={overdue ? "font-semibold text-red-800" : ""}>{overdue ? "Overdue · " : "Due "}{prettyDate(note.due)}</span>}
             {meta.map((m) => <span key={m}>{m}</span>)}
             <span>{prettyDate(note.created.slice(0, 10))}</span>

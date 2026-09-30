@@ -62,7 +62,7 @@ export async function getNotes(): Promise<Note[]> {
   if (error) throw new Error(`Could not load notes: ${error.message}`);
   return data.map((n) => ({
     id: n.id, kind: n.kind, body: n.body, status: n.status, due: n.due_date, owner: n.owner,
-    playerId: n.player_id, practiceId: n.practice_id, gameId: n.game_id, source: n.source, created: n.created_at,
+    category: n.category ?? null, playerId: n.player_id, practiceId: n.practice_id, gameId: n.game_id, source: n.source, created: n.created_at,
   }));
 }
 
@@ -94,9 +94,11 @@ export async function getDocuments(): Promise<Doc[]> {
   return data.map((d) => ({ id: d.id, name: d.name, category: d.category, mime: d.mime, size: d.size_bytes, gameId: d.game_id, practiceId: d.practice_id, created: d.created_at }));
 }
 
-export async function getScheduleLinks(): Promise<GameLink[]> {
+async function getLinkSetting(key: string, what: string): Promise<GameLink[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("settings").select("value").eq("key", "schedule_links").maybeSingle();
-  if (error) throw new Error(`Could not load the schedule links: ${error.message}`);
+  const { data, error } = await supabase.from("settings").select("value").eq("key", key).maybeSingle();
+  if (error) throw new Error(`Could not load the ${what}: ${error.message}`);
   return ((data?.value as GameLink[] | undefined) ?? []).filter((l) => l && typeof l.url === "string");
 }
+export const getScheduleLinks = () => getLinkSetting("schedule_links", "schedule links");
+export const getToolLinks = () => getLinkSetting("tool_links", "tools");
