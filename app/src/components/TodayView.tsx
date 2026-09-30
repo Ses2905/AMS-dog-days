@@ -36,6 +36,7 @@ export function TodayView({ now, practices, games, notes, players, attendance }:
   return (
     <div className="space-y-6">
       <PageHeader title="Today" subtitle={`${hello}, Coach. ${prettyDate(now.today)}`}>
+        <Link href="/week-ahead" className={btnOutline}><Icon name="calendar" />Week Ahead</Link>
         <Link href="/notes?add=1&kind=action" className={btnOutline}><Icon name="plus" />Add Action Item</Link>
         <Link href="/notes?add=1&kind=note" className={btnPrimary}><Icon name="plus" />Add Note</Link>
       </PageHeader>

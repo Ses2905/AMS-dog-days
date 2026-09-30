@@ -82,3 +82,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 
 ## Parked
 - Public read-only team page (the app stays private)
+
+## Week Ahead (built)
+- `/week-ahead` (button on Today): practices with and without plans, games with prep, overdue and due-this-week action items, players not fully available. Saturday and Sunday look at the coming week. Built from existing data, no AI.
+- Later: optional "Draft Week Plan" assistant button that proposes plans for the empty practice slots.
