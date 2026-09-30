@@ -6,6 +6,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 1. Depth chart, finish it: waiting on Jordan's answer about units vs. position groups, one chart per team level, print view
 
 ## Done Recently
+- Full-data export (Settings, Download Everything)
 - Calendar link (Settings): private subscribe URL for the iPhone and Google calendars; updates itself; can be reset
 - High school roster (68 players, varsity and JV) loaded with position, height and weight; scorers in JV and varsity games pick from it
 - One Calendar for everything (week and month, filters by practice/game and by team); Practice and Games tabs are now each their own workflow
@@ -26,7 +27,6 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Document text extraction so the assistant can read the playbook and scouting files
 - Plaud transcripts: paste or upload straight into "Read a Transcript"
 - Morning summary and weather on Today
-- Full-data export
 - High school staff list from the roster PDF (head coach and coordinators) is not loaded; the coaches list is Jr. High only
 - Split the high school roster into varsity and JV once Jordan says who plays where
 - Real logo files for the Tools page (currently colored letter tiles)

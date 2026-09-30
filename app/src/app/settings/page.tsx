@@ -40,6 +40,10 @@ export default async function SettingsPage() {
           <Card href="/documents" title="Library" detail={`${docs.length} documents and film links.`} />
         </div>
       </section>
+      <section className="flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm">
+        <div className="min-w-0 flex-1"><h2>Download Everything</h2><p className="text-sm text-neutral-600">All players, practices, games, scores, notes, scripts and the depth chart in one file. Your data is yours.</p></div>
+        <a href="/settings/export" download className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">Download</a>
+      </section>
       {token && host && <CalendarLink url={`${proto}://${host}/cal/${token}.ics`} />}
       <section className="space-y-2">
         <h2 className="text-xl">Connections</h2>
