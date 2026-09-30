@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PracticeGrid, PracticeMeta } from "@/components/PracticeGrid";
-import { getPractice } from "@/lib/db";
+import { AvailabilitySummary } from "@/components/AvailabilitySummary";
+import { getPlayers, getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 export default async function PracticePage({ params }: PageProps<"/practice/[id]">) {
   const { id } = await params;
   const practice = await getPractice(id);
   if (!practice) notFound();
+  const players = await getPlayers();
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
@@ -30,6 +32,7 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
         </p>
       )}
       <PracticeMeta practice={practice} />
+      <AvailabilitySummary players={players} date={practice.date} />
       <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
         <div className="min-w-[640px]"><PracticeGrid practice={practice} /></div>
       </div>

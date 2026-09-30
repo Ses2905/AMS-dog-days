@@ -36,6 +36,10 @@ export type Player = {
   grade: 8 | 9;
   number: number;
   otherNumbers: number[];
+  status: "available" | "limited" | "out" | "excused";
+  statusNote?: string;
+  /** Last day the status applies (inclusive). Empty means until changed. */
+  statusUntil?: string;
 };
 
 export type RosterData = {

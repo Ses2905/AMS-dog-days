@@ -1,3 +1,6 @@
+import { connection } from "next/server";
+import { AvailabilitySummary } from "@/components/AvailabilitySummary";
+import { PlayerList } from "@/components/PlayerList";
 import { getPlayers } from "@/lib/db";
 import reviewNotes from "@/data/roster-review.json";
 
@@ -11,6 +14,8 @@ function distance(a: string, b: string) {
 }
 
 export default async function RosterPage() {
+  await connection();
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
   const players = await getPlayers();
   const roster = reviewNotes;
   // Same last name, same grade, first names within 2 letters: probably one kid spelled two ways.
@@ -21,6 +26,8 @@ export default async function RosterPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">Team · {players.length} players</h1>
+
+      <AvailabilitySummary players={players} date={today} />
 
       <section className="rounded-xl border border-gold-500 bg-[#f8f4e3] p-4">
         <h2 className="font-semibold">Needs your review before this roster is final</h2>
@@ -44,23 +51,7 @@ export default async function RosterPage() {
         </ul>
       </section>
 
-      <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead className="bg-green-900 text-left text-white">
-            <tr><th className="px-3 py-2">#</th><th className="px-3 py-2">Player</th><th className="px-3 py-2">Grade</th><th className="px-3 py-2">Check</th></tr>
-          </thead>
-          <tbody>
-            {players.map((p) => (
-              <tr key={p.id} className="border-b border-neutral-200">
-                <td className="px-3 py-2 font-mono tabular-nums">{p.number}</td>
-                <td className="px-3 py-2 font-medium">{p.first} {p.last}</td>
-                <td className="px-3 py-2">{p.grade}th</td>
-                <td className="px-3 py-2 text-neutral-500">{p.otherNumbers.length ? `also #${p.otherNumbers.join(", #")}` : ""}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <PlayerList players={players} today={today} />
     </div>
   );
 }
