@@ -26,7 +26,7 @@ export function GameHeader({ game }: { game: Game }) {
         <button className={btnPrimary} onClick={() => setEditing(!editing)}>{editing ? <><Icon name="x" />Close</> : <><Icon name="pencil" />Edit</>}</button>
       </PageHeader>
       {editing && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Edit Game</h2>
           <GameForm game={game} onDone={() => setEditing(false)} />
         </section>
@@ -49,7 +49,7 @@ export function GameChecklist({ gameId, initial }: { gameId: string; initial: Re
     });
   };
   return (
-    <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex items-center gap-3"><h2>Game Prep</h2><span className="ml-auto text-sm font-semibold text-neutral-600">{p.done} of {p.total} ready</span></div>
       <div className="h-2 overflow-hidden rounded-full bg-neutral-200"><div className="h-full bg-green-900 transition-all" style={{ width: `${(p.done / p.total) * 100}%` }} /></div>
       <ul>

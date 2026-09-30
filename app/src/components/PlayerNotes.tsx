@@ -5,7 +5,7 @@ import { createNote, deleteNote } from "@/app/notes/actions";
 import type { Note, NoteCategory } from "@/lib/db-types";
 import { NOTE_CATEGORIES } from "@/lib/notes";
 import { prettyDate } from "@/lib/time";
-import { btnDanger, btnPrimary, chip, inputCls } from "./ui";
+import { btnIconSm, btnPrimary, chip, inputCls } from "./ui";
 import { Icon } from "./Icon";
 
 /** Running notes on one player, grouped by what they are about. Parent contact is kept apart and marked private. */
@@ -23,7 +23,7 @@ export function PlayerNotes({ playerId, notes }: { playerId: string; notes: Note
   };
   const hint = NOTE_CATEGORIES.find((c) => c.value === category)!.hint;
   return (
-    <section className="space-y-4 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
       <h2>Coach Notes</h2>
       <div className="space-y-2">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Kind of note">
@@ -47,7 +47,7 @@ export function PlayerNotes({ playerId, notes }: { playerId: string; notes: Note
               {list.map((n) => (
                 <li key={n.id} className="flex items-start gap-2 py-2">
                   <div className="min-w-0 flex-1"><p className="whitespace-pre-wrap">{n.body}</p><p className="text-xs text-neutral-600">{prettyDate(n.created.slice(0, 10))}</p></div>
-                  <button className={btnDanger} disabled={pending} aria-label="Delete note" onClick={() => remove(n)}>Delete</button>
+                  <button className={btnIconSm} disabled={pending} aria-label="Delete note" onClick={() => remove(n)}><Icon name="trash" size={18} /></button>
                 </li>
               ))}
             </ul>

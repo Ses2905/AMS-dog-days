@@ -6,7 +6,7 @@ export function PlayerAttendance({ rows }: { rows: { mark: Mark; date: string; s
   const s = playerSummary(rows);
   const misses = rows.filter((r) => r.mark === "absent").sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   return (
-    <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
       <h2>Attendance</h2>
       {s.total === 0 ? (
         <p className="text-sm text-neutral-600">No practices marked for him yet. Take attendance on a practice page.</p>

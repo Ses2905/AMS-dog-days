@@ -44,7 +44,7 @@ function CoachForm({ coach, onDone }: { coach: Coach | null; onDone: () => void 
 function Row({ coach }: { coach: Coach }) {
   const [open, setOpen] = useState(false);
   return (
-    <li className="border-b border-neutral-200 last:border-0">
+    <li>
       <button className="flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left hover:bg-wash" aria-expanded={open} onClick={() => setOpen(!open)}>
         <span className="min-w-0 flex-1"><span className="font-medium">{coach.first ? `${coach.first} ` : ""}{coach.last}</span><span className="block text-sm text-neutral-500">{coach.role}</span></span>
         {!coach.active && <Pill>Inactive</Pill>}
@@ -71,7 +71,7 @@ export function CoachesView({ coaches }: { coaches: Coach[] }) {
       </PageHeader>
 
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Coach</h2>
           <CoachForm coach={null} onDone={() => setAdding(false)} />
         </section>
@@ -84,7 +84,7 @@ export function CoachesView({ coaches }: { coaches: Coach[] }) {
         summary={`Showing ${list.length} of ${coaches.length}`} canReset={filtered} onReset={() => setFilters(NO_COACH_FILTERS)}
       />
 
-      <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
         {list.map((c) => <Row key={c.id} coach={c} />)}
         {list.length === 0 && <li className="px-3 py-6 text-center text-sm text-neutral-500">No coaches match.</li>}
       </ul>

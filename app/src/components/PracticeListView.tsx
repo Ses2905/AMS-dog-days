@@ -36,7 +36,7 @@ export function PracticeListView({ practices }: { practices: Practice[] }) {
         summary={`Showing ${list.length} of ${practices.length}`} canReset={filtered} onReset={() => setFilters(NO_PRACTICE_FILTERS)}
       />
 
-      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl bg-white shadow-sm">
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
         {list.map((p) => (
           <li key={p.id}>
             <Link href={`/practice/${p.id}`} className="flex min-h-14 items-center justify-between gap-3 px-4 py-3 hover:bg-wash">

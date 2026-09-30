@@ -8,7 +8,7 @@ export function SeasonStats({ games, plays, players }: { games: Game[]; plays: P
   const records = seasonRecords(games, LEVELS.map((l) => l.value));
   const top = leaders(plays, (id) => { const p = players.find((x) => x.id === id); return p ? `#${p.number} ${p.first} ${p.last}` : undefined; }).slice(0, 10);
   return (
-    <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
       <h2>Season</h2>
       {records.length === 0 ? (
         <p className="text-sm text-neutral-600">Records show up here once games are marked final with a score.</p>

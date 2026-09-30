@@ -38,7 +38,7 @@ export function PlayerForm({ player, players, onDone, team: teamProp }: { player
 
   return (
     <div className="space-y-4">
-      <div className={player ? "space-y-4 rounded-xl bg-white p-4 shadow-sm" : "space-y-4"}>
+      <div className={player ? "space-y-4 rounded-2xl bg-white p-5 shadow-sm" : "space-y-4"}>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="text-sm font-medium">First Name<input className={input} value={first} onChange={(e) => setFirst(e.target.value)} autoComplete="off" /></label>
           <label className="text-sm font-medium">Last Name<input className={input} value={last} onChange={(e) => setLast(e.target.value)} autoComplete="off" /></label>
@@ -71,7 +71,7 @@ export function PlayerForm({ player, players, onDone, team: teamProp }: { player
       </div>
 
       {player && (
-        <div className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <div className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Same kid listed twice?</h2>
           <p className="text-sm text-neutral-600">Keeps {player.first} {player.last} (#{player.number}) and removes the other entry. The other entry’s number is saved as an “also #” note.</p>
           <div className="flex gap-2">

@@ -67,7 +67,7 @@ export function ScriptEditor({ script, practices, games }: { script: Script; pra
         <Link href={`/scripts/${script.id}/print`} className={btnPrimary}><Icon name="printer" />Print / PDF</Link>
       </PageHeader>
 
-      <section className="grid gap-3 rounded-xl bg-white p-4 shadow-sm sm:grid-cols-3">
+      <section className="grid gap-3 rounded-2xl bg-white p-5 shadow-sm sm:grid-cols-3">
         <label className="text-sm font-medium sm:col-span-3">Name<input className={inputCls} value={name} maxLength={80} onChange={(e) => { setName(e.target.value); setDirty(true); }} /></label>
         <label className="text-sm font-medium">For a Practice<select className={inputCls} value={practiceId} onChange={(e) => { setPracticeId(e.target.value); setDirty(true); }}><option value="">None</option>{practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
         <label className="text-sm font-medium">For a Game<select className={inputCls} value={gameId} onChange={(e) => { setGameId(e.target.value); setDirty(true); }}><option value="">None</option>{games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
@@ -81,11 +81,11 @@ export function ScriptEditor({ script, practices, games }: { script: Script; pra
 
       {rows.length === 0 && <p className="rounded-xl bg-white p-4 text-neutral-600 shadow-sm">No plays yet. Add the first one.</p>}
       {groups.map((g) => (
-        <section key={g.section} className="overflow-hidden rounded-xl bg-white shadow-sm">
+        <section key={g.section} className="overflow-hidden rounded-2xl bg-white shadow-sm">
           <h2 className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2 text-lg"><span className={`rounded-full px-3 py-0.5 text-sm font-semibold ${sectionChip(g.section)}`}>{g.section}</span><span className="text-sm font-normal text-neutral-600">{g.items.length}</span></h2>
           <ul>
             {g.items.map(({ row, index }) => (
-              <li key={index} className="border-b border-neutral-200 last:border-0">
+              <li key={index}>
                 <button className="flex min-h-14 w-full items-center gap-3 px-4 py-2 text-left" aria-expanded={open === index} onClick={() => setOpen(open === index ? null : index)}>
                   <span className="font-display w-8 shrink-0 text-xl font-semibold text-neutral-500">{index + 1}</span>
                   <span className="min-w-0 flex-1"><span className="block truncate font-medium">{rowSummary(row)}</span>{(row.personnel || row.defense || row.hash) && <span className="block truncate text-xs text-neutral-600">{[row.personnel && `Pers ${row.personnel}`, row.hash && `Hash ${row.hash}`, row.defense && `vs ${row.defense}`].filter(Boolean).join(" · ")}</span>}</span>

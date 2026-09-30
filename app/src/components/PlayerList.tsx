@@ -10,13 +10,14 @@ import type { Player } from "@/lib/types";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { Pill, type PillTone } from "./Pill";
+import { Row } from "./Row";
 import { PlayerForm } from "./PlayerForm";
 import { btnOutline, btnPlain, btnPrimary } from "./ui";
 import { Icon } from "./Icon";
 
 const STATUS_TONE: Record<Status, PillTone> = { available: "green", limited: "gold", out: "red", excused: "grey" };
 
-function Row({ p, today }: { p: Player; today: string }) {
+function PlayerRow({ p, today }: { p: Player; today: string }) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>(p.status);
   const [note, setNote] = useState(p.statusNote ?? "");
@@ -33,17 +34,12 @@ function Row({ p, today }: { p: Player; today: string }) {
     });
 
   return (
-    <li className="border-b border-neutral-200 last:border-0">
-      <button className="flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left hover:bg-wash" aria-expanded={open} onClick={() => setOpen(!open)}>
-        <span className="font-display w-9 text-lg font-semibold tabular-nums text-neutral-500">{p.number}</span>
-        <span className="min-w-0 flex-1">
-          <span className="font-medium">{p.first} {p.last}</span>
-          <span className="text-sm text-neutral-500"> · {p.grade}th</span>
-          {p.otherNumbers.length > 0 && <span className="block text-xs text-neutral-500">also #{p.otherNumbers.join(", #")}</span>}
-          {shown !== "available" && p.statusNote && <span className="block truncate text-xs text-neutral-600">{p.statusNote}{p.statusUntil ? ` · through ${prettyDate(p.statusUntil)}` : ""}</span>}
-        </span>
-        <Pill tone={STATUS_TONE[shown]}>{STATUS_LABEL[shown]}</Pill>
-      </button>
+    <li>
+      <Row narrow
+        lead={p.number} title={`${p.first} ${p.last}`} expanded={open} onClick={() => setOpen(!open)}
+        meta={[`${p.grade}th`, p.otherNumbers.length > 0 && `also #${p.otherNumbers.join(", #")}`, shown !== "available" && p.statusNote && `${p.statusNote}${p.statusUntil ? ` through ${prettyDate(p.statusUntil)}` : ""}`].filter(Boolean).join(" · ")}
+        status={shown !== "available" ? <Pill tone={STATUS_TONE[shown]}>{STATUS_LABEL[shown]}</Pill> : undefined}
+      />
       {open && (
         <div className="space-y-3 bg-wash px-3 py-3">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -99,7 +95,7 @@ export function TeamView({ players, today, children }: { players: Player[]; toda
       </PageHeader>
 
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Player</h2>
           <PlayerForm players={players} onDone={() => setAdding(false)} />
         </section>
@@ -118,8 +114,8 @@ export function TeamView({ players, today, children }: { players: Player[]; toda
         summary={`Showing ${list.length} of ${players.length}`} canReset={filtered} onReset={() => setFilters(NO_PLAYER_FILTERS)}
       />
 
-      <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
-        {list.map((p) => <Row key={p.id} p={p} today={today} />)}
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
+        {list.map((p) => <PlayerRow key={p.id} p={p} today={today} />)}
         {list.length === 0 && <li className="px-3 py-6 text-center text-sm text-neutral-500">No players match.</li>}
       </ul>
     </div>

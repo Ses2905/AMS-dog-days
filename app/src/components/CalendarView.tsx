@@ -4,14 +4,12 @@ import type { Game } from "@/lib/db-types";
 import { LEVELS } from "@/lib/games";
 import { prettyDate } from "@/lib/time";
 import type { Practice } from "@/lib/types";
-import type { SlotStatus } from "@/lib/week";
 import { PageHeader } from "./PageHeader";
+import { Row, Section } from "./Row";
 import { btnIcon, btnPlain, chip } from "./ui";
 import { Icon } from "./Icon";
-import { Pill, type PillTone } from "./Pill";
+import { Pill } from "./Pill";
 
-const STATUS_LABEL: Record<SlotStatus, string> = { done: "Done", "in-progress": "In progress", "later-today": "Later today", planned: "Planned", "needs-plan": "Needs a plan", "no-plan": "No plan on file" };
-const STATUS_TONE: Record<SlotStatus, PillTone> = { done: "green", "in-progress": "gold", "later-today": "grey", planned: "grey", "needs-plan": "red", "no-plan": "quiet" };
 
 type Params = { view: CalView; show: CalKind; level: string; anchor: string };
 const href = (p: Params, patch: Partial<Params>) => {
@@ -28,22 +26,16 @@ function Chip({ on, to, children }: { on: boolean; to: string; children: React.R
   return <Link href={to} aria-current={on ? "true" : undefined} className={chip(on)}>{children}</Link>;
 }
 
-function Row({ item }: { item: CalItem }) {
+function CalRow({ item }: { item: CalItem }) {
   const game = item.kind === "game";
+  const past = item.status === "done";
+  const status = item.empty ? <Pill tone="red">Needs a Plan</Pill> : item.status === "in-progress" ? <Pill tone="gold">In Progress</Pill> : undefined;
   return (
-    <li>
-      <Link href={item.href} className={`flex min-h-14 items-center gap-3 px-4 py-2 hover:bg-wash ${game ? "bg-[#f1ecd3]" : ""}`}>
-        <span className="min-w-0 flex-1">
-          <span className="flex flex-wrap items-center gap-2">
-            {game ? <Pill tone="gold">{item.badge}</Pill> : null}
-            <span className={game ? "font-display text-xl font-semibold uppercase tracking-wide" : "font-medium"}>{item.title}</span>
-            {item.status && <Pill tone={STATUS_TONE[item.status]}>{STATUS_LABEL[item.status]}</Pill>}
-          </span>
-          <span className="block text-sm text-neutral-600">{item.detail}</span>
-        </span>
-        <span className="text-sm font-semibold text-green-900">{item.empty ? "Plan It" : "Open"}</span>
-      </Link>
-    </li>
+    <Row
+      href={item.href} lead={item.time} title={item.title} muted={past} tone={game ? "game" : "normal"} status={status}
+      meta={game ? [item.badge, item.detail.replace(/^[^·]*(?: · )?/, "")].filter(Boolean).join(" · ") : item.empty ? undefined : item.detail}
+      chevron={!item.empty}
+    />
   );
 }
 
@@ -90,7 +82,7 @@ export function CalendarView({ view, show, level, anchor, practices, games, now 
       </div>
 
       {view === "month" && (
-        <div className="hidden overflow-hidden rounded-xl bg-white shadow-sm md:block">
+        <div className="hidden overflow-hidden rounded-2xl bg-white shadow-sm md:block">
           <div className="grid grid-cols-7 border-b border-neutral-200 bg-wash text-xs font-semibold uppercase tracking-wide text-neutral-600">
             {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => <div key={d} className="px-2 py-1.5">{d}</div>)}
           </div>
@@ -116,13 +108,9 @@ export function CalendarView({ view, show, level, anchor, practices, games, now 
       <div className={view === "month" ? "space-y-3 md:hidden" : "space-y-3"}>
         {agenda.length === 0 && <p className="rounded-xl bg-white p-4 text-neutral-600 shadow-sm">Nothing scheduled here.</p>}
         {agenda.filter((d) => view === "week" || d.slice(0, 7) === month).map((d) => (
-          <section key={d} className="overflow-hidden rounded-xl bg-white shadow-sm">
-            <h2 className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2 text-lg">
-              {prettyDate(d)}
-              {d === now.today && <Pill tone="gold">Today</Pill>}
-            </h2>
-            {(byDay.get(d) ?? []).length === 0 ? <p className="px-4 py-3 text-sm text-neutral-600">Nothing scheduled.</p> : <ul className="divide-y divide-neutral-200">{byDay.get(d)!.map((it) => <Row key={it.key} item={it} />)}</ul>}
-          </section>
+          <Section key={d} title={<span className="inline-flex items-center gap-3">{prettyDate(d)}{d === now.today && <Pill tone="gold">Today</Pill>}</span>}>
+            {(byDay.get(d) ?? []).length === 0 ? <p className="px-5 py-4 text-base text-neutral-600">Nothing scheduled.</p> : byDay.get(d)!.map((it) => <CalRow key={it.key} item={it} />)}
+          </Section>
         ))}
       </div>
     </div>

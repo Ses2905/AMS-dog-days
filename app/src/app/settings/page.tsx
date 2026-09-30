@@ -1,23 +1,14 @@
 import { headers } from "next/headers";
-import Link from "next/link";
 import { connection } from "next/server";
 import { CalendarLink } from "@/components/CalendarLink";
 import { PageHeader } from "@/components/PageHeader";
+import { Row, Section } from "@/components/Row";
 import { createClient } from "@/lib/supabase/server";
 import { aiStatus } from "@/lib/ai/config";
 import { getCoaches, getDocuments, getGames, getPlayers, getScripts, getToolLinks } from "@/lib/db";
 import { Icon } from "@/components/Icon";
 import { Pill } from "@/components/Pill";
 import { btnOutline } from "@/components/ui";
-
-function Card({ href, title, detail, status }: { href: string; title: string; detail: string; status?: string }) {
-  return (
-    <Link href={href} className="flex min-h-24 flex-col justify-center gap-1 rounded-xl bg-white p-4 shadow-sm hover:shadow-md">
-      <span className="flex items-center gap-2"><span className="font-display text-xl font-semibold uppercase tracking-wide">{title}</span>{status && <Pill tone={status === "On" ? "green" : "grey"}>{status}</Pill>}</span>
-      <span className="text-sm text-neutral-600">{detail}</span>
-    </Link>
-  );
-}
 
 export default async function SettingsPage() {
   await connection();
@@ -31,30 +22,26 @@ export default async function SettingsPage() {
   const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   return (
     <div className="space-y-6">
-      <PageHeader title="Settings" subtitle="The data everything else runs on" />
-      <section className="space-y-2">
-        <h2 className="text-xl">Team Data</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Card href="/roster" title="Players" detail={`${players.length} on the roster. Names, numbers, grades, availability, coach notes.`} />
-          <Card href="/coaches" title="Coaches" detail={`${coaches.filter((c) => c.active).length} active. These names become the columns on a practice plan.`} />
-          <Card href="/games" title="Schedule" detail={`${games.length} games. Add, edit and keep the Hudl and school schedule links.`} />
-          <Card href="/depth" title="Depth Chart" detail="Who plays where, by position, with backups and injuries flagged." />
-          <Card href="/scripts" title="Scripts" detail={`${scripts.length} scripts of plays by situation.`} />
-          <Card href="/documents" title="Library" detail={`${docs.length} documents and film links.`} />
-        </div>
-      </section>
-      <section className="flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm">
-        <div className="min-w-0 flex-1"><h2>Download Everything</h2><p className="text-sm text-neutral-600">All players, practices, games, scores, notes, scripts and the depth chart in one file. Your data is yours.</p></div>
-        <a href="/settings/export" download className={btnOutline}><Icon name="download" />Download</a>
-      </section>
+      <PageHeader title="Settings" subtitle="Your team, your data and your connections" />
+      <Section title="Team">
+        <Row href="/roster" title="Players" meta={`${players.length} on the Jr. High roster. Names, numbers, availability, coach notes.`} />
+        <Row href="/roster/high-school" title="High School Roster" meta="Varsity and JV players." />
+        <Row href="/coaches" title="Coaches" meta={`${coaches.filter((c) => c.active).length} active. These names become the columns on a practice plan.`} />
+        <Row href="/depth" title="Depth Chart" meta="Who plays where, with backups and injuries flagged." />
+      </Section>
+      <Section title="Plans and Files">
+        <Row href="/games" title="Schedule" meta={`${games.length} games. Add, edit, and keep the Hudl and school schedule links.`} />
+        <Row href="/scripts" title="Scripts" meta={`${scripts.length} ${scripts.length === 1 ? "script" : "scripts"} of plays by situation.`} />
+        <Row href="/documents" title="Library" meta={`${docs.length} ${docs.length === 1 ? "document" : "documents"} and film links.`} />
+        <Row href="/tools" title="Tools" meta={`${tools.length} links to Hudl, SportsYou, Google and the rest.`} />
+      </Section>
+      <Section title="Assistant">
+        <Row href="/assistant" title="Assistant" meta={ai.ready ? `On. Model: ${ai.model}. Players are shared as number and last name only, and parent notes never.` : "Off. Add AI_GATEWAY_API_KEY in Vercel to switch it on."} status={<Pill tone={ai.ready ? "green" : "grey"}>{ai.ready ? "On" : "Off"}</Pill>} />
+      </Section>
+      <Section title="Download Everything" action={<a href="/settings/export" download className={btnOutline}><Icon name="download" />Download</a>}>
+        <p className="px-5 py-4 text-base text-neutral-700">All players, practices, games, scores, notes, scripts and the depth chart in one file. Your data is yours.</p>
+      </Section>
       {token && host && <CalendarLink url={`${proto}://${host}/cal/${token}.ics`} />}
-      <section className="space-y-2">
-        <h2 className="text-xl">Connections</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Card href="/tools" title="Tools" detail={`${tools.length} links to Hudl, SportsYou, Google and the rest.`} />
-          <Card href="/assistant" title="Assistant" detail={ai.ready ? `Model: ${ai.model}. Players are shared as number and last name only; parent notes never.` : "Add AI_GATEWAY_API_KEY in Vercel to switch it on."} status={ai.ready ? "On" : "Off"} />
-        </div>
-      </section>
     </div>
   );
 }

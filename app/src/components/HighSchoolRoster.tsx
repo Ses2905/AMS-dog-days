@@ -35,7 +35,7 @@ export function HighSchoolRoster({ players }: { players: Player[] }) {
         <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? <><Icon name="x" />Close</> : <><Icon name="plus" />Add Player</>}</button>
       </PageHeader>
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Player</h2>
           <PlayerForm players={players} team="hs" onDone={() => setAdding(false)} />
         </section>
@@ -49,9 +49,9 @@ export function HighSchoolRoster({ players }: { players: Player[] }) {
         ]}
         summary={`Showing ${list.length} of ${players.length}`} canReset={JSON.stringify(filters) !== JSON.stringify(NONE)} onReset={() => setFilters(NONE)}
       />
-      <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
         {list.map((p) => (
-          <li key={p.id} className="border-b border-neutral-200 last:border-0">
+          <li key={p.id}>
             <Link href={`/roster/${p.id}/edit`} className="flex min-h-14 items-center gap-3 px-4 py-2 hover:bg-wash">
               <span className="font-display w-10 shrink-0 text-2xl font-semibold text-green-900">{p.number}</span>
               <span className="min-w-0 flex-1"><span className="block font-medium">{p.first} {p.last}</span><span className="block text-sm text-neutral-600">{[p.position, `${p.grade}th`, p.height, p.weight && `${p.weight} lb`].filter(Boolean).join(" · ")}</span></span>

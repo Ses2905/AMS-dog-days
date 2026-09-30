@@ -34,10 +34,10 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
       )}
       <PracticeMeta practice={practice} />
       <AvailabilitySummary players={players} date={practice.date} />
-      <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
         <div className="min-w-[640px]"><PracticeGrid practice={practice} /></div>
       </div>
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Scripts{scripts.length > 0 ? ` · ${scripts.length}` : ""}</h2>
           <Link href={`/scripts?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}><Icon name="plus" />Add Script</Link>
@@ -48,12 +48,12 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
       </section>
       <AttendancePanel practiceId={practice.id} date={practice.date} players={players} initial={marks} />
       {practice.notes.length > 0 && (
-        <section className="rounded-xl bg-white p-4 shadow-sm">
+        <section className="rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="mb-2 font-semibold">Notes</h2>
           <ul className="list-disc space-y-1 pl-5 text-sm">{practice.notes.map((n) => <li key={n}>{n}</li>)}</ul>
         </section>
       )}
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Documents{docs.length > 0 ? ` · ${docs.length}` : ""}</h2>
           <Link href={`/documents?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}><Icon name="plus" />Add Document</Link>
@@ -69,7 +69,7 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
         )}
       </section>
 
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Notes from This Practice{notes.length > 0 ? ` · ${notes.length}` : ""}</h2>
           <div className="ml-auto flex gap-2">

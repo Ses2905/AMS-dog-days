@@ -47,7 +47,7 @@ export function ScriptsView({ scripts, practices, games, initial }: { scripts: S
       </PageHeader>
 
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Script</h2>
           <label className="block text-sm font-medium">Name<input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder="e.g. Thursday install, Opening script vs. Pea Ridge" autoFocus /></label>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -73,9 +73,9 @@ export function ScriptsView({ scripts, practices, games, initial }: { scripts: S
       {scripts.length === 0 ? (
         <p className="rounded-xl bg-white p-4 text-neutral-600 shadow-sm">No scripts yet. Add one for the next practice or your opening script.</p>
       ) : (
-        <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+        <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
           {list.map((s) => (
-            <li key={s.id} className="border-b border-neutral-200 last:border-0">
+            <li key={s.id}>
               <Link href={`/scripts/${s.id}`} className="flex min-h-16 items-center gap-3 px-4 py-2 hover:bg-wash">
                 <span className="min-w-0 flex-1"><span className="font-display block text-xl font-semibold uppercase tracking-wide">{s.name}</span><span className="block text-sm text-neutral-600">{s.rows.length} plays{label(s) ? ` · ${label(s)}` : ""} · {prettyDate(s.updated.slice(0, 10))}</span></span>
                 <Icon name="chevron-right" className="text-neutral-400" />

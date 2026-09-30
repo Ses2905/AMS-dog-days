@@ -5,7 +5,7 @@ import { addPlayerToPosition, addPosition, deletePosition, movePlayer, removePla
 import { analyze, DEPTH_LABEL, UNITS, type DepthPosition, type DepthSlot, type Row, type Unit } from "@/lib/depth";
 import type { Player } from "@/lib/types";
 import { PageHeader } from "./PageHeader";
-import { btnDanger, btnIcon, btnOutline, btnPlain, btnPrimary, inputCls, tab } from "./ui";
+import { btnDanger, btnIcon, btnOutline, btnPlain, btnPrimary, inputCls, tab, tabBar } from "./ui";
 import { Icon } from "./Icon";
 import { Pill, type PillTone } from "./Pill";
 
@@ -24,7 +24,7 @@ function PositionCard({ row, players, ideas, editing }: { row: Row; players: Pla
   const p = row.position;
 
   return (
-    <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center gap-2">
         <h2>{p.name}</h2>
         <span className="text-sm text-neutral-600">{p.starters} starter{p.starters === 1 ? "" : "s"}</span>
@@ -87,7 +87,7 @@ export function DepthChartView({ positions, slots, players, ideas, date }: { pos
         <button className={btnOutline} onClick={() => setEditing(!editing)}>{editing ? "Done Editing" : <><Icon name="pencil" />Edit Positions</>}</button>
       </PageHeader>
 
-      <div role="tablist" className="flex gap-2 overflow-x-auto">
+      <div role="tablist" className={tabBar}>
         {UNITS.map((u) => (
           <button key={u.value} role="tab" aria-selected={unit === u.value} onClick={() => setUnit(u.value)} className={tab(unit === u.value)}>{u.label}</button>
         ))}
@@ -99,7 +99,7 @@ export function DepthChartView({ positions, slots, players, ideas, date }: { pos
       {shown.length === 0 && <p className="rounded-xl bg-white p-4 text-neutral-600 shadow-sm">No positions here yet.</p>}
 
       {editing && (
-        <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Position to {UNITS.find((u) => u.value === unit)!.label}</h2>
           <div className="grid gap-2 sm:grid-cols-[1fr_auto_auto]">
             <input className={`${inputCls} mt-0`} value={name} maxLength={30} onChange={(e) => setName(e.target.value)} placeholder="e.g. Nose Guard, Slot, Kick Returner" aria-label="New position name" />
@@ -111,7 +111,7 @@ export function DepthChartView({ positions, slots, players, ideas, date }: { pos
         </section>
       )}
 
-      <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
         <h2>Not Placed Yet · {unplaced.length}</h2>
         {unplaced.length === 0 ? <p className="text-sm text-neutral-600">Everyone is on the chart somewhere.</p> : (
           <>

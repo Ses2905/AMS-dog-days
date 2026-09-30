@@ -11,6 +11,8 @@ export type CalItem = {
   key: string; date: string; sort: number;
   title: string; detail: string; badge: string;
   href: string;
+  /** "6:55 PM", or "TBA" for a game with no time. */
+  time: string;
   /** Practices only: an empty slot that still needs a plan, or a real practice with its state. */
   status?: SlotStatus; empty?: boolean;
   level?: Game["level"];
@@ -18,6 +20,13 @@ export type CalItem = {
 
 const addDays = (iso: string, n: number) => { const d = new Date(`${iso}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
 export const isIso = (s: unknown): s is string => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(new Date(`${s}T00:00:00Z`).getTime()) && new Date(`${s}T00:00:00Z`).toISOString().slice(0, 10) === s;
+
+/** Minutes since midnight to "5:30 PM"; the "no time yet" marker becomes "TBA". */
+export function fmtMinutes(m: number): string {
+  if (m >= 24 * 60) return "TBA";
+  const h = Math.floor(m / 60) % 24;
+  return `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+}
 
 /** "5:30 PM" to minutes since midnight; unknown times sort to the end of the day. */
 export function clockMinutes(t: string | null): number {
@@ -60,12 +69,12 @@ export function calendarItems(view: CalView, anchor: string, practices: Practice
         for (const s of day.slots) {
           const status = slotStatus(s.practice, day.date, now.today, now.minutes);
           if (s.practice) {
-            items.push({ kind: "practice", key: `p-${s.practice.id}`, date: day.date, sort: practiceWindow(s.practice).start, title: `${s.session} practice`, detail: [s.practice.dress, s.practice.opponent && `vs ${s.practice.opponent}`].filter(Boolean).join(" · ") || "No details yet", badge: "Practice", href: `/practice/${s.practice.id}`, status });
+            items.push({ kind: "practice", key: `p-${s.practice.id}`, date: day.date, sort: practiceWindow(s.practice).start, title: `${s.session} practice`, detail: [s.practice.dress, s.practice.opponent && `vs ${s.practice.opponent}`].filter(Boolean).join(" · ") || "No details yet", badge: "Practice", href: `/practice/${s.practice.id}`, time: fmtMinutes(practiceWindow(s.practice).start), status });
           } else {
             // Empty slots are a planning prompt: only the next two weeks, never history.
             if ((status as SlotStatus) === "no-plan" || day.date > addDays(now.today, 14)) continue;
             const source = suggestSource(practices, day.date, s.session);
-            items.push({ kind: "practice", key: `e-${day.date}-${s.session}`, date: day.date, sort: s.session === "School Day" ? 12 * 60 : 18 * 60, title: `${s.session} practice`, detail: "Needs a plan", badge: "Practice", href: `/practice/new?date=${day.date}&session=${encodeURIComponent(s.session)}${source ? `&from=${source.id}` : ""}`, status, empty: true });
+            items.push({ kind: "practice", key: `e-${day.date}-${s.session}`, date: day.date, sort: s.session === "School Day" ? 12 * 60 : 18 * 60, title: `${s.session} practice`, detail: "Needs a plan", badge: "Practice", href: `/practice/new?date=${day.date}&session=${encodeURIComponent(s.session)}${source ? `&from=${source.id}` : ""}`, time: s.session === "School Day" ? "Midday" : "Evening", status, empty: true });
           }
         }
       }
@@ -75,7 +84,7 @@ export function calendarItems(view: CalView, anchor: string, practices: Practice
     for (const g of games) {
       if (g.date < days[0] || g.date > days[days.length - 1]) continue;
       if (level !== "all" && g.level !== level) continue;
-      items.push({ kind: "game", key: `g-${g.id}`, date: g.date, sort: clockMinutes(g.time), title: vsLabel(g), detail: [g.time, g.location].filter(Boolean).join(" · ") || "Time to be set", badge: levelLabel(g.level), href: `/games/${g.id}`, level: g.level });
+      items.push({ kind: "game", key: `g-${g.id}`, date: g.date, sort: clockMinutes(g.time), title: vsLabel(g), detail: [g.time, g.location].filter(Boolean).join(" · ") || "Time to be set", badge: levelLabel(g.level), href: `/games/${g.id}`, time: fmtMinutes(clockMinutes(g.time)), level: g.level });
     }
   }
   return items.sort((a, b) => a.date.localeCompare(b.date) || a.sort - b.sort || a.key.localeCompare(b.key));

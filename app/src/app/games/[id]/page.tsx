@@ -33,7 +33,7 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
         <GameLinks gameId={game.id} initial={game.links} />
       </div>
 
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Scripts{scripts.length > 0 ? ` · ${scripts.length}` : ""}</h2>
           <Link href={`/scripts?add=1&game=${game.id}`} className={btnOutline + " ml-auto"}><Icon name="plus" />Add Script</Link>
@@ -43,7 +43,7 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
         )}
       </section>
 
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Documents{docs.length > 0 ? ` · ${docs.length}` : ""}</h2>
           <Link href={`/documents?add=1&game=${game.id}`} className={btnOutline + " ml-auto"}><Icon name="plus" />Add Document</Link>
@@ -59,7 +59,7 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
         )}
       </section>
 
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Scouting & Notes{about.length > 0 ? ` · ${about.length}` : ""}</h2>
           <div className="ml-auto flex gap-2">
@@ -81,7 +81,7 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
         )}
       </section>
 
-      <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
         <h2>Practices This Week</h2>
         {week.length === 0 ? (
           <p className="text-sm text-neutral-600">No practices on file in the six days before this game.</p>
