@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { availabilityOn } from "@/lib/availability";
-import { getNotes, getPlayers, getPractices } from "@/lib/db";
+import { getGames, getNotes, getPlayers, getPractices } from "@/lib/db";
+import { nextGame, prepProgress, vsLabel } from "@/lib/games";
 import { isOverdue, openActions } from "@/lib/notes";
 import { mondayOf, nowInSchool, slotStatus, weekSlots } from "@/lib/week";
 import { prettyDate } from "@/lib/time";
@@ -12,7 +13,9 @@ const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Ameri
 export default async function Home() {
   await connection();
   const today = todayIso();
-  const [practices, players, notes] = await Promise.all([getPractices(), getPlayers(), getNotes()]);
+  const [practices, players, notes, games] = await Promise.all([getPractices(), getPlayers(), getNotes(), getGames()]);
+  const game = nextGame(games, today);
+  const prep = game ? prepProgress(game.checklist) : null;
   const actions = openActions(notes, today);
   const sorted = [...practices].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   const todays = sorted.filter((p) => p.date === today);
@@ -64,6 +67,15 @@ export default async function Home() {
             {next.notes.map((n) => <li key={n}>{n}</li>)}
           </ul>
         </section>
+      )}
+
+      {game && prep && (
+        <Link href={`/games/${game.id}`} className="block rounded-xl bg-white p-4 shadow-sm hover:shadow">
+          <p className="text-sm text-neutral-600">Next game{game.date === today ? " · today" : ""}</p>
+          <p className="font-display text-2xl font-semibold uppercase tracking-wide">{vsLabel(game)}</p>
+          <p className="text-sm text-neutral-700">{prettyDate(game.date)}{game.time ? ` · ${game.time}` : ""}{game.location ? ` · ${game.location}` : ""}</p>
+          <p className={`mt-1 text-sm font-semibold ${prep.done === prep.total ? "text-green-900" : "text-neutral-700"}`}>Prep {prep.done} of {prep.total} ready</p>
+        </Link>
       )}
 
       <section className="rounded-xl bg-white p-4 shadow-sm">

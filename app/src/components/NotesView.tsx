@@ -11,20 +11,21 @@ import { PageHeader } from "./PageHeader";
 import { btnDanger, btnPlain, btnPrimary, inputCls } from "./ui";
 
 type Choice = { id: string; label: string };
-type Lookups = { players: Choice[]; coaches: Choice[]; practices: Choice[] };
+type Lookups = { players: Choice[]; coaches: Choice[]; practices: Choice[]; games: Choice[] };
 
-function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initial?: { kind?: "note" | "action"; practiceId?: string }; lookups: Lookups; onDone: () => void }) {
+function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initial?: { kind?: "note" | "action"; practiceId?: string; gameId?: string }; lookups: Lookups; onDone: () => void }) {
   const [kind, setKind] = useState<"note" | "action">(note?.kind ?? initial?.kind ?? "note");
   const [body, setBody] = useState(note?.body ?? "");
   const [playerId, setPlayerId] = useState(note?.playerId ?? "");
   const [practiceId, setPracticeId] = useState(note?.practiceId ?? initial?.practiceId ?? "");
+  const [gameId, setGameId] = useState(note?.gameId ?? initial?.gameId ?? "");
   const [owner, setOwner] = useState(note?.owner ?? "");
   const [due, setDue] = useState(note?.due ?? "");
   const [error, setError] = useState("");
   const [pending, start] = useTransition();
 
   const save = () => start(async () => {
-    const payload = { kind, body, playerId, practiceId, owner, due };
+    const payload = { kind, body, playerId, practiceId, gameId, owner, due };
     const r = note ? await updateNote(note.id, payload) : await createNote(payload);
     if (r.error) setError(r.error); else { setError(""); onDone(); }
   });
@@ -48,6 +49,9 @@ function NoteForm({ note, initial, lookups, onDone }: { note: Note | null; initi
         </label>
         <label className="text-sm font-medium">From a practice (optional)
           <select className={inputCls} value={practiceId} onChange={(e) => setPracticeId(e.target.value)}><option value="">No practice</option>{lookups.practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select>
+        </label>
+        <label className="text-sm font-medium">About a game (optional)
+          <select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)}><option value="">No game</option>{lookups.games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select>
         </label>
         {kind === "action" && (
           <>
@@ -81,6 +85,7 @@ function Row({ note, lookups, today }: { note: Note; lookups: Lookups; today: st
   const meta = [
     label(lookups.players, note.playerId),
     label(lookups.practices, note.practiceId),
+    label(lookups.games, note.gameId),
     action && note.owner ? `Owner: ${label(lookups.coaches, note.owner) ?? note.owner}` : null,
   ].filter(Boolean);
 
@@ -112,12 +117,12 @@ function Row({ note, lookups, today }: { note: Note; lookups: Lookups; today: st
 
 const SORTS: { value: NoteSort; label: string }[] = [{ value: "newest", label: "Newest first" }, { value: "oldest", label: "Oldest first" }, { value: "due", label: "Due date" }];
 
-export function NotesView({ notes, lookups, today, initial }: { notes: Note[]; lookups: Lookups; today: string; initial: { add: boolean; kind?: "note" | "action"; practiceId?: string; show?: NoteFilters["show"] } }) {
+export function NotesView({ notes, lookups, today, initial }: { notes: Note[]; lookups: Lookups; today: string; initial: { add: boolean; kind?: "note" | "action"; practiceId?: string; gameId?: string; show?: NoteFilters["show"] } }) {
   const [filters, setFilters] = useState<NoteFilters>({ ...NO_NOTE_FILTERS, show: initial.show ?? "all" });
   const [sort, setSort] = useState<NoteSort>(initial.show === "open" ? "due" : "newest");
   const [adding, setAdding] = useState(initial.add);
   const find = (list: Choice[], id: string | null) => list.find((x) => x.id === id)?.label ?? "";
-  const list = sortNotes(filterNotes(notes, filters, (n) => `${n.body} ${find(lookups.players, n.playerId)} ${find(lookups.practices, n.practiceId)} ${find(lookups.coaches, n.owner)}`), sort, today);
+  const list = sortNotes(filterNotes(notes, filters, (n) => `${n.body} ${find(lookups.players, n.playerId)} ${find(lookups.practices, n.practiceId)} ${find(lookups.games, n.gameId)} ${find(lookups.coaches, n.owner)}`), sort, today);
   const open = notes.filter((n) => n.kind === "action" && n.status === "open").length;
   const filtered = JSON.stringify(filters) !== JSON.stringify(NO_NOTE_FILTERS);
 

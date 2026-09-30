@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Coach, Note } from "@/lib/db-types";
+import type { Coach, Game, Note } from "@/lib/db-types";
 import type { Block, Player, Practice } from "@/lib/types";
 
 type BlockRow = { position: number; start_time: string; periods: number; span: string | null; flex: boolean; lanes: Record<string, string> };
@@ -62,6 +62,27 @@ export async function getNotes(): Promise<Note[]> {
   if (error) throw new Error(`Could not load notes: ${error.message}`);
   return data.map((n) => ({
     id: n.id, kind: n.kind, body: n.body, status: n.status, due: n.due_date, owner: n.owner,
-    playerId: n.player_id, practiceId: n.practice_id, source: n.source, created: n.created_at,
+    playerId: n.player_id, practiceId: n.practice_id, gameId: n.game_id, source: n.source, created: n.created_at,
   }));
+}
+
+const toGame = (g: Record<string, unknown>): Game => ({
+  id: g.id as string, date: g.date as string, time: (g.start_time as string | null) ?? null, opponent: g.opponent as string,
+  site: g.site as Game["site"], location: (g.location as string | null) ?? null, kind: g.kind as Game["kind"], status: g.status as Game["status"],
+  scoreUs: (g.score_us as number | null) ?? null, scoreThem: (g.score_them as number | null) ?? null,
+  links: (g.links as Game["links"]) ?? [], checklist: (g.checklist as Game["checklist"]) ?? {},
+});
+
+export async function getGames(): Promise<Game[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("games").select("*").order("date");
+  if (error) throw new Error(`Could not load games: ${error.message}`);
+  return data.map(toGame);
+}
+
+export async function getGame(id: string): Promise<Game | undefined> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("games").select("*").eq("id", id).maybeSingle();
+  if (error) throw new Error(`Could not load the game: ${error.message}`);
+  return data ? toGame(data) : undefined;
 }

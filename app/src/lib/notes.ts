@@ -1,6 +1,6 @@
 import type { Note } from "./db-types";
 
-export type NoteInput = { kind: "note" | "action"; body: string; playerId: string | null; practiceId: string | null; owner: string | null; due: string | null };
+export type NoteInput = { kind: "note" | "action"; body: string; playerId: string | null; practiceId: string | null; gameId: string | null; owner: string | null; due: string | null };
 
 const validDate = (s: string) => {
   const d = new Date(`${s}T00:00:00Z`);
@@ -27,7 +27,7 @@ export function parseNoteInput(input: unknown): { ok: true; value: NoteInput } |
       ok: true,
       value: {
         kind: p.kind, body,
-        playerId: optId(p.playerId, "Player"), practiceId: optId(p.practiceId, "Practice"),
+        playerId: optId(p.playerId, "Player"), practiceId: optId(p.practiceId, "Practice"), gameId: optId(p.gameId, "Game"),
         // Owner and due date only make sense for action items.
         owner: action ? optId(p.owner, "Owner") : null,
         due: action && due ? due : null,
