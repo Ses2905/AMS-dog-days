@@ -148,3 +148,11 @@ export async function getScript(id: string): Promise<Script | null> {
     rows: (data.script_rows as { position: number }[]).sort((a, b) => a.position - b.position).map((r) => toScriptRow(r)),
   };
 }
+
+export type SavedOutput = { id: string; workflow: string; title: string; body: string; gameId: string | null; playerId: string | null; created: string };
+export async function getSavedOutputs(): Promise<SavedOutput[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("saved_outputs").select("*").order("created_at", { ascending: false }).limit(50);
+  if (error) throw new Error(`Could not load saved results: ${error.message}`);
+  return data.map((r) => ({ id: r.id, workflow: r.workflow, title: r.title, body: r.body, gameId: r.game_id, playerId: r.player_id, created: r.created_at }));
+}

@@ -3,10 +3,12 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { aiStatus } from "@/lib/ai/config";
-import { getCoaches, getDocuments, getGames, getNotes, getPlayers, getPractices } from "@/lib/db";
-import { runAsk, runDraft, runTranscript, type Fail, type Ok } from "@/lib/ai/run";
+import { getAttendance, getCoaches, getDocuments, getGames, getNotes, getPlayers, getPlays, getPractices, getScripts } from "@/lib/db";
+import { runAsk, runDraft, runTranscript, runWorkflow, type Fail, type Ok, type WorkflowResult } from "@/lib/ai/run";
 import { draftToPractice, type DraftResult, type Proposal } from "@/lib/ai/schemas";
 import type { AssistantData, Source } from "@/lib/ai/context";
+import { parseName, parseRows } from "@/lib/scripts";
+import type { ScriptRow } from "@/lib/scripts";
 import { parsePayload } from "@/lib/practice-edit";
 import { parseNewPractice, practiceId } from "@/lib/new-practice";
 import { createClient } from "@/lib/supabase/server";
@@ -18,8 +20,8 @@ async function gate(): Promise<Fail | { ok: true; model: string; data: Assistant
   if (!user) redirect("/login");
   const status = aiStatus();
   if (!status.ready) return { ok: false, error: "The assistant isn't switched on yet." };
-  const [players, practices, games, notes, coaches, docs] = await Promise.all([getPlayers(), getPractices(), getGames(), getNotes(), getCoaches(), getDocuments()]);
-  return { ok: true, model: status.model, data: { today: nowInSchool().today, players, practices, games, notes, coaches, docs } };
+  const [players, practices, games, notes, coaches, docs, attendance, plays, scripts] = await Promise.all([getPlayers(), getPractices(), getGames(), getNotes(), getCoaches(), getDocuments(), getAttendance(), getPlays(), getScripts()]);
+  return { ok: true, model: status.model, data: { today: nowInSchool().today, players, practices, games, notes, coaches, docs, attendance, plays, scripts } };
 }
 
 export async function askAssistant(question: string): Promise<Ok<{ answer: string; sources: Source[] }> | Fail> {
@@ -72,4 +74,57 @@ export async function saveDraftPractice(input: { date: string; session: string; 
   }
   revalidatePath("/", "layout");
   return { error: "", id };
+}
+
+export async function runCoachWorkflow(workflowId: string, subjectId: string, input: string): Promise<Ok<WorkflowResult> | Fail> {
+  if (typeof workflowId !== "string" || typeof input !== "string" || typeof subjectId !== "string") return { ok: false, error: "Something was missing." };
+  const g = await gate();
+  return !g.ok ? g : runWorkflow(g.model, g.data, workflowId, subjectId, input);
+}
+
+const validId = (v: unknown): v is string => typeof v === "string" && v.length > 0 && v.length <= 120;
+async function authedClient() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  return supabase;
+}
+
+/** Keeps a result the coach wants to come back to. */
+export async function saveOutput(input: { workflow: string; title: string; body: string; gameId?: string; playerId?: string }): Promise<{ error: string }> {
+  const title = typeof input?.title === "string" ? input.title.trim() : "";
+  const body = typeof input?.body === "string" ? input.body.trim() : "";
+  if (!title || title.length > 120) return { error: "That title isn't valid." };
+  if (!body || body.length > 20000) return { error: "That is too long to save (max 20,000 characters)." };
+  if (typeof input.workflow !== "string" || input.workflow.length > 60) return { error: "Unknown workflow." };
+  const supabase = await authedClient();
+  const { error } = await supabase.from("saved_outputs").insert({ workflow: input.workflow, title, body, game_id: validId(input.gameId) ? input.gameId : null, player_id: validId(input.playerId) ? input.playerId : null });
+  if (error) return { error: `Could not save: ${error.message}` };
+  revalidatePath("/assistant");
+  return { error: "" };
+}
+
+export async function deleteOutput(id: string): Promise<{ error: string }> {
+  if (!validId(id)) return { error: "Unknown item." };
+  const supabase = await authedClient();
+  const { error } = await supabase.from("saved_outputs").delete().eq("id", id);
+  if (error) return { error: `Could not delete: ${error.message}` };
+  revalidatePath("/assistant");
+  return { error: "" };
+}
+
+/** Turns an approved script draft into a real script. Rows are checked again here. */
+export async function saveGeneratedScript(input: { name: unknown; rows: unknown; gameId?: unknown }): Promise<{ error: string; id?: string }> {
+  const name = parseName(input?.name);
+  if (!name.ok) return { error: name.error };
+  const rows = parseRows(input.rows);
+  if (!rows.ok) return { error: rows.error };
+  const supabase = await authedClient();
+  const ins = await supabase.from("scripts").insert({ name: name.value, game_id: validId(input.gameId) ? input.gameId : null }).select("id").single();
+  if (ins.error) return { error: `Could not create the script: ${ins.error.message}` };
+  const cols = (rows.value as ScriptRow[]).map((r, position) => ({ script_id: ins.data.id, position, ...r }));
+  const r = await supabase.from("script_rows").insert(cols);
+  if (r.error) { await supabase.from("scripts").delete().eq("id", ins.data.id); return { error: `Could not save the plays: ${r.error.message}` }; }
+  revalidatePath("/", "layout");
+  return { error: "", id: ins.data.id };
 }
