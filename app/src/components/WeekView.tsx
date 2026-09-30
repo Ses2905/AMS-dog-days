@@ -27,6 +27,7 @@ export function WeekView({ practices, games, monday, now }: { practices: Practic
   return (
     <div className="space-y-5">
       <PageHeader title={`Week of ${prettyDate(monday).replace(/^\w+, /, "")}`}>
+        <Link href="/scripts" className={btnOutline}>Scripts</Link>
         <Link href="/practice/all" className={btnOutline}>All practices</Link>
         <Link href="/practice/new" className={btnPrimary}>Plan a practice</Link>
       </PageHeader>

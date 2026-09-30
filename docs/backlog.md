@@ -3,13 +3,15 @@
 Add ideas here as they come up. Newest thinking goes at the top of its section.
 
 ## Next Up (in order)
-1. Team script (plays by situation)
-2. Depth chart (positions, using the "Position Ideas" player notes)
+1. Depth chart (positions, using the "Position Ideas" player notes)
 
 ## Done Recently
+- Team script: sectioned plays with down, distance, hash, personnel, formation, motion, defense; edit, sideline view, print; linked to practices and games
+- Game scoring log, season records, scoring leaders
 - Attendance: tap Present / Late / Absent / Excused on a practice page, "Everyone Present", Today prompt, per-player history
 
 ## After That
+- Script: link rows to a real play library, drag to reorder, save as reusable template
 - Deeper game stats (yards, tackles, turnovers, per-quarter breakdown) once we know which ones Jordan actually tracks
 - Scoring log for JV/varsity players (they are not on the roster yet, so scorers are typed by name)
 - Offline read of today's plan (iPhone)

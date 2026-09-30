@@ -1,3 +1,4 @@
+import type { Script, ScriptRow } from "./scripts";
 import type { Play } from "./plays";
 import type { AttendanceRow } from "./attendance";
 import { createClient } from "@/lib/supabase/server";
@@ -118,4 +119,32 @@ export async function getPlays(gameId?: string): Promise<Play[]> {
   const { data, error } = await (gameId ? q.eq("game_id", gameId) : q);
   if (error) throw new Error(`Could not load scoring plays: ${error.message}`);
   return data.map((r) => ({ id: r.id, gameId: r.game_id, quarter: r.quarter, team: r.team, type: r.type, points: r.points, playerId: r.player_id, scorerName: r.scorer_name, detail: r.detail }));
+}
+
+const toScriptRow = (r: Record<string, unknown>): ScriptRow => ({
+  section: r.section as string, down: (r.down as number | null) ?? null, distance: r.distance as string, hash: r.hash as ScriptRow["hash"],
+  personnel: r.personnel as string, formation: r.formation as string, motion: r.motion as string, play: r.play as string,
+  defense: r.defense as string, notes: r.notes as string, ran: r.ran === true,
+});
+
+export async function getScripts(): Promise<Script[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("scripts").select("*, script_rows(*)").order("updated_at", { ascending: false });
+  if (error) throw new Error(`Could not load scripts: ${error.message}`);
+  return data.map((s) => ({
+    id: s.id, name: s.name, practiceId: s.practice_id, gameId: s.game_id, updated: s.updated_at,
+    rows: (s.script_rows as { position: number }[]).sort((a, b) => a.position - b.position).map((r) => toScriptRow(r)),
+  }));
+}
+
+export async function getScript(id: string): Promise<Script | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("scripts").select("*, script_rows(*)").eq("id", id).maybeSingle();
+  if (error) throw new Error(`Could not load the script: ${error.message}`);
+  if (!data) return null;
+  return {
+    id: data.id, name: data.name, practiceId: data.practice_id, gameId: data.game_id, updated: data.updated_at,
+    rows: (data.script_rows as { position: number }[]).sort((a, b) => a.position - b.position).map((r) => toScriptRow(r)),
+  };
 }
