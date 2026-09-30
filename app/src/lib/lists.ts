@@ -1,5 +1,6 @@
 import { statusOn } from "./availability";
-import type { Coach } from "./db-types";
+import type { Coach, Note } from "./db-types";
+import { byUrgency } from "./notes";
 import type { Player, Practice } from "./types";
 
 const text = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: "base" });
@@ -71,4 +72,28 @@ export function filterPractices(practices: Practice[], f: PracticeFilters): Prac
 export function sortPractices(practices: Practice[], by: PracticeSort): Practice[] {
   const dir = by === "newest" ? -1 : 1;
   return [...practices].sort((a, b) => dir * a.date.localeCompare(b.date) || dir * a.id.localeCompare(b.id));
+}
+
+// ---------- Notes & action items ----------
+export type NoteSort = "newest" | "oldest" | "due";
+export type NoteFilters = { q: string; show: "all" | "open" | "done" | "notes" };
+export const NO_NOTE_FILTERS: NoteFilters = { q: "", show: "all" };
+
+/** `haystack` returns everything searchable about a note (its text plus player, coach and practice names). */
+export function filterNotes(notes: Note[], f: NoteFilters, haystack: (n: Note) => string): Note[] {
+  const q = norm(f.q);
+  return notes.filter((n) => {
+    if (f.show === "notes" && n.kind !== "note") return false;
+    if (f.show === "open" && !(n.kind === "action" && n.status === "open")) return false;
+    if (f.show === "done" && !(n.kind === "action" && n.status === "done")) return false;
+    return !q || norm(haystack(n)).includes(q);
+  });
+}
+
+export function sortNotes(notes: Note[], by: NoteSort, today: string): Note[] {
+  if (by === "oldest") return [...notes].sort((a, b) => a.created.localeCompare(b.created));
+  if (by === "newest") return [...notes].sort((a, b) => b.created.localeCompare(a.created));
+  // Due date: open action items by urgency first, then everything else newest first.
+  const open = (n: Note) => n.kind === "action" && n.status === "open";
+  return [...notes].sort((a, b) => (open(a) === open(b) ? (open(a) ? byUrgency(a, b, today) : b.created.localeCompare(a.created)) : open(a) ? -1 : 1));
 }

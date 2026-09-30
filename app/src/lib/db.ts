@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Coach } from "@/lib/db-types";
+import type { Coach, Note } from "@/lib/db-types";
 import type { Block, Player, Practice } from "@/lib/types";
 
 type BlockRow = { position: number; start_time: string; periods: number; span: string | null; flex: boolean; lanes: Record<string, string> };
@@ -54,4 +54,14 @@ export async function getCoaches(): Promise<Coach[]> {
   const { data, error } = await supabase.from("coaches").select("*").order("sort");
   if (error) throw new Error(`Could not load coaches: ${error.message}`);
   return data.map((c) => ({ id: c.id, first: c.first_name, last: c.last_name, role: c.role, active: c.active }));
+}
+
+export async function getNotes(): Promise<Note[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("notes").select("*").order("created_at", { ascending: false });
+  if (error) throw new Error(`Could not load notes: ${error.message}`);
+  return data.map((n) => ({
+    id: n.id, kind: n.kind, body: n.body, status: n.status, due: n.due_date, owner: n.owner,
+    playerId: n.player_id, practiceId: n.practice_id, source: n.source, created: n.created_at,
+  }));
 }

@@ -8,6 +8,7 @@ const links = [
   { href: "/", label: "Today" },
   { href: "/practice", label: "Practice" },
   { href: "/roster", label: "Team" },
+  { href: "/notes", label: "Notes" },
 ];
 
 /** Brand bar, plus the main tabs and Sign out once someone is signed in (everything except the login page). */
