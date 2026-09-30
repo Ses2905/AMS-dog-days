@@ -10,7 +10,7 @@ import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { btnPrimary } from "./ui";
 
-type Filters = { q: string; when: "all" | "upcoming" | "past"; site: "all" | "home" | "away"; level: "all" | "jr" | "jv" | "varsity" };
+type Filters = { q: string; when: "all" | "upcoming" | "past"; site: "all" | "home" | "away"; level: "all" | "jr" | "jrjv" | "jv" | "varsity" };
 const NONE: Filters = { q: "", when: "upcoming", site: "all", level: "all" };
 
 export function GamesView({ games, today }: { games: Game[]; today: string }) {

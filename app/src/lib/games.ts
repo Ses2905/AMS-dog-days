@@ -14,7 +14,7 @@ export const CHECKLIST = [
 export type ChecklistKey = (typeof CHECKLIST)[number]["key"];
 export const isChecklistKey = (k: unknown): k is ChecklistKey => CHECKLIST.some((c) => c.key === k);
 
-export const LEVELS = [{ value: "jr", label: "Jr. High" }, { value: "jv", label: "JV" }, { value: "varsity", label: "Varsity" }] as const;
+export const LEVELS = [{ value: "jr", label: "7th / Jr. High" }, { value: "jrjv", label: "Jr. High JV" }, { value: "jv", label: "Sr. High JV" }, { value: "varsity", label: "Varsity" }] as const;
 export type Level = (typeof LEVELS)[number]["value"];
 export const levelLabel = (l: Level) => LEVELS.find((x) => x.value === l)?.label ?? "Jr. High";
 
@@ -60,7 +60,7 @@ export function parseGameInput(input: unknown): { ok: true; value: GameInput } |
     if (timeRaw && !time) throw new Error("Time should look like 7:00 PM.");
     const site = p.site as GameInput["site"], kind = p.kind as GameInput["kind"], status = p.status as GameInput["status"];
     const level = (p.level ?? "jr") as Level;
-    if (!LEVELS.some((l) => l.value === level)) throw new Error("Pick Jr. High, JV or Varsity.");
+    if (!LEVELS.some((l) => l.value === level)) throw new Error("Pick a team.");
     if (!SITES.includes(site)) throw new Error("Pick home, away or neutral.");
     if (!KINDS.includes(kind)) throw new Error("Pick game, scrimmage or other.");
     if (!STATUSES.includes(status)) throw new Error("Pick a status.");
