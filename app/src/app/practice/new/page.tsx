@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
+import { PageHeader } from "@/components/PageHeader";
+import { btnOutline } from "@/components/ui";
 import { getPractices } from "@/lib/db";
 import { SESSION_CHOICES } from "@/lib/new-practice";
 import { prettyDate } from "@/lib/time";
@@ -22,7 +24,7 @@ export default async function NewPracticePage({ searchParams }: PageProps<"/prac
   const field = "mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base";
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <div className="flex items-center gap-3"><h1 className="text-3xl">Plan a practice</h1><Link href="/practice" className="ml-auto text-sm text-green-600 underline">Back to the week</Link></div>
+      <PageHeader title="Plan a practice"><Link href="/practice" className={btnOutline}>Week view</Link></PageHeader>
       <form action={createPractice} className="space-y-4 rounded-xl bg-white p-4 shadow-sm">
         <label className="block text-sm font-medium">Date
           <input type="date" name="date" defaultValue={date} required className={field} />

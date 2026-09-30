@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { connection } from "next/server";
 import { AvailabilitySummary } from "@/components/AvailabilitySummary";
-import { PlayerList } from "@/components/PlayerList";
+import { TeamView } from "@/components/PlayerList";
 import { getPlayers } from "@/lib/db";
 import reviewNotes from "@/data/roster-review.json";
 
@@ -25,15 +24,7 @@ export default async function RosterPage() {
   );
   const flagged = players.filter((p) => p.otherNumbers.length > 0);
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-3xl">Team · {players.length} players</h1>
-        <div className="ml-auto flex gap-2">
-          <Link href="/coaches" className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">Coaches</Link>
-          <Link href="/roster/new" className="inline-flex min-h-12 items-center rounded-lg bg-green-900 px-5 font-semibold text-white">Add player</Link>
-        </div>
-      </div>
-
+    <TeamView players={players} today={today}>
       <AvailabilitySummary players={players} date={today} />
 
       <section className="rounded-xl border border-gold-500 bg-[#f8f4e3] p-4">
@@ -57,8 +48,6 @@ export default async function RosterPage() {
           </li>
         </ul>
       </section>
-
-      <PlayerList players={players} today={today} />
-    </div>
+    </TeamView>
   );
 }

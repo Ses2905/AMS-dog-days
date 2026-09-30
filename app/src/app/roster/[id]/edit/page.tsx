@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/PageHeader";
 import { PlayerForm } from "@/components/PlayerForm";
+import { btnOutline } from "@/components/ui";
 import { getPlayers } from "@/lib/db";
 
 export default async function EditPlayerPage({ params }: PageProps<"/roster/[id]/edit">) {
@@ -10,8 +12,8 @@ export default async function EditPlayerPage({ params }: PageProps<"/roster/[id]
   if (!player) notFound();
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3"><h1 className="text-3xl">{player.first} {player.last}</h1><Link href="/roster" className="ml-auto text-sm text-green-600 underline">Back to the team</Link></div>
-      <PlayerForm player={player} players={players} />
+      <PageHeader title={`${player.first} ${player.last}`}><Link href="/roster" className={btnOutline}>Team</Link></PageHeader>
+      <div className="mx-auto max-w-xl"><PlayerForm player={player} players={players} /></div>
     </div>
   );
 }

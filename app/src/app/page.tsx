@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { connection } from "next/server";
 import { availabilityOn } from "@/lib/availability";
-import { getPlayers, getPractices } from "@/lib/db";
+import { getNotes, getPlayers, getPractices } from "@/lib/db";
+import { isOverdue, openActions } from "@/lib/notes";
 import { mondayOf, nowInSchool, slotStatus, weekSlots } from "@/lib/week";
 import { prettyDate } from "@/lib/time";
 
@@ -11,7 +12,8 @@ const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Ameri
 export default async function Home() {
   await connection();
   const today = todayIso();
-  const [practices, players] = await Promise.all([getPractices(), getPlayers()]);
+  const [practices, players, notes] = await Promise.all([getPractices(), getPlayers(), getNotes()]);
+  const actions = openActions(notes, today);
   const sorted = [...practices].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   const todays = sorted.filter((p) => p.date === today);
   const next = todays[0] ?? sorted.find((p) => p.date > today);
@@ -63,6 +65,28 @@ export default async function Home() {
           </ul>
         </section>
       )}
+
+      <section className="rounded-xl bg-white p-4 shadow-sm">
+        <div className="mb-2 flex items-center gap-3">
+          <h2>Open action items{actions.length > 0 ? ` · ${actions.length}` : ""}</h2>
+          <Link href="/notes?add=1&kind=action" className="ml-auto inline-flex min-h-10 items-center text-sm font-semibold text-green-600 underline">Add one</Link>
+        </div>
+        {actions.length === 0 ? (
+          <p className="text-sm text-neutral-600">Nothing open. Add a note or action item after practice.</p>
+        ) : (
+          <ul className="space-y-2">
+            {actions.slice(0, 5).map((n) => (
+              <li key={n.id} className="text-sm">
+                <Link href="/notes?show=open" className="block hover:underline">
+                  {n.body.length > 90 ? `${n.body.slice(0, 90)}…` : n.body}
+                  {n.due && <span className={`ml-2 text-xs ${isOverdue(n, today) ? "font-semibold text-red-800" : "text-neutral-500"}`}>{isOverdue(n, today) ? "Overdue · " : "Due "}{prettyDate(n.due)}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+        {actions.length > 5 && <Link href="/notes?show=open" className="mt-2 inline-block text-sm text-green-600 underline">See all {actions.length}</Link>}
+      </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
         <Link href="/roster" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">

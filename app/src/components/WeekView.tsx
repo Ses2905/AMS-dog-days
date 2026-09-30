@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { prettyDate } from "@/lib/time";
+import { PageHeader } from "./PageHeader";
+import { btnOutline, btnPlain, btnPrimary } from "./ui";
 import { mondayOf, shiftWeek, slotStatus, suggestSource, weekSlots, type SlotStatus } from "@/lib/week";
 import type { Practice } from "@/lib/types";
 
@@ -22,13 +24,14 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-3xl">Week of {prettyDate(monday).replace(/^\w+, /, "")}</h1>
-        <div className="ml-auto flex gap-2">
-          <Link href={`/practice?week=${shiftWeek(monday, -1)}`} className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium" aria-label="Previous week">←</Link>
-          {monday !== thisMonday && <Link href="/practice" className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium">This week</Link>}
-          <Link href={`/practice?week=${shiftWeek(monday, 1)}`} className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium" aria-label="Next week">→</Link>
-        </div>
+      <PageHeader title={`Week of ${prettyDate(monday).replace(/^\w+, /, "")}`}>
+        <Link href="/practice/all" className={btnOutline}>All practices</Link>
+        <Link href="/practice/new" className={btnPrimary}>Plan a practice</Link>
+      </PageHeader>
+      <div className="flex gap-2">
+        <Link href={`/practice?week=${shiftWeek(monday, -1)}`} className={`${btnPlain} min-w-12`} aria-label="Previous week">←</Link>
+        {monday !== thisMonday && <Link href="/practice" className={btnPlain}>This week</Link>}
+        <Link href={`/practice?week=${shiftWeek(monday, 1)}`} className={`${btnPlain} min-w-12`} aria-label="Next week">→</Link>
       </div>
 
       <p className="text-sm text-neutral-700">
@@ -73,7 +76,6 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
         </section>
       ))}
 
-      <p className="text-sm"><Link href="/practice/all" className="text-green-600 underline">See every practice on file</Link> · <Link href="/practice/new" className="text-green-600 underline">Plan a different day</Link></p>
     </div>
   );
 }
