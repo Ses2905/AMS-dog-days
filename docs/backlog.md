@@ -6,6 +6,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 1. Depth chart, finish it: waiting on Jordan's answer about units vs. position groups, one chart per team level, print view
 
 ## Done Recently
+- Offline reading: today's pages, the next few days of practices and games, and their scripts are kept on the phone; a banner says when there is no signal; Sign Out clears them
 - Assistant reads uploaded playbooks, scouting reports and practice documents (PDF, Word, text, CSV); answers point back to the file; school documents and contact details stay out
 - Automatic checks on every PR; friendly error, not-found and loading screens
 - Full-data export (Settings, Download Everything)
@@ -25,7 +26,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Script: link rows to a real play library, drag to reorder, save as reusable template
 - Deeper game stats (yards, tackles, turnovers, per-quarter breakdown) once we know which ones Jordan actually tracks
 - Scoring log for JV/varsity players (they are not on the roster yet, so scorers are typed by name)
-- Offline read of today's plan (iPhone)
+- Offline saving: attendance and notes made with no signal that sync when it returns (today the app is read-only offline)
 - Reading Excel, PowerPoint and photos of pages (needs OCR) for the assistant
 - Plaud transcripts: paste or upload straight into "Read a Transcript"
 - Morning summary and weather on Today
