@@ -2,7 +2,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { PageHeader } from "@/components/PageHeader";
 import { aiStatus } from "@/lib/ai/config";
-import { getCoaches, getDocuments, getGames, getPlayers, getToolLinks } from "@/lib/db";
+import { getCoaches, getDocuments, getGames, getPlayers, getScripts, getToolLinks } from "@/lib/db";
 
 function Card({ href, title, detail, status }: { href: string; title: string; detail: string; status?: string }) {
   return (
@@ -15,7 +15,7 @@ function Card({ href, title, detail, status }: { href: string; title: string; de
 
 export default async function SettingsPage() {
   await connection();
-  const [players, coaches, games, docs, tools] = await Promise.all([getPlayers(), getCoaches(), getGames(), getDocuments(), getToolLinks()]);
+  const [players, coaches, games, docs, tools, scripts] = await Promise.all([getPlayers(), getCoaches(), getGames(), getDocuments(), getToolLinks(), getScripts()]);
   const ai = aiStatus();
   return (
     <div className="space-y-6">
@@ -26,6 +26,8 @@ export default async function SettingsPage() {
           <Card href="/roster" title="Players" detail={`${players.length} on the roster. Names, numbers, grades, availability, coach notes.`} />
           <Card href="/coaches" title="Coaches" detail={`${coaches.filter((c) => c.active).length} active. These names become the columns on a practice plan.`} />
           <Card href="/games" title="Schedule" detail={`${games.length} games. Add, edit and keep the Hudl and school schedule links.`} />
+          <Card href="/depth" title="Depth Chart" detail="Who plays where, by position, with backups and injuries flagged." />
+          <Card href="/scripts" title="Scripts" detail={`${scripts.length} scripts of plays by situation.`} />
           <Card href="/documents" title="Library" detail={`${docs.length} documents and film links.`} />
         </div>
       </section>

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parseRows, SECTIONS, type ScriptRow } from "../scripts";
 import { parsePayload, type EditPayload } from "../practice-edit";
 import { parseNoteInput, type NoteInput } from "../notes";
 import type { Coach } from "../db-types";
@@ -90,4 +91,25 @@ export function checkTranscript(t: TranscriptOut, players: Pick<Player, "id" | "
     if (r.ok) proposals.push({ key: `p${i}`, label: matches.length === 1 ? `#${matches[0].number} ${matches[0].last}` : "", note: r.value });
   });
   return { summary: t.summary.trim(), proposals, suggestions: t.suggestions.map((s) => s.trim()).filter(Boolean).slice(0, 10) };
+}
+
+/** A script the model drafts. Rows are checked with the same rules as a hand-typed script. */
+export const scriptDraftSchema = z.object({
+  name: z.string(),
+  rows: z.array(z.object({
+    section: z.string(), down: z.number().int().nullable(), distance: z.string(), hash: z.string(),
+    personnel: z.string(), formation: z.string(), motion: z.string(), play: z.string(), defense: z.string(), notes: z.string(),
+  })),
+});
+
+export function checkScriptDraft(d: z.infer<typeof scriptDraftSchema>): { ok: true; value: { name: string; rows: ScriptRow[]; dropped: number } } | { ok: false; error: string } {
+  const cleaned = d.rows.slice(0, 200).map((r) => ({
+    ...r, ran: false,
+    down: r.down !== null && r.down >= 1 && r.down <= 4 ? r.down : null,
+    hash: ["L", "M", "R"].includes(r.hash.trim().toUpperCase()) ? r.hash.trim().toUpperCase() : "",
+    section: SECTIONS.find((s) => s.toLowerCase() === r.section.trim().toLowerCase()) ?? r.section,
+  })).filter((r) => r.play.trim() || r.formation.trim());
+  const rows = parseRows(cleaned);
+  if (!rows.ok || rows.value.length === 0) return { ok: false, error: "The draft script wasn't usable. Try again with a play list." };
+  return { ok: true, value: { name: d.name.trim().slice(0, 80) || "Assistant script", rows: rows.value, dropped: d.rows.length - rows.value.length } };
 }

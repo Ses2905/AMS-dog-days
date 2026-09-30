@@ -7,7 +7,14 @@ import type { Coach, Doc, Game, Note } from "../db-types";
 import type { Player, Practice } from "../types";
 
 export type Source = { label: string; href: string };
-export type AssistantData = { today: string; players: Player[]; practices: Practice[]; games: Game[]; notes: Note[]; coaches: Coach[]; docs: Doc[] };
+import type { DepthPosition, DepthSlot } from "../depth";
+import type { AttendanceRow } from "../attendance";
+import type { Play } from "../plays";
+import type { Script } from "../scripts";
+export type AssistantData = {
+  today: string; players: Player[]; practices: Practice[]; games: Game[]; notes: Note[]; coaches: Coach[]; docs: Doc[];
+  attendance?: AttendanceRow[]; plays?: Play[]; scripts?: Script[]; depth?: { positions: DepthPosition[]; slots: DepthSlot[] };
+};
 
 /** Players are only ever referred to by jersey number and last name. First names, contact details and status reasons never go in. */
 export const playerRef = (p: Pick<Player, "number" | "last">) => `#${p.number} ${p.last}`;

@@ -6,14 +6,15 @@ import { PageHeader } from "@/components/PageHeader";
 import { btnOutline, btnPrimary } from "@/components/ui";
 import { AttendancePanel } from "@/components/AttendancePanel";
 import type { Mark } from "@/lib/attendance";
-import { getAttendance, getDocuments, getNotes, getPlayers, getPractice } from "@/lib/db";
+import { getAttendance, getDocuments, getNotes, getPlayers, getPractice, getScripts } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 export default async function PracticePage({ params }: PageProps<"/practice/[id]">) {
   const { id } = await params;
   const practice = await getPractice(id);
   if (!practice) notFound();
-  const [players, allNotes, allDocs, attendance] = await Promise.all([getPlayers(), getNotes(), getDocuments(), getAttendance()]);
+  const [players, allNotes, allDocs, attendance, allScripts] = await Promise.all([getPlayers(), getNotes(), getDocuments(), getAttendance(), getScripts()]);
+  const scripts = allScripts.filter((s) => s.practiceId === practice.id);
   const marks: Record<string, Mark> = Object.fromEntries(attendance.filter((a) => a.practiceId === practice.id).map((a) => [a.playerId, a.mark]));
   const docs = allDocs.filter((d) => d.practiceId === practice.id);
   const notes = allNotes.filter((n) => n.practiceId === practice.id);
@@ -34,6 +35,15 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
       <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
         <div className="min-w-[640px]"><PracticeGrid practice={practice} /></div>
       </div>
+      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2>Scripts{scripts.length > 0 ? ` · ${scripts.length}` : ""}</h2>
+          <Link href={`/scripts?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}>Add script</Link>
+        </div>
+        {scripts.length === 0 ? <p className="text-sm text-neutral-600">Plan the plays you will run in team periods and open them on the field.</p> : (
+          <ul className="divide-y divide-neutral-200">{scripts.map((s) => <li key={s.id}><Link href={`/scripts/${s.id}`} className="flex min-h-12 items-center justify-between gap-2 font-medium text-green-600 underline"><span className="truncate">{s.name}</span><span className="text-sm font-normal text-neutral-600">{s.rows.length} plays</span></Link></li>)}</ul>
+        )}
+      </section>
       <AttendancePanel practiceId={practice.id} date={practice.date} players={players} initial={marks} />
       {practice.notes.length > 0 && (
         <section className="rounded-xl bg-white p-4 shadow-sm">

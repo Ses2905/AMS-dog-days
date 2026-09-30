@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { GameChecklist, GameHeader, GameLinks } from "@/components/GamePanels";
 import { btnOutline, btnPrimary } from "@/components/ui";
 import { GameScoring } from "@/components/GameScoring";
-import { getDocuments, getGame, getNotes, getPlayers, getPlays, getPractices } from "@/lib/db";
+import { getDocuments, getGame, getNotes, getPlayers, getPlays, getPractices, getScripts } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 const addDays = (iso: string, n: number) => {
@@ -16,7 +16,8 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
   const { id } = await params;
   const game = await getGame(id);
   if (!game) notFound();
-  const [notes, practices, allDocs, plays, players] = await Promise.all([getNotes(), getPractices(), getDocuments(), getPlays(game.id), getPlayers()]);
+  const [notes, practices, allDocs, plays, players, allScripts] = await Promise.all([getNotes(), getPractices(), getDocuments(), getPlays(game.id), getPlayers(), getScripts()]);
+  const scripts = allScripts.filter((s) => s.gameId === game.id);
   const docs = allDocs.filter((d) => d.gameId === game.id);
   const about = notes.filter((n) => n.gameId === game.id);
   const week = practices.filter((p) => p.date >= addDays(game.date, -6) && p.date <= game.date).sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
@@ -29,6 +30,16 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
         <GameChecklist gameId={game.id} initial={game.checklist} />
         <GameLinks gameId={game.id} initial={game.links} />
       </div>
+
+      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2>Scripts{scripts.length > 0 ? ` · ${scripts.length}` : ""}</h2>
+          <Link href={`/scripts?add=1&game=${game.id}`} className={btnOutline + " ml-auto"}>Add script</Link>
+        </div>
+        {scripts.length === 0 ? <p className="text-sm text-neutral-600">Opening script and situational plays for this opponent.</p> : (
+          <ul className="divide-y divide-neutral-200">{scripts.map((s) => <li key={s.id}><Link href={`/scripts/${s.id}`} className="flex min-h-12 items-center justify-between gap-2 font-medium text-green-600 underline"><span className="truncate">{s.name}</span><span className="text-sm font-normal text-neutral-600">{s.rows.length} plays</span></Link></li>)}</ul>
+        )}
+      </section>
 
       <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">

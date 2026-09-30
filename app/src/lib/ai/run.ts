@@ -1,8 +1,11 @@
 import { generateText, Output, type LanguageModel } from "ai";
 import { LIMITS } from "./config";
 import { buildContext, extractCitations, playerRef, practiceLines, type AssistantData, type Source } from "./context";
-import { askPrompt, askSystem, draftPrompt, draftSystem, transcriptPrompt, transcriptSystem } from "./prompts";
-import { checkDraft, checkTranscript, draftSchema, transcriptSchema, type DraftRequest, type DraftResult, type Proposal } from "./schemas";
+import { askPrompt, askSystem, draftPrompt, draftSystem, RULES, transcriptPrompt, transcriptSystem } from "./prompts";
+import { vsLabel } from "../games";
+import { situation, type ScriptRow } from "../scripts";
+import { workflowById, workflowContext, workflowSystem } from "./workflows";
+import { checkDraft, checkScriptDraft, checkTranscript, draftSchema, scriptDraftSchema, transcriptSchema, type DraftRequest, type DraftResult, type Proposal } from "./schemas";
 
 export type Ok<T> = { ok: true; value: T };
 export type Fail = { ok: false; error: string };
@@ -67,5 +70,35 @@ export async function runTranscript(model: LanguageModel, data: AssistantData, t
       prompt: transcriptPrompt(`${context}\n\n## ROSTER (number and last name)\n${roster}`, t), ...common(),
     });
     return { ok: true, value: checkTranscript(output, data.players, data.coaches) };
+  } catch (e) { return explain(e); }
+}
+
+export type WorkflowResult = { kind: "document"; title: string; body: string } | { kind: "script"; title: string; body: string; script: { name: string; rows: ScriptRow[] } };
+
+export async function runWorkflow(model: LanguageModel, data: AssistantData, workflowId: string, subjectId: string, input: string): Promise<Ok<WorkflowResult> | Fail> {
+  const w = workflowById(workflowId);
+  if (!w) return { ok: false, error: "Unknown workflow." };
+  const text = input.trim();
+  if (!text && w.id !== "week" && w.id !== "depth") return { ok: false, error: "Tell it what to work from first." };
+  if (text.length > LIMITS.transcript) return { ok: false, error: `That's too long (max ${LIMITS.transcript.toLocaleString()} characters).` };
+  if (w.subject === "game" && subjectId && !data.games.some((g) => g.id === subjectId)) return { ok: false, error: "That game wasn't found." };
+  if (w.subject === "player" && !data.players.some((p) => p.id === subjectId)) return { ok: false, error: "Pick a player." };
+  if (w.subject === "game" && !subjectId && !w.subjectHint.includes("optional")) return { ok: false, error: "Pick a game." };
+  const context = workflowContext(w, subjectId, data, LIMITS.contextChars);
+  const prompt = `<data>\n${context}\n</data>\n\n<request>\n${text || "Use the data above."}\n</request>`;
+  const system = `${RULES}\n\n${workflowSystem(w)}`;
+  const subject = w.subject === "game" ? data.games.find((g) => g.id === subjectId) : undefined;
+  const title = `${w.title}${subject ? ` · ${vsLabel(subject)}` : ""}`;
+  try {
+    if (w.kind === "script") {
+      const { output } = await generateText({ model, system, prompt, output: Output.object({ schema: scriptDraftSchema }), ...common() });
+      const c = checkScriptDraft(output);
+      if (!c.ok) return c;
+      const lines = c.value.rows.map((r, i) => `${i + 1}. ${[r.section, situation(r), r.formation, r.play].filter(Boolean).join(" · ")}`);
+      return { ok: true, value: { kind: "script", title, body: `${c.value.name}\n\n${lines.join("\n")}${c.value.dropped ? `\n\n(${c.value.dropped} unusable rows were dropped.)` : ""}`, script: { name: c.value.name, rows: c.value.rows } } };
+    }
+    const { text: out } = await generateText({ model, system, prompt, ...common() });
+    if (!out.trim()) return { ok: false, error: "The assistant sent back an empty answer. Try again." };
+    return { ok: true, value: { kind: "document", title, body: out.trim() } };
   } catch (e) { return explain(e); }
 }

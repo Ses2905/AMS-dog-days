@@ -6,11 +6,13 @@ import { askAssistant, draftPractice, readTranscript, saveDraftPractice } from "
 import { createNote } from "@/app/notes/actions";
 import type { Source } from "@/lib/ai/context";
 import type { DraftResult, Proposal } from "@/lib/ai/schemas";
+import type { SavedOutput } from "@/lib/db";
 import { PageHeader } from "./PageHeader";
+import { WorkflowsPanel } from "./WorkflowsPanel";
 import { PracticeGrid } from "./PracticeGrid";
 import { btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
 
-const TABS = [{ id: "ask", label: "Ask" }, { id: "draft", label: "Draft a Practice" }, { id: "transcript", label: "Read a Transcript" }] as const;
+const TABS = [{ id: "ask", label: "Ask" }, { id: "playbooks", label: "Playbooks" }, { id: "draft", label: "Draft a Practice" }, { id: "transcript", label: "Read a Transcript" }] as const;
 type Tab = (typeof TABS)[number]["id"];
 
 const Err = ({ msg }: { msg: string }) => (msg ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{msg}</p> : null);
@@ -174,7 +176,7 @@ function Off() {
   );
 }
 
-export function AssistantView({ ready, today, defaultStart }: { ready: boolean; today: string; defaultStart: Record<string, string> }) {
+export function AssistantView({ ready, today, defaultStart, games, players, saved }: { ready: boolean; today: string; defaultStart: Record<string, string>; games: { id: string; label: string }[]; players: { id: string; label: string }[]; saved: SavedOutput[] }) {
   const [tab, setTab] = useState<Tab>("ask");
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4 py-6">
@@ -187,6 +189,7 @@ export function AssistantView({ ready, today, defaultStart }: { ready: boolean; 
             ))}
           </div>
           {tab === "ask" && <Ask />}
+          {tab === "playbooks" && <WorkflowsPanel games={games} players={players} saved={saved} />}
           {tab === "draft" && <Draft today={today} defaultStart={defaultStart} />}
           {tab === "transcript" && <Transcript />}
         </>
