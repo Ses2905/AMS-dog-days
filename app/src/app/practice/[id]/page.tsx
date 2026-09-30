@@ -15,9 +15,14 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
           <h1 className="text-2xl font-semibold">{prettyDate(practice.date)} · {practice.session}</h1>
           <p className="text-sm text-neutral-600">{practice.team}</p>
         </div>
-        <Link href={`/practice/${practice.id}/print`} className="ml-auto inline-flex min-h-12 items-center rounded-lg bg-green-900 px-5 font-semibold text-white">
-          Print / PDF
-        </Link>
+        <div className="ml-auto flex gap-2">
+          <Link href={`/practice/${practice.id}/edit`} className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">
+            Edit
+          </Link>
+          <Link href={`/practice/${practice.id}/print`} className="inline-flex min-h-12 items-center rounded-lg bg-green-900 px-5 font-semibold text-white">
+            Print / PDF
+          </Link>
+        </div>
       </div>
       {practice.imported && (
         <p className="rounded-lg border border-gold-500 bg-[#f8f4e3] px-3 py-2 text-sm">
