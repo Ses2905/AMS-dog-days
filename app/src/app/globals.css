@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+:root {
+  --green-900: #003810;
+  --green-600: #006030;
+  --gold-500: #c4b259;
+  --tan-300: #d2b899;
+  --ink: #111512;
+  --paper: #ffffff;
+  --wash: #f3f5f2;
+}
+
+@theme inline {
+  --color-green-900: var(--green-900);
+  --color-green-600: var(--green-600);
+  --color-gold-500: var(--gold-500);
+  --color-tan-300: var(--tan-300);
+  --color-ink: var(--ink);
+  --color-wash: var(--wash);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--wash);
+  color: var(--ink);
+}
+
+/* Print: landscape letter, one clean sheet, no app chrome. */
+@page {
+  size: letter landscape;
+  margin: 0.4in;
+}
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .print-sheet { box-shadow: none !important; border: 0 !important; padding: 0 !important; }
+}

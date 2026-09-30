@@ -1,0 +1,774 @@
+{
+ "players": [
+  {
+   "first": "Wesley",
+   "last": "Abshere",
+   "grade": 9,
+   "number": 70,
+   "otherNumbers": [
+    67
+   ],
+   "id": "wesley-abshere"
+  },
+  {
+   "first": "Jace",
+   "last": "Aguilera",
+   "grade": 8,
+   "number": 17,
+   "otherNumbers": [],
+   "id": "jace-aguilera"
+  },
+  {
+   "first": "Justin",
+   "last": "Baldwin",
+   "grade": 8,
+   "number": 25,
+   "otherNumbers": [
+    39
+   ],
+   "id": "justin-baldwin"
+  },
+  {
+   "first": "Luke",
+   "last": "Blankenship",
+   "grade": 8,
+   "number": 54,
+   "otherNumbers": [
+    55
+   ],
+   "id": "luke-blankenship"
+  },
+  {
+   "first": "Jesse",
+   "last": "Booth",
+   "grade": 9,
+   "number": 30,
+   "otherNumbers": [],
+   "id": "jesse-booth"
+  },
+  {
+   "first": "Ben",
+   "last": "Bowles",
+   "grade": 9,
+   "number": 5,
+   "otherNumbers": [],
+   "id": "ben-bowles"
+  },
+  {
+   "first": "Kaleb",
+   "last": "Brown",
+   "grade": 8,
+   "number": 18,
+   "otherNumbers": [],
+   "id": "kaleb-brown"
+  },
+  {
+   "first": "Easton",
+   "last": "Bunn",
+   "grade": 8,
+   "number": 22,
+   "otherNumbers": [
+    20
+   ],
+   "id": "easton-bunn"
+  },
+  {
+   "first": "Korben",
+   "last": "Burkhart",
+   "grade": 9,
+   "number": 13,
+   "otherNumbers": [
+    33
+   ],
+   "id": "korben-burkhart"
+  },
+  {
+   "first": "Caden",
+   "last": "Butler",
+   "grade": 8,
+   "number": 52,
+   "otherNumbers": [],
+   "id": "caden-butler"
+  },
+  {
+   "first": "Jensen",
+   "last": "Cahoon",
+   "grade": 9,
+   "number": 7,
+   "otherNumbers": [],
+   "id": "jensen-cahoon"
+  },
+  {
+   "first": "Brently",
+   "last": "Carmell",
+   "grade": 8,
+   "number": 3,
+   "otherNumbers": [],
+   "id": "brently-carmell"
+  },
+  {
+   "first": "Wyatt",
+   "last": "Cecil",
+   "grade": 8,
+   "number": 12,
+   "otherNumbers": [],
+   "id": "wyatt-cecil"
+  },
+  {
+   "first": "Michael",
+   "last": "Clements",
+   "grade": 9,
+   "number": 53,
+   "otherNumbers": [],
+   "id": "michael-clements"
+  },
+  {
+   "first": "Ayden",
+   "last": "Cole",
+   "grade": 8,
+   "number": 6,
+   "otherNumbers": [
+    37
+   ],
+   "id": "ayden-cole"
+  },
+  {
+   "first": "Kaiden",
+   "last": "Collingsworth",
+   "grade": 9,
+   "number": 74,
+   "otherNumbers": [],
+   "id": "kaiden-collingsworth"
+  },
+  {
+   "first": "Kamryn",
+   "last": "Copeland",
+   "grade": 8,
+   "number": 32,
+   "otherNumbers": [
+    31
+   ],
+   "id": "kamryn-copeland"
+  },
+  {
+   "first": "Sam",
+   "last": "Cox",
+   "grade": 8,
+   "number": 62,
+   "otherNumbers": [],
+   "id": "sam-cox"
+  },
+  {
+   "first": "Lawson",
+   "last": "Crabtree",
+   "grade": 8,
+   "number": 71,
+   "otherNumbers": [],
+   "id": "lawson-crabtree"
+  },
+  {
+   "first": "Hudson",
+   "last": "Daily",
+   "grade": 8,
+   "number": 9,
+   "otherNumbers": [
+    13
+   ],
+   "id": "hudson-daily"
+  },
+  {
+   "first": "Lucas",
+   "last": "Daniels",
+   "grade": 9,
+   "number": 16,
+   "otherNumbers": [],
+   "id": "lucas-daniels"
+  },
+  {
+   "first": "Easton",
+   "last": "Delude",
+   "grade": 9,
+   "number": 44,
+   "otherNumbers": [
+    22
+   ],
+   "id": "easton-delude"
+  },
+  {
+   "first": "Haedyn",
+   "last": "Denton",
+   "grade": 8,
+   "number": 58,
+   "otherNumbers": [
+    59
+   ],
+   "id": "haedyn-denton"
+  },
+  {
+   "first": "Ashton",
+   "last": "Ellison",
+   "grade": 9,
+   "number": 51,
+   "otherNumbers": [],
+   "id": "ashton-ellison"
+  },
+  {
+   "first": "Daniel",
+   "last": "Ford",
+   "grade": 8,
+   "number": 74,
+   "otherNumbers": [],
+   "id": "daniel-ford"
+  },
+  {
+   "first": "Danny",
+   "last": "Fuller",
+   "grade": 8,
+   "number": 64,
+   "otherNumbers": [],
+   "id": "danny-fuller"
+  },
+  {
+   "first": "Mason",
+   "last": "Gilliam",
+   "grade": 8,
+   "number": 14,
+   "otherNumbers": [
+    9
+   ],
+   "id": "mason-gilliam"
+  },
+  {
+   "first": "Raiden",
+   "last": "Gooden",
+   "grade": 8,
+   "number": 85,
+   "otherNumbers": [
+    86
+   ],
+   "id": "raiden-gooden"
+  },
+  {
+   "first": "Hagen",
+   "last": "Goodwin",
+   "grade": 8,
+   "number": 2,
+   "otherNumbers": [
+    9
+   ],
+   "id": "hagen-goodwin"
+  },
+  {
+   "first": "Jaycob",
+   "last": "Hall",
+   "grade": 8,
+   "number": 34,
+   "otherNumbers": [],
+   "id": "jaycob-hall"
+  },
+  {
+   "first": "Colton",
+   "last": "Hamilton",
+   "grade": 9,
+   "number": 72,
+   "otherNumbers": [],
+   "id": "colton-hamilton"
+  },
+  {
+   "first": "Jagger",
+   "last": "Harmon",
+   "grade": 9,
+   "number": 6,
+   "otherNumbers": [],
+   "id": "jagger-harmon"
+  },
+  {
+   "first": "Bentley",
+   "last": "Henson",
+   "grade": 8,
+   "number": 15,
+   "otherNumbers": [
+    14
+   ],
+   "id": "bentley-henson"
+  },
+  {
+   "first": "Peyton",
+   "last": "Henson",
+   "grade": 8,
+   "number": 16,
+   "otherNumbers": [
+    15
+   ],
+   "id": "peyton-henson"
+  },
+  {
+   "first": "Landyn",
+   "last": "Higgins",
+   "grade": 8,
+   "number": 56,
+   "otherNumbers": [
+    57
+   ],
+   "id": "landyn-higgins"
+  },
+  {
+   "first": "Bryson",
+   "last": "Hildebrandt",
+   "grade": 8,
+   "number": 13,
+   "otherNumbers": [],
+   "id": "bryson-hildebrandt"
+  },
+  {
+   "first": "Sebastian",
+   "last": "Holcombe",
+   "grade": 8,
+   "number": 26,
+   "otherNumbers": [
+    23
+   ],
+   "id": "sebastian-holcombe"
+  },
+  {
+   "first": "Atikus",
+   "last": "Holscher-White",
+   "grade": 8,
+   "number": 82,
+   "otherNumbers": [],
+   "id": "atikus-holscher-white"
+  },
+  {
+   "first": "Jordon",
+   "last": "Horn",
+   "grade": 9,
+   "number": 1,
+   "otherNumbers": [],
+   "id": "jordon-horn"
+  },
+  {
+   "first": "Tucker",
+   "last": "Houck",
+   "grade": 8,
+   "number": 19,
+   "otherNumbers": [],
+   "id": "tucker-houck"
+  },
+  {
+   "first": "Brycen",
+   "last": "Hudson",
+   "grade": 8,
+   "number": 11,
+   "otherNumbers": [],
+   "id": "brycen-hudson"
+  },
+  {
+   "first": "Noah",
+   "last": "James",
+   "grade": 8,
+   "number": 24,
+   "otherNumbers": [],
+   "id": "noah-james"
+  },
+  {
+   "first": "EJ",
+   "last": "Jones",
+   "grade": 8,
+   "number": 51,
+   "otherNumbers": [],
+   "id": "ej-jones"
+  },
+  {
+   "first": "Landry",
+   "last": "Jones",
+   "grade": 8,
+   "number": 21,
+   "otherNumbers": [],
+   "id": "landry-jones"
+  },
+  {
+   "first": "Zigha",
+   "last": "Kinght",
+   "grade": 9,
+   "number": 32,
+   "otherNumbers": [],
+   "id": "zigha-kinght"
+  },
+  {
+   "first": "Kamarcus",
+   "last": "Lawson",
+   "grade": 8,
+   "number": 50,
+   "otherNumbers": [],
+   "id": "kamarcus-lawson"
+  },
+  {
+   "first": "Konnor",
+   "last": "Mahan",
+   "grade": 8,
+   "number": 63,
+   "otherNumbers": [],
+   "id": "konnor-mahan"
+  },
+  {
+   "first": "Carter",
+   "last": "Meredith",
+   "grade": 9,
+   "number": 12,
+   "otherNumbers": [],
+   "id": "carter-meredith"
+  },
+  {
+   "first": "Liam",
+   "last": "Moore",
+   "grade": 9,
+   "number": 14,
+   "otherNumbers": [
+    88
+   ],
+   "id": "liam-moore"
+  },
+  {
+   "first": "Matthew",
+   "last": "Moore",
+   "grade": 8,
+   "number": 30,
+   "otherNumbers": [
+    40
+   ],
+   "id": "matthew-moore"
+  },
+  {
+   "first": "Max",
+   "last": "Morgan",
+   "grade": 8,
+   "number": 77,
+   "otherNumbers": [],
+   "id": "max-morgan"
+  },
+  {
+   "first": "Brady",
+   "last": "Moss",
+   "grade": 9,
+   "number": 4,
+   "otherNumbers": [],
+   "id": "brady-moss"
+  },
+  {
+   "first": "Anthony",
+   "last": "Pacheco",
+   "grade": 8,
+   "number": 72,
+   "otherNumbers": [],
+   "id": "anthony-pacheco"
+  },
+  {
+   "first": "Mark",
+   "last": "Parker",
+   "grade": 9,
+   "number": 23,
+   "otherNumbers": [],
+   "id": "mark-parker"
+  },
+  {
+   "first": "Boston",
+   "last": "Parnell",
+   "grade": 9,
+   "number": 11,
+   "otherNumbers": [],
+   "id": "boston-parnell"
+  },
+  {
+   "first": "Braxton",
+   "last": "Price",
+   "grade": 9,
+   "number": 17,
+   "otherNumbers": [],
+   "id": "braxton-price"
+  },
+  {
+   "first": "Landen",
+   "last": "Quinalty",
+   "grade": 9,
+   "number": 10,
+   "otherNumbers": [],
+   "id": "landen-quinalty"
+  },
+  {
+   "first": "Kadden",
+   "last": "Richardson",
+   "grade": 8,
+   "number": 20,
+   "otherNumbers": [
+    35
+   ],
+   "id": "kadden-richardson"
+  },
+  {
+   "first": "Carver",
+   "last": "Rogers",
+   "grade": 8,
+   "number": 70,
+   "otherNumbers": [],
+   "id": "carver-rogers"
+  },
+  {
+   "first": "Basil",
+   "last": "Romo",
+   "grade": 8,
+   "number": 10,
+   "otherNumbers": [],
+   "id": "basil-romo"
+  },
+  {
+   "first": "Parker",
+   "last": "Seals",
+   "grade": 8,
+   "number": 23,
+   "otherNumbers": [
+    26
+   ],
+   "id": "parker-seals"
+  },
+  {
+   "first": "Ayden",
+   "last": "Shaffer",
+   "grade": 8,
+   "number": 65,
+   "otherNumbers": [
+    66
+   ],
+   "id": "ayden-shaffer"
+  },
+  {
+   "first": "Tyler",
+   "last": "Simon",
+   "grade": 8,
+   "number": 4,
+   "otherNumbers": [
+    10
+   ],
+   "id": "tyler-simon"
+  },
+  {
+   "first": "Pierce",
+   "last": "Simpson",
+   "grade": 8,
+   "number": 88,
+   "otherNumbers": [
+    87
+   ],
+   "id": "pierce-simpson"
+  },
+  {
+   "first": "Jax",
+   "last": "Spaulding",
+   "grade": 8,
+   "number": 27,
+   "otherNumbers": [],
+   "id": "jax-spaulding"
+  },
+  {
+   "first": "Gabriel",
+   "last": "Squires",
+   "grade": 8,
+   "number": 5,
+   "otherNumbers": [],
+   "id": "gabriel-squires"
+  },
+  {
+   "first": "Tristen",
+   "last": "Stacy",
+   "grade": 9,
+   "number": 60,
+   "otherNumbers": [],
+   "id": "tristen-stacy"
+  },
+  {
+   "first": "Lane",
+   "last": "Standley",
+   "grade": 9,
+   "number": 3,
+   "otherNumbers": [],
+   "id": "lane-standley"
+  },
+  {
+   "first": "Bryson",
+   "last": "Taylor",
+   "grade": 9,
+   "number": 8,
+   "otherNumbers": [],
+   "id": "bryson-taylor"
+  },
+  {
+   "first": "Kasen",
+   "last": "Tilton",
+   "grade": 8,
+   "number": 73,
+   "otherNumbers": [],
+   "id": "kasen-tilton"
+  },
+  {
+   "first": "Kason",
+   "last": "Tilton",
+   "grade": 8,
+   "number": 53,
+   "otherNumbers": [],
+   "id": "kason-tilton"
+  },
+  {
+   "first": "Kendryc",
+   "last": "Waldon",
+   "grade": 8,
+   "number": 8,
+   "otherNumbers": [],
+   "id": "kendryc-waldon"
+  },
+  {
+   "first": "Jace",
+   "last": "Warren",
+   "grade": 9,
+   "number": 50,
+   "otherNumbers": [],
+   "id": "jace-warren"
+  },
+  {
+   "first": "Austin",
+   "last": "Watkins",
+   "grade": 9,
+   "number": 54,
+   "otherNumbers": [],
+   "id": "austin-watkins"
+  },
+  {
+   "first": "Cayden",
+   "last": "Wiley",
+   "grade": 9,
+   "number": 15,
+   "otherNumbers": [],
+   "id": "cayden-wiley"
+  },
+  {
+   "first": "Cullen",
+   "last": "Wiley",
+   "grade": 9,
+   "number": 25,
+   "otherNumbers": [],
+   "id": "cullen-wiley"
+  },
+  {
+   "first": "Colton",
+   "last": "Williams",
+   "grade": 8,
+   "number": 60,
+   "otherNumbers": [
+    56
+   ],
+   "id": "colton-williams"
+  },
+  {
+   "first": "Issac",
+   "last": "Williams",
+   "grade": 8,
+   "number": 40,
+   "otherNumbers": [
+    38
+   ],
+   "id": "issac-williams"
+  },
+  {
+   "first": "Zach",
+   "last": "Wilson",
+   "grade": 9,
+   "number": 64,
+   "otherNumbers": [],
+   "id": "zach-wilson"
+  },
+  {
+   "first": "Zander",
+   "last": "Wooden",
+   "grade": 9,
+   "number": 24,
+   "otherNumbers": [],
+   "id": "zander-wooden"
+  },
+  {
+   "first": "Brayden",
+   "last": "Wright",
+   "grade": 9,
+   "number": 27,
+   "otherNumbers": [
+    28
+   ],
+   "id": "brayden-wright"
+  }
+ ],
+ "nearDuplicates": [
+  {
+   "first": "Hagan",
+   "last": "Goodwin",
+   "grade": 8,
+   "numbers": [
+    2
+   ],
+   "closest": "hagen goodwin"
+  },
+  {
+   "first": "Brentley",
+   "last": "Carmell",
+   "grade": 8,
+   "numbers": [
+    44
+   ],
+   "closest": "brently carmell"
+  },
+  {
+   "first": "Haeden",
+   "last": "Denton",
+   "grade": 8,
+   "numbers": [
+    58
+   ],
+   "closest": "haedyn denton"
+  }
+ ],
+ "notOnSignOut": [
+  {
+   "first": "Isaiah",
+   "last": "Smith",
+   "grade": 9,
+   "numbers": [
+    36
+   ],
+   "closest": null
+  },
+  {
+   "first": "Adrian",
+   "last": "Minser",
+   "grade": 9,
+   "numbers": [
+    40
+   ],
+   "closest": null
+  },
+  {
+   "first": "Brayden",
+   "last": "Davis",
+   "grade": 8,
+   "numbers": [
+    1,
+    2
+   ],
+   "closest": null
+  },
+  {
+   "first": "Loren",
+   "last": "Painter",
+   "grade": 8,
+   "numbers": [
+    76
+   ],
+   "closest": null
+  }
+ ]
+}
