@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { MockLanguageModelV4 } from "ai/test";
-import { runAsk, runDraft, runTranscript } from "../src/lib/ai/run";
+import { explain, runAsk, runDraft, runTranscript } from "../src/lib/ai/run";
 import { buildContext } from "../src/lib/ai/context";
 import type { AssistantData } from "../src/lib/ai/context";
 
@@ -9,7 +9,7 @@ const usage = { inputTokens: { total: 1, noCache: 1, cacheRead: undefined, cache
 const say = (text: string) => new MockLanguageModelV4({ doGenerate: async () => ({ content: [{ type: "text", text }], finishReason: { unified: "stop", raw: undefined }, usage, warnings: [] }) });
 const prompts: string[] = [];
 const spy = (text: string) => new MockLanguageModelV4({ doGenerate: async (o) => { prompts.push(JSON.stringify(o.prompt)); return { content: [{ type: "text", text }], finishReason: { unified: "stop", raw: undefined }, usage, warnings: [] }; } });
-const boom = (m: string) => new MockLanguageModelV4({ doGenerate: async () => { throw new Error(m); } });
+const boom = (m: string, statusCode?: number) => new MockLanguageModelV4({ doGenerate: async () => { throw Object.assign(new Error(m), { statusCode }); } });
 
 const data: AssistantData = {
   today: "2026-09-30",
@@ -37,7 +37,7 @@ test("ask: turns tags into source links and strips them", async () => {
 test("ask: rejects empty and oversized questions, explains failures", async () => {
   assert.equal((await runAsk(say("x"), data, "  ")).ok, false);
   assert.equal((await runAsk(say("x"), data, "a".repeat(1001))).ok, false);
-  const r = await runAsk(boom("401 Unauthorized"), data, "hi");
+  const r = await runAsk(boom("Unauthorized", 401), data, "hi");
   assert.ok(!r.ok && /key/i.test(r.error));
 });
 
@@ -95,4 +95,12 @@ test("prompt sent to the model has no first names", async () => {
   await runAsk(spy("ok"), data, "who is out?");
   assert.ok(prompts[0].includes("#12 Hill"));
   assert.ok(!prompts[0].includes("Marcus"));
+});
+
+test("errors: plain reason plus the provider's own words; 'generate' is not a rate limit", () => {
+  assert.match(explain(Object.assign(new Error("Failed to generate text"), { name: "Error" })).error as string, /couldn't answer.*generate/);
+  assert.match(explain(Object.assign(new Error("Free credits require a card"), { name: "GatewayRateLimitError", statusCode: 429 })).error as string, /credits or a payment method/);
+  assert.match(explain(Object.assign(new Error("Model x not found"), { name: "GatewayModelNotFoundError", statusCode: 404 })).error as string, /AI_MODEL/);
+  assert.match(explain(Object.assign(new Error("Invalid"), { statusCode: 401 })).error as string, /key was rejected/);
+  assert.match(explain(Object.assign(new Error("x"), { name: "TimeoutError" })).error as string, /too long/);
 });
