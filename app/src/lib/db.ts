@@ -46,3 +46,12 @@ export async function getPlayers(): Promise<Player[]> {
   if (error) throw new Error(`Could not load players: ${error.message}`);
   return data.map((p) => ({ id: p.id, first: p.first_name, last: p.last_name, grade: p.grade, number: p.number, otherNumbers: p.other_numbers, status: p.status, statusNote: p.status_note ?? undefined, statusUntil: p.status_until ?? undefined }));
 }
+
+export type Coach = { id: string; first: string | null; last: string; role: string; active: boolean };
+
+export async function getCoaches(): Promise<Coach[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("coaches").select("*").order("sort");
+  if (error) throw new Error(`Could not load coaches: ${error.message}`);
+  return data.map((c) => ({ id: c.id, first: c.first_name, last: c.last_name, role: c.role, active: c.active }));
+}

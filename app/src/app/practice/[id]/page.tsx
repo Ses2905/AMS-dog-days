@@ -14,7 +14,7 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">{prettyDate(practice.date)} · {practice.session}</h1>
+          <h1 className="text-3xl">{prettyDate(practice.date)} · {practice.session}</h1>
           <p className="text-sm text-neutral-600">{practice.team}</p>
         </div>
         <div className="ml-auto flex gap-2">

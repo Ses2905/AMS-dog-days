@@ -8,7 +8,7 @@ export default async function AllPractices() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-semibold">All practices</h1>
+        <h1 className="text-3xl">All practices</h1>
         <Link href="/practice/new" className="ml-auto inline-flex min-h-12 items-center rounded-lg bg-green-900 px-5 font-semibold text-white">New practice</Link>
       </div>
       <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl bg-white shadow-sm">

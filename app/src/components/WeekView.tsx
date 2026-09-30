@@ -23,7 +23,7 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-2xl font-semibold">Week of {prettyDate(monday).replace(/^\w+, /, "")}</h1>
+        <h1 className="text-3xl">Week of {prettyDate(monday).replace(/^\w+, /, "")}</h1>
         <div className="ml-auto flex gap-2">
           <Link href={`/practice?week=${shiftWeek(monday, -1)}`} className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium" aria-label="Previous week">←</Link>
           {monday !== thisMonday && <Link href="/practice" className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium">This week</Link>}

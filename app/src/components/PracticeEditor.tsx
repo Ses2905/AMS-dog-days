@@ -12,7 +12,7 @@ type Draft = { key: number; mode: "span" | "lanes"; span: string; lanes: Record<
 const input = "mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base";
 const btn = "inline-flex min-h-12 min-w-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-3 text-sm font-medium disabled:opacity-40";
 
-export function PracticeEditor({ practice }: { practice: Practice }) {
+export function PracticeEditor({ practice, directory = [] }: { practice: Practice; directory?: string[] }) {
   const [start, setStart] = useState(practice.blocks[0]?.start ?? "");
   const [dress, setDress] = useState(practice.dress);
   const [lift, setLift] = useState(practice.lift ?? "");
@@ -83,6 +83,14 @@ export function PracticeEditor({ practice }: { practice: Practice }) {
             </li>
           ))}
         </ul>
+        {directory.filter((n) => !coaches.includes(n)).length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="text-neutral-600">Add from your coaches:</span>
+            {directory.filter((n) => !coaches.includes(n)).map((n) => (
+              <button key={n} className="min-h-10 rounded-full border border-neutral-300 bg-white px-3 font-medium" onClick={() => setCoaches([...coaches, n])}>+ {n}</button>
+            ))}
+          </div>
+        )}
         <div className="flex gap-2">
           <input className={`${input} mt-0`} value={newCoach} onChange={(e) => setNewCoach(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCoach())} placeholder="Add a coach" />
           <button className={btn} onClick={addCoach}>Add</button>
@@ -96,7 +104,7 @@ export function PracticeEditor({ practice }: { practice: Practice }) {
           return (
             <div key={b.key} className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-sm tabular-nums">{starts[i]} to {end}</span>
+                <span className="font-display text-base font-semibold tabular-nums">{starts[i]} to {end}</span>
                 <span className="text-sm text-neutral-500">{b.periods * 5} min</span>
                 <div className="ml-auto flex gap-1">
                   <button className={btn} aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}>↑</button>
