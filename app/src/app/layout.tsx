@@ -10,6 +10,9 @@ const display = Barlow_Condensed({ variable: "--font-display", subsets: ["latin"
 export const metadata: Metadata = {
   title: "Coach OS | Alma Football",
   description: "Practice planning and roster for Alma Jr. High Football",
+  manifest: "/manifest.webmanifest",
+  icons: { apple: "/icons/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "Coach OS", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = { themeColor: "#003810" };

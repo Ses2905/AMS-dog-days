@@ -24,9 +24,10 @@ export function SiteHeader({ signOut }: { signOut: () => Promise<void> }) {
         <span className="font-display whitespace-nowrap text-xl font-bold uppercase tracking-widest">Coach OS</span>
         {signedIn && (
           <>
-            <form action={signOut} className="ml-auto sm:order-last sm:ml-4">
-              <button className="min-h-10 rounded-md px-3 text-sm font-medium text-white/70 hover:bg-white/10">Sign out</button>
-            </form>
+            <div className="ml-auto flex items-center sm:order-last sm:ml-4">
+              <Link href="/documents" aria-current={path.startsWith("/documents") ? "page" : undefined} className={`inline-flex min-h-10 items-center rounded-md px-3 text-sm font-medium hover:bg-white/10 ${path.startsWith("/documents") ? "text-gold-500" : "text-white/70"}`}>Library</Link>
+              <form action={signOut}><button className="min-h-10 rounded-md px-3 text-sm font-medium text-white/70 hover:bg-white/10">Sign out</button></form>
+            </div>
             <nav className="order-last flex w-full sm:order-none sm:ml-auto sm:w-auto" aria-label="Main">
               {links.map((l) => (
                 <Link

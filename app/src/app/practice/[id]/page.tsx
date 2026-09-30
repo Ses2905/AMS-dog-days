@@ -4,14 +4,15 @@ import { PracticeGrid, PracticeMeta } from "@/components/PracticeGrid";
 import { AvailabilitySummary } from "@/components/AvailabilitySummary";
 import { PageHeader } from "@/components/PageHeader";
 import { btnOutline, btnPrimary } from "@/components/ui";
-import { getNotes, getPlayers, getPractice } from "@/lib/db";
+import { getDocuments, getNotes, getPlayers, getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 export default async function PracticePage({ params }: PageProps<"/practice/[id]">) {
   const { id } = await params;
   const practice = await getPractice(id);
   if (!practice) notFound();
-  const [players, allNotes] = await Promise.all([getPlayers(), getNotes()]);
+  const [players, allNotes, allDocs] = await Promise.all([getPlayers(), getNotes(), getDocuments()]);
+  const docs = allDocs.filter((d) => d.practiceId === practice.id);
   const notes = allNotes.filter((n) => n.practiceId === practice.id);
   return (
     <div className="space-y-4">
@@ -36,6 +37,22 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
           <ul className="list-disc space-y-1 pl-5 text-sm">{practice.notes.map((n) => <li key={n}>{n}</li>)}</ul>
         </section>
       )}
+      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2>Documents{docs.length > 0 ? ` · ${docs.length}` : ""}</h2>
+          <Link href={`/documents?add=1&practice=${practice.id}`} className={btnOutline + " ml-auto"}>Add document</Link>
+        </div>
+        {docs.length === 0 ? (
+          <p className="text-sm text-neutral-600">Drill diagrams, install sheets or a printed plan you want to keep with this practice.</p>
+        ) : (
+          <ul className="divide-y divide-neutral-200">
+            {docs.map((d) => (
+              <li key={d.id}><a href={`/documents/${d.id}/file`} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center gap-2 font-medium text-green-600 underline"><span className="truncate">{d.name}</span><span aria-hidden className="text-xs">↗</span></a></li>
+            ))}
+          </ul>
+        )}
+      </section>
+
       <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           <h2>Notes from this practice{notes.length > 0 ? ` · ${notes.length}` : ""}</h2>
