@@ -33,7 +33,12 @@ export type Player = {
   id: string;
   first: string;
   last: string;
-  grade: 8 | 9;
+  grade: number;
+  /** "jr" is Jordan's Jr. High roster (the default); "hs" is the high school roster, varsity and JV. */
+  team: "jr" | "hs";
+  position?: string;
+  height?: string;
+  weight?: number;
   number: number;
   otherNumbers: number[];
   status: "available" | "limited" | "out" | "excused";

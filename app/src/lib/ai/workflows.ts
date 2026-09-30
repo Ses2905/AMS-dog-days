@@ -37,7 +37,7 @@ const clip = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1)}…`
 /** Extra, focused facts about the chosen game, player or practice. Players are only ever number and last name; parent notes never appear. */
 export function focusContext(kind: Subject, id: string, data: AssistantData): string {
   const notes = data.notes.filter((n) => n.category !== "parent");
-  const ref = (pid: string | null) => { const p = data.players.find((x) => x.id === pid); return p ? playerRef(p) : ""; };
+  const ref = (pid: string | null) => { const p = [...data.players, ...(data.hsPlayers ?? [])].find((x) => x.id === pid); return p ? playerRef(p) : ""; };
   if (kind === "game") {
     const g = data.games.find((x) => x.id === id);
     if (!g) return "";

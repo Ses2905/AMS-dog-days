@@ -18,12 +18,12 @@ const done = () => revalidatePath("/", "layout");
 export async function createPlayer(payload: unknown): Promise<Result> {
   const parsed = parsePlayerInput(payload);
   if (!parsed.ok) return { error: parsed.error };
-  const { first, last, grade, number } = parsed.value;
+  const { first, last, grade, number, team, position, height, weight } = parsed.value;
   const supabase = await authed();
   const ids = await supabase.from("players").select("id");
   if (ids.error) return { error: `Could not check existing players: ${ids.error.message}` };
-  const id = uniqueId(`${first} ${last}`, ids.data.map((r) => r.id));
-  const ins = await supabase.from("players").insert({ id, first_name: first, last_name: last, grade, number, other_numbers: [] });
+  const id = uniqueId(`${team === "hs" ? "hs " : ""}${first} ${last}`, ids.data.map((r) => r.id));
+  const ins = await supabase.from("players").insert({ id, first_name: first, last_name: last, grade, number, team, position, height, weight, other_numbers: [] });
   if (ins.error) return { error: `Could not add the player: ${ins.error.message}` };
   done();
   return { error: "" };
@@ -33,24 +33,25 @@ export async function updatePlayer(id: string, payload: unknown): Promise<Result
   if (typeof id !== "string" || !id || id.length > 100) return { error: "Unknown player." };
   const parsed = parsePlayerInput(payload);
   if (!parsed.ok) return { error: parsed.error };
-  const { first, last, grade, number, confirmNumber } = parsed.value;
+  const { first, last, grade, number, team, position, height, weight, confirmNumber } = parsed.value;
   const supabase = await authed();
-  const patch: Record<string, unknown> = { first_name: first, last_name: last, grade, number };
+  const patch: Record<string, unknown> = { first_name: first, last_name: last, grade, number, position, height, weight };
   if (confirmNumber) patch.other_numbers = []; // he has settled which number is right
   const upd = await supabase.from("players").update(patch).eq("id", id).select("id");
   if (upd.error) return { error: `Could not save: ${upd.error.message}` };
   if (!upd.data || upd.data.length === 0) return { error: "That player wasn't found." };
   done();
-  redirect("/roster");
+  redirect(team === "hs" ? "/roster/high-school" : "/roster");
 }
 
 export async function deletePlayer(id: string): Promise<Result> {
   if (typeof id !== "string" || !id || id.length > 100) return { error: "Unknown player." };
   const supabase = await authed();
+  const before = await supabase.from("players").select("team").eq("id", id).maybeSingle();
   const del = await supabase.from("players").delete().eq("id", id);
   if (del.error) return { error: `Could not remove the player: ${del.error.message}` };
   done();
-  redirect("/roster");
+  redirect(before.data?.team === "hs" ? "/roster/high-school" : "/roster");
 }
 
 /** Two entries are the same kid: keep one, fold the other's number into "also #", remove the extra. */

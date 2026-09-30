@@ -10,10 +10,15 @@ import type { Player } from "@/lib/types";
 const input = inputCls;
 const btn = btnPlain;
 
-export function PlayerForm({ player, players, onDone }: { player?: Player; players: Player[]; onDone?: () => void }) {
+export function PlayerForm({ player, players, onDone, team: teamProp }: { player?: Player; players: Player[]; onDone?: () => void; team?: "jr" | "hs" }) {
+  const team = player?.team ?? teamProp ?? "jr";
+  const back = team === "hs" ? "/roster/high-school" : "/roster";
   const [first, setFirst] = useState(player?.first ?? "");
   const [last, setLast] = useState(player?.last ?? "");
-  const [grade, setGrade] = useState<number>(player?.grade ?? 8);
+  const [grade, setGrade] = useState<number>(player?.grade ?? (team === "hs" ? 9 : 8));
+  const [position, setPosition] = useState(player?.position ?? "");
+  const [height, setHeight] = useState(player?.height ?? "");
+  const [weight, setWeight] = useState(player?.weight ? String(player.weight) : "");
   const [number, setNumber] = useState(player ? String(player.number) : "");
   const [confirmNumber, setConfirmNumber] = useState(false);
   const [mergeWith, setMergeWith] = useState("");
@@ -26,7 +31,7 @@ export function PlayerForm({ player, players, onDone }: { player?: Player; playe
   const run = (fn: () => Promise<{ error: string } | void>) => start(async () => { setError(""); const r = await fn(); if (r?.error) setError(r.error); });
 
   const save = () => run(() => {
-    const payload = { first, last, grade, number, confirmNumber };
+    const payload = { first, last, grade, number, team, position, height, weight, confirmNumber };
     return player ? updatePlayer(player.id, payload) : createPlayer(payload).then((r) => { if (!r.error) onDone?.(); return r; });
   });
 
@@ -37,9 +42,16 @@ export function PlayerForm({ player, players, onDone }: { player?: Player; playe
           <label className="text-sm font-medium">First name<input className={input} value={first} onChange={(e) => setFirst(e.target.value)} autoComplete="off" /></label>
           <label className="text-sm font-medium">Last name<input className={input} value={last} onChange={(e) => setLast(e.target.value)} autoComplete="off" /></label>
           <label className="text-sm font-medium">Grade
-            <select className={input} value={grade} onChange={(e) => setGrade(Number(e.target.value))}><option value={8}>8th</option><option value={9}>9th</option></select>
+            <select className={input} value={grade} onChange={(e) => setGrade(Number(e.target.value))}>{(team === "hs" ? [9, 10, 11, 12] : [8, 9]).map((g) => <option key={g} value={g}>{g}th</option>)}</select>
           </label>
           <label className="text-sm font-medium">Jersey number<input className={input} value={number} onChange={(e) => setNumber(e.target.value)} inputMode="numeric" /></label>
+          {team === "hs" && (
+            <>
+              <label className="text-sm font-medium">Position<input className={input} value={position} onChange={(e) => setPosition(e.target.value)} placeholder="WR/CB" maxLength={20} /></label>
+              <label className="text-sm font-medium">Height<input className={input} value={height} onChange={(e) => setHeight(e.target.value)} placeholder="5'10" maxLength={10} /></label>
+              <label className="text-sm font-medium">Weight (lbs)<input className={input} value={weight} onChange={(e) => setWeight(e.target.value)} inputMode="numeric" /></label>
+            </>
+          )}
         </div>
         {clashes.length > 0 && (
           <p className="rounded-lg bg-[#f8f4e3] p-3 text-sm">#{n} is also worn by {clashes.map((c) => `${c.first} ${c.last}`).join(" and ")}. You can still save if that’s intended.</p>
@@ -52,7 +64,7 @@ export function PlayerForm({ player, players, onDone }: { player?: Player; playe
         )}
         <div className="flex flex-wrap items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
-          {player ? <Link href="/roster" className={btn}>Cancel</Link> : <button className={btn} onClick={onDone}>Cancel</button>}
+          {player ? <Link href={back} className={btn}>Cancel</Link> : <button className={btn} onClick={onDone}>Cancel</button>}
           <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : player ? "Save" : "Add player"}</button>
         </div>
       </div>

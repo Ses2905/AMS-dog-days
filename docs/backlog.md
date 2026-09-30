@@ -6,6 +6,9 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 1. Depth chart, finish it: waiting on Jordan's answer about units vs. position groups, one chart per team level, print view
 
 ## Done Recently
+- Full-data export (Settings, Download Everything)
+- Calendar link (Settings): private subscribe URL for the iPhone and Google calendars; updates itself; can be reset
+- High school roster (68 players, varsity and JV) loaded with position, height and weight; scorers in JV and varsity games pick from it
 - One Calendar for everything (week and month, filters by practice/game and by team); Practice and Games tabs are now each their own workflow
 - Depth chart shell: units and editable positions, ranked players, injuries and thin spots flagged, dual roles shown; feeds the Depth Chart Check playbook
 - Playbooks: the coaching skills in /skills run inside the Assistant (scout, game plan, script, briefing, game day, postgame, player development, depth check, family message, plan my week); results can be saved, scripts go straight into Scripts
@@ -14,7 +17,6 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Attendance: tap Present / Late / Absent / Excused on a practice page, "Everyone Present", Today prompt, per-player history
 
 ## After That
-- Calendar: subscribe from Google Calendar / iPhone (ICS feed), export to the school calendar
 - Calendar: weather and travel time on game days
 - Playbooks: run on a schedule (Monday plan-my-week), and feed saved results back in as context
 - Playbooks: real depth chart data once the depth chart exists
@@ -25,8 +27,8 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Document text extraction so the assistant can read the playbook and scouting files
 - Plaud transcripts: paste or upload straight into "Read a Transcript"
 - Morning summary and weather on Today
-- Full-data export
-- Varsity and JV rosters (varsity roster PDF received, not loaded)
+- High school staff list from the roster PDF (head coach and coordinators) is not loaded; the coaches list is Jr. High only
+- Split the high school roster into varsity and JV once Jordan says who plays where
 - Real logo files for the Tools page (currently colored letter tiles)
 
 ## Ideas to Validate With Jordan (hypotheses, not decisions)
@@ -42,6 +44,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 10. **Plaud auto-import** instead of paste.
 
 ## Open Questions for Jordan
+- **Calendar sync:** which calendar does he live in (iPhone, Google, the school's)? Would he want games and practices to show up there automatically (a read-only subscribe link), and does he want reminders (say, 1 hour before practice, the night before a game)?
 - **Depth chart on the phone or at a desk?** Does he look at it during practice or only when planning? Decides whether it needs a sideline mode, a print view, or both.
 - **Depth chart shape (blocks the build):** does he think in units (offense, defense, special teams) or position groups (QB, RB, OL...)? Does he want one chart per team level? Does he want a two-deep or a full list?
 - Are the 7th grade and Jr. High games one game or two on "5:30 / 7pm" nights?

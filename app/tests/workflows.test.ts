@@ -14,7 +14,7 @@ const say = (text: string) => new MockLanguageModelV4({ doGenerate: async (o) =>
 const note = (id: string, category: string | null, body: string, extra: object = {}) => ({ id, kind: "note", category, body, status: "open", due: null, owner: null, playerId: "p1", practiceId: null, gameId: null, source: "manual", created: "2026-09-29T10:00:00Z", ...extra });
 const data: AssistantData = {
   today: "2026-09-30",
-  players: [{ id: "p1", first: "Marcus", last: "Hill", grade: 9, number: 12, otherNumbers: [], status: "out", statusNote: "sprained ankle" }, { id: "p2", first: "Eli", last: "Cook", grade: 8, number: 7, otherNumbers: [], status: "available" }],
+  players: [{ id: "p1", first: "Marcus", last: "Hill", grade: 9, number: 12, otherNumbers: [], team: "jr", status: "out", statusNote: "sprained ankle" }, { id: "p2", first: "Eli", last: "Cook", grade: 8, number: 7, otherNumbers: [], team: "jr", status: "available" }],
   practices: [], docs: [], coaches: [],
   notes: [note("n1", "parent", "SECRET mom complaint"), note("n2", "performance", "Great tackling"), note("n3", "position", "Could play corner"), note("n4", null, "Won the game", { playerId: null, gameId: "g1" })] as never,
   games: [{ id: "g1", date: "2026-10-01", time: "5:30 PM", level: "jr", opponent: "Pea Ridge", site: "home", location: null, kind: "game", status: "scheduled", scoreUs: null, scoreThem: null, links: [], checklist: {} } as never],

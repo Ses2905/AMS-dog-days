@@ -17,7 +17,7 @@ test("player note categories: allowed on notes about a player only", () => {
 test("parent notes never reach the assistant", () => {
   const note = (id: string, category: string | null, body: string) => ({ id, kind: "note", category, body, status: "open", due: null, owner: null, playerId: "p1", practiceId: null, gameId: null, source: "manual", created: "2026-09-29T10:00:00Z" });
   const { text } = buildContext({
-    today: "2026-09-30", players: [{ id: "p1", first: "A", last: "Hill", grade: 9, number: 12, otherNumbers: [], status: "available" }], practices: [], games: [], coaches: [], docs: [],
+    today: "2026-09-30", players: [{ id: "p1", first: "A", last: "Hill", grade: 9, number: 12, otherNumbers: [], team: "jr", status: "available" }], practices: [], games: [], coaches: [], docs: [],
     notes: [note("n1", "parent", "SECRET parent complaint"), note("n2", "performance", "Great tackling")] as never,
   }, 30000);
   assert.ok(text.includes("Great tackling"));
@@ -28,4 +28,14 @@ test("tool links must be web addresses", () => {
   assert.equal(parseLinks([{ label: "x", url: "javascript:alert(1)" }]).ok, false);
   const r = parseLinks([{ label: "", url: "hudl.com" }]);
   assert.ok(r.ok && r.value[0].url === "https://hudl.com/");
+});
+
+import { parsePlayerInput } from "../src/lib/roster-admin";
+test("player input: grade depends on the team; high school adds position, height and weight", () => {
+  assert.ok(parsePlayerInput({ first: "Al", last: "Bo", grade: 9, number: 4 }).ok);
+  assert.equal(parsePlayerInput({ first: "Al", last: "Bo", grade: 11, number: 4 }).ok, false); // Jr. High is 8th or 9th
+  const hs = parsePlayerInput({ first: "Al", last: "Bo", grade: 11, number: 4, team: "hs", position: " wr/cb ", height: "5'10", weight: "160" });
+  assert.ok(hs.ok && hs.value.team === "hs" && hs.value.position === "WR/CB" && hs.value.weight === 160);
+  assert.equal(parsePlayerInput({ first: "Al", last: "Bo", grade: 8, number: 4, team: "hs" }).ok, false);
+  assert.equal(parsePlayerInput({ first: "Al", last: "Bo", grade: 10, number: 4, team: "hs", weight: "20" }).ok, false);
 });
