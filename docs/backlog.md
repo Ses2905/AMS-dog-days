@@ -3,9 +3,11 @@
 Add ideas here as they come up. Newest thinking goes at the top of its section.
 
 ## Next Up (in order)
-1. Attendance (who was at practice, tied to availability)
-2. Team script (plays by situation)
-3. Depth chart (positions, using the "Position Ideas" player notes)
+1. Team script (plays by situation)
+2. Depth chart (positions, using the "Position Ideas" player notes)
+
+## Done Recently
+- Attendance: tap Present / Late / Absent / Excused on a practice page, "Everyone Present", Today prompt, per-player history
 
 ## After That
 - Offline read of today's plan (iPhone)
