@@ -104,7 +104,7 @@ export function TeamView({ players, today, children }: { players: Player[]; toda
       {children}
 
       <ListToolbar
-        search={filters.q} onSearch={(v) => set("q", v)} placeholder="Find a player or number"
+        search={filters.q} onSearch={(v) => set("q", v)} placeholder="Find a player"
         sort={{ value: sort, options: SORTS, onChange: (v) => setSort(v as PlayerSort) }}
         filters={[
           { label: "Grade", value: filters.grade, onChange: (v) => set("grade", v as PlayerFilters["grade"]), options: [{ value: "all", label: "All" }, { value: "8", label: "8th" }, { value: "9", label: "9th" }] },

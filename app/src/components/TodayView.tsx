@@ -36,6 +36,7 @@ export function TodayView({ now, practices, games, notes, players, attendance }:
   return (
     <div className="space-y-6">
       <PageHeader title="Today" subtitle={`${hello}, Coach. ${prettyDate(now.today)}`}>
+        <Link href="/week-ahead" className={btnOutline}><Icon name="calendar" />Week Ahead</Link>
         <Link href="/notes?add=1&kind=action" className={btnOutline}><Icon name="plus" />Add Action Item</Link>
         <Link href="/notes?add=1&kind=note" className={btnPrimary}><Icon name="plus" />Add Note</Link>
       </PageHeader>
@@ -69,7 +70,7 @@ export function TodayView({ now, practices, games, notes, players, attendance }:
 
         <Section title="Coming Up" action={<Link href="/calendar" className="inline-flex min-h-10 items-center gap-1 text-sm font-semibold text-green-600 underline">Full Calendar</Link>}>
           {coming.length === 0 ? <p className="px-5 py-4 text-base text-neutral-700">Nothing else scheduled this week or next.</p> : coming.map((i) => (
-            <Row key={i.key} href={i.href} lead={<><span className="block text-xs font-semibold uppercase tracking-wide text-neutral-500">{i.date === now.today ? "Today" : shortDay(i.date)}</span>{i.time.replace(" ", "")}</>} title={i.title} meta={i.kind === "game" ? `${i.badge} · ${i.detail}` : i.detail} tone={i.kind === "game" ? "game" : "normal"} />
+            <Row key={i.key} href={i.href} lead={<><span className="block text-xs font-semibold uppercase tracking-wide text-neutral-500">{i.date === now.today ? "Today" : shortDay(i.date)}</span>{i.time.replace(" ", "")}</>} title={i.title} meta={i.kind === "game" ? [i.badge, i.place].filter(Boolean).join(" · ") : i.detail} tone={i.kind === "game" ? "game" : "normal"} />
           ))}
         </Section>
       </div>
