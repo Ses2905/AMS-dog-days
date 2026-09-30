@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { createPlayer, deletePlayer, mergePlayers, updatePlayer } from "@/app/roster/admin-actions";
 import { numberClashes } from "@/lib/roster-admin";
+import { btnDanger, btnPlain, inputCls } from "./ui";
 import type { Player } from "@/lib/types";
 
-const input = "mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base";
-const btn = "inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-semibold disabled:opacity-50";
+const input = inputCls;
+const btn = btnPlain;
 
-export function PlayerForm({ player, players }: { player?: Player; players: Player[] }) {
+export function PlayerForm({ player, players, onDone }: { player?: Player; players: Player[]; onDone?: () => void }) {
   const [first, setFirst] = useState(player?.first ?? "");
   const [last, setLast] = useState(player?.last ?? "");
   const [grade, setGrade] = useState<number>(player?.grade ?? 8);
@@ -26,12 +27,12 @@ export function PlayerForm({ player, players }: { player?: Player; players: Play
 
   const save = () => run(() => {
     const payload = { first, last, grade, number, confirmNumber };
-    return player ? updatePlayer(player.id, payload) : createPlayer(payload);
+    return player ? updatePlayer(player.id, payload) : createPlayer(payload).then((r) => { if (!r.error) onDone?.(); return r; });
   });
 
   return (
-    <div className="mx-auto max-w-xl space-y-4">
-      <div className="space-y-4 rounded-xl bg-white p-4 shadow-sm">
+    <div className="space-y-4">
+      <div className={player ? "space-y-4 rounded-xl bg-white p-4 shadow-sm" : "space-y-4"}>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="text-sm font-medium">First name<input className={input} value={first} onChange={(e) => setFirst(e.target.value)} autoComplete="off" /></label>
           <label className="text-sm font-medium">Last name<input className={input} value={last} onChange={(e) => setLast(e.target.value)} autoComplete="off" /></label>
@@ -51,7 +52,7 @@ export function PlayerForm({ player, players }: { player?: Player; players: Play
         )}
         <div className="flex flex-wrap items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
-          <Link href="/roster" className={btn}>Cancel</Link>
+          {player ? <Link href="/roster" className={btn}>Cancel</Link> : <button className={btn} onClick={onDone}>Cancel</button>}
           <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : player ? "Save" : "Add player"}</button>
         </div>
       </div>
@@ -71,7 +72,7 @@ export function PlayerForm({ player, players }: { player?: Player; players: Play
             }}>Merge</button>
           </div>
           <hr className="border-neutral-200" />
-          <button className={`${btn} text-red-700`} disabled={pending} onClick={() => {
+          <button className={btnDanger} disabled={pending} onClick={() => {
             if (window.confirm(`Remove ${player.first} ${player.last} from the roster? This can't be undone.`)) run(() => deletePlayer(player.id));
           }}>Remove from roster</button>
         </div>

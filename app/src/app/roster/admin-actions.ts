@@ -26,7 +26,7 @@ export async function createPlayer(payload: unknown): Promise<Result> {
   const ins = await supabase.from("players").insert({ id, first_name: first, last_name: last, grade, number, other_numbers: [] });
   if (ins.error) return { error: `Could not add the player: ${ins.error.message}` };
   done();
-  redirect("/roster");
+  return { error: "" };
 }
 
 export async function updatePlayer(id: string, payload: unknown): Promise<Result> {

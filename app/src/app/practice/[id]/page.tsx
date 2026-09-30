@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PracticeGrid, PracticeMeta } from "@/components/PracticeGrid";
 import { AvailabilitySummary } from "@/components/AvailabilitySummary";
+import { PageHeader } from "@/components/PageHeader";
+import { btnOutline, btnPrimary } from "@/components/ui";
 import { getPlayers, getPractice } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
@@ -12,23 +14,11 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
   const players = await getPlayers();
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <div>
-          <h1 className="text-3xl">{prettyDate(practice.date)} · {practice.session}</h1>
-          <p className="text-sm text-neutral-600">{practice.team}</p>
-        </div>
-        <div className="ml-auto flex gap-2">
-          <Link href={`/practice/${practice.id}/edit`} className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">
-            Edit
-          </Link>
-          <Link href={`/practice/new?from=${practice.id}`} className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">
-            Copy to a new day
-          </Link>
-          <Link href={`/practice/${practice.id}/print`} className="inline-flex min-h-12 items-center rounded-lg bg-green-900 px-5 font-semibold text-white">
-            Print / PDF
-          </Link>
-        </div>
-      </div>
+      <PageHeader title={`${prettyDate(practice.date)} · ${practice.session}`} subtitle={practice.team}>
+        <Link href={`/practice/new?from=${practice.id}`} className={btnOutline}>Copy to a new day</Link>
+        <Link href={`/practice/${practice.id}/edit`} className={btnOutline}>Edit</Link>
+        <Link href={`/practice/${practice.id}/print`} className={btnPrimary}>Print / PDF</Link>
+      </PageHeader>
       {practice.imported && (
         <p className="rounded-lg border border-gold-500 bg-[#f8f4e3] px-3 py-2 text-sm">
           Imported from your PDF. Merged rows and notes may need a quick check against the original.

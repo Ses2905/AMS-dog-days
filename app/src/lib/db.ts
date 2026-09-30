@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import type { Coach } from "@/lib/db-types";
 import type { Block, Player, Practice } from "@/lib/types";
 
 type BlockRow = { position: number; start_time: string; periods: number; span: string | null; flex: boolean; lanes: Record<string, string> };
@@ -47,7 +48,6 @@ export async function getPlayers(): Promise<Player[]> {
   return data.map((p) => ({ id: p.id, first: p.first_name, last: p.last_name, grade: p.grade, number: p.number, otherNumbers: p.other_numbers, status: p.status, statusNote: p.status_note ?? undefined, statusUntil: p.status_until ?? undefined }));
 }
 
-export type Coach = { id: string; first: string | null; last: string; role: string; active: boolean };
 
 export async function getCoaches(): Promise<Coach[]> {
   const supabase = await createClient();
