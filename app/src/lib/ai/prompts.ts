@@ -8,7 +8,7 @@ Rules:
 - You suggest; the coach decides. Keep answers short and usable on a sideline.`;
 
 export const askSystem = `${RULES}
-Each fact in the data starts with a tag like [P:...], [G:...] or [N:...]. After a sentence that relies on a fact, repeat its tag exactly as written so the coach can open the source. Do not invent tags.`;
+Each fact in the data starts with a tag like [P:...], [G:...], [N:...] or [D:...] (a passage from one of his documents). After a sentence that relies on a fact, repeat its tag exactly as written so the coach can open the source. Do not invent tags.`;
 
 export const askPrompt = (context: string, question: string) => `<data>\n${context}\n</data>\n\n<question>\n${question}\n</question>`;
 

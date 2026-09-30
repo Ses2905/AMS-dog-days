@@ -1,6 +1,6 @@
 import { generateText, Output, type LanguageModel } from "ai";
 import { LIMITS } from "./config";
-import { buildContext, extractCitations, playerRef, practiceLines, type AssistantData, type Source } from "./context";
+import { buildContext, docContext, extractCitations, playerRef, practiceLines, type AssistantData, type Source } from "./context";
 import { askPrompt, askSystem, draftPrompt, draftSystem, RULES, transcriptPrompt, transcriptSystem } from "./prompts";
 import { vsLabel } from "../games";
 import { situation, type ScriptRow } from "../scripts";
@@ -31,7 +31,10 @@ export async function runAsk(model: LanguageModel, data: AssistantData, question
   const q = question.trim();
   if (!q) return { ok: false, error: "Type a question first." };
   if (q.length > LIMITS.question) return { ok: false, error: `Keep the question under ${LIMITS.question} characters.` };
-  const { text: context, sources } = buildContext(data, LIMITS.contextChars);
+  const base = buildContext(data, LIMITS.contextChars);
+  const docs = docContext(q, data.docTexts);
+  const context = docs.text ? `${base.text}\n\n${docs.text}` : base.text;
+  const sources = { ...base.sources, ...docs.sources };
   try {
     const { text } = await generateText({ model, system: askSystem, prompt: askPrompt(context, q), ...common() });
     const { text: answer, cited } = extractCitations(text, sources);
@@ -84,7 +87,7 @@ export async function runWorkflow(model: LanguageModel, data: AssistantData, wor
   if (w.subject === "game" && subjectId && !data.games.some((g) => g.id === subjectId)) return { ok: false, error: "That game wasn't found." };
   if (w.subject === "player" && !data.players.some((p) => p.id === subjectId)) return { ok: false, error: "Pick a player." };
   if (w.subject === "game" && !subjectId && !w.subjectHint.includes("optional")) return { ok: false, error: "Pick a game." };
-  const context = workflowContext(w, subjectId, data, LIMITS.contextChars);
+  const context = workflowContext(w, subjectId, data, LIMITS.contextChars, text);
   const prompt = `<data>\n${context}\n</data>\n\n<request>\n${text || "Use the data above."}\n</request>`;
   const system = `${RULES}\n\n${workflowSystem(w)}`;
   const subject = w.subject === "game" ? data.games.find((g) => g.id === subjectId) : undefined;

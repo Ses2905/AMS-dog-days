@@ -13,9 +13,11 @@
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "ai": "^7.0.123",
+    "mammoth": "^1.13.0",
     "next": "16.3.7",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "unpdf": "^1.8.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {

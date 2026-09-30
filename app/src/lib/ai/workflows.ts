@@ -5,7 +5,7 @@ import { levelLabel, vsLabel } from "../games";
 import { leaders, playLabel, quarterLabel, totals } from "../plays";
 import { prettyDate } from "../time";
 import { analyze } from "../depth";
-import { buildContext, playerRef, practiceLines, type AssistantData } from "./context";
+import { buildContext, docContext, playerRef, practiceLines, type AssistantData } from "./context";
 import { SKILL_TEXT } from "./skills";
 
 export type Subject = "none" | "game" | "player" | "practice";
@@ -85,7 +85,7 @@ export function positionIdeas(data: AssistantData): string {
   return [chart, lines.length ? `POSITION IDEAS FROM COACH NOTES\n${lines.join("\n")}` : ""].filter(Boolean).join("\n\n");
 }
 
-export function workflowContext(w: Workflow, subjectId: string, data: AssistantData, budget: number): string {
+export function workflowContext(w: Workflow, subjectId: string, data: AssistantData, budget: number, input = ""): string {
   if (w.scope === "schedule") {
     // Families see schedules only: no roster, no notes, no availability.
     const base = buildContext({ ...data, players: [], notes: [], practices: [], docs: [], coaches: [] }, budget).text;
@@ -94,7 +94,10 @@ export function workflowContext(w: Workflow, subjectId: string, data: AssistantD
   }
   const focus = [focusContext(w.subject, subjectId, data), w.id === "depth" ? positionIdeas(data) : ""].filter(Boolean).join("\n\n");
   const main = buildContext(data, Math.max(4000, budget - focus.length)).text;
-  return focus ? `${focus}\n\n${main}` : main;
+  // Passages from his own documents that match the request (and the opponent's name, for a game).
+  const opp = w.subject === "game" ? data.games.find((g) => g.id === subjectId)?.opponent ?? "" : "";
+  const docs = docContext(`${input} ${opp}`, data.docTexts, 9000, 7).text;
+  return [focus, main, docs].filter(Boolean).join("\n\n");
 }
 
 export const workflowSystem = (w: Workflow) => `${SKILL_TEXT[w.skill] ?? ""}

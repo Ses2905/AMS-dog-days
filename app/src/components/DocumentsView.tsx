@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { deleteDocument, finishUpload, prepareUpload, updateDocument } from "@/app/documents/actions";
+import { deleteDocument, finishUpload, prepareUpload, readDocument, updateDocument } from "@/app/documents/actions";
 import type { Doc } from "@/lib/db-types";
+import { canReadMime, isReadableCategory } from "@/lib/doc-text";
 import { ACCEPT, CATEGORIES, TYPES, displayName, extensionOf, formatSize, kindOf, type Category } from "@/lib/documents";
 import { prettyDate } from "@/lib/time";
 import { createClient } from "@/lib/supabase/client";
@@ -114,6 +115,11 @@ function Row({ doc, lookups }: { doc: Doc; lookups: Lookups }) {
   const label = (list: Choice[], id: string | null) => list.find((x) => x.id === id)?.label;
   const cat = CATEGORIES.find((c) => c.value === doc.category)?.label;
   const links = [label(lookups.games, doc.gameId), label(lookups.practices, doc.practiceId)].filter(Boolean);
+  const [reading, startReading] = useTransition();
+  const [readNote, setReadNote] = useState("");
+  const shown = isReadableCategory(doc.category);
+  const state = doc.textChars === null ? "unread" : doc.textChars === 0 ? "none" : "ready";
+  const read = () => startReading(async () => { const r = await readDocument(doc.id); setReadNote(r.error || r.note || ""); });
   return (
     <li className="border-b border-neutral-200 last:border-0">
       <div className="flex items-center gap-2 px-3 py-2">
@@ -121,6 +127,8 @@ function Row({ doc, lookups }: { doc: Doc; lookups: Lookups }) {
           <span className="block truncate font-medium text-green-600 underline">{doc.name} <Icon name="external" size={14} /></span>
           <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-600">
             <Pill>{cat}</Pill>
+            {state === "ready" && <Pill tone={shown ? "green" : "quiet"}>{shown ? "Assistant Can Read" : "Read, But Kept Private"}</Pill>}
+            {state === "none" && <Pill tone="gold">No Text Found</Pill>}
             <span>{kindOf(doc.mime)} · {formatSize(doc.size)}</span>
             {links.map((l) => <span key={l}>{l}</span>)}
             <span>{prettyDate(doc.created.slice(0, 10))}</span>
@@ -128,6 +136,12 @@ function Row({ doc, lookups }: { doc: Doc; lookups: Lookups }) {
         </a>
         <button className={btnPlain} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <><Icon name="x" />Close</> : <><Icon name="pencil" />Edit</>}</button>
       </div>
+      {(state !== "ready" || readNote) && canReadMime(doc.mime) && (
+        <div className="flex flex-wrap items-center gap-2 px-3 pb-2 text-sm">
+          {state !== "ready" && <button className={btnPlain} disabled={reading} onClick={read}><Icon name="book" />{reading ? "Reading…" : state === "none" ? "Try Reading Again" : "Let the Assistant Read This"}</button>}
+          {readNote && <span className="text-neutral-700">{readNote}</span>}
+        </div>
+      )}
       {open && <div className="bg-wash px-3 py-3"><DocEdit doc={doc} lookups={lookups} onDone={() => setOpen(false)} /></div>}
     </li>
   );

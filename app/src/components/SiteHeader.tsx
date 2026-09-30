@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Icon, type IconName } from "./Icon";
+import { clearOfflineCopies } from "./OfflineSync";
 
 // Ordered the way a coach works: what is happening now, what is coming, the two workflows, the people, then capture.
 const tabs: { href: string; label: string; icon: IconName }[] = [
@@ -52,7 +53,7 @@ export function SiteHeader({ signOut }: { signOut: () => Promise<void> }) {
                       <Icon name={l.icon} size={16} />{l.label}
                     </Link>
                   ))}
-                  <form action={signOut}><button className="ml-1 inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10"><Icon name="log-out" size={16} />Sign Out</button></form>
+                  <form action={signOut} onSubmit={clearOfflineCopies}><button className="ml-1 inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10"><Icon name="log-out" size={16} />Sign Out</button></form>
                 </nav>
                 <button
                   className="ml-auto inline-flex min-h-12 items-center gap-2 rounded-md px-3 text-sm font-semibold text-white/90 hover:bg-white/10 md:hidden"
@@ -69,7 +70,7 @@ export function SiteHeader({ signOut }: { signOut: () => Promise<void> }) {
               {more.map((l) => (
                 <Link key={l.href} href={l.href} aria-current={active(l.href) ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-md px-3 text-base font-semibold hover:bg-white/10 ${active(l.href) ? "text-gold-500" : "text-white"}`}><Icon name={l.icon} />{l.label}</Link>
               ))}
-              <form action={signOut}><button className="flex min-h-12 w-full items-center gap-3 rounded-md px-3 text-base font-semibold text-white/80 hover:bg-white/10"><Icon name="log-out" />Sign Out</button></form>
+              <form action={signOut} onSubmit={clearOfflineCopies}><button className="flex min-h-12 w-full items-center gap-3 rounded-md px-3 text-base font-semibold text-white/80 hover:bg-white/10"><Icon name="log-out" />Sign Out</button></form>
             </nav>
           )}
 

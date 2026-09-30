@@ -1,6 +1,7 @@
 import type { DepthPosition, DepthSlot } from "./depth";
 import type { Script, ScriptRow } from "./scripts";
 import type { Play } from "./plays";
+import type { DocText } from "./db-types";
 import type { AttendanceRow } from "./attendance";
 import { createClient } from "@/lib/supabase/server";
 import type { Coach, Doc, Game, GameLink, Note } from "@/lib/db-types";
@@ -105,9 +106,17 @@ export async function getGame(id: string): Promise<Game | undefined> {
 
 export async function getDocuments(): Promise<Doc[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("documents").select("id,name,category,mime,size_bytes,game_id,practice_id,created_at").order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("documents").select("id,name,category,mime,size_bytes,game_id,practice_id,created_at,text_chars").order("created_at", { ascending: false });
   if (error) throw new Error(`Could not load documents: ${error.message}`);
-  return data.map((d) => ({ id: d.id, name: d.name, category: d.category, mime: d.mime, size: d.size_bytes, gameId: d.game_id, practiceId: d.practice_id, created: d.created_at }));
+  return data.map((d) => ({ id: d.id, name: d.name, category: d.category, mime: d.mime, size: d.size_bytes, gameId: d.game_id, practiceId: d.practice_id, created: d.created_at, textChars: d.text_chars }));
+}
+
+/** The text of every document the assistant may read (playbooks, scouting, practice), for finding passages. */
+export async function getDocumentTexts(): Promise<DocText[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("documents").select("id,name,category,game_id,text_content").in("category", ["playbook", "scouting", "practice"]).gt("text_chars", 0);
+  if (error) throw new Error(`Could not load document text: ${error.message}`);
+  return data.map((d) => ({ id: d.id, name: d.name, category: d.category, gameId: d.game_id, text: d.text_content ?? "" }));
 }
 
 async function getLinkSetting(key: string, what: string): Promise<GameLink[]> {
