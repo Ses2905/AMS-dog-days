@@ -9,7 +9,8 @@ import { addMinutes } from "@/lib/time";
 type SourceBlock = { position: number; start_time: string; periods: number; span: string | null; flex: boolean; lanes: unknown };
 type Source = { dress: string | null; lift: string | null; opponent: string | null; coaches: string[]; team: string; practice_blocks: SourceBlock[] };
 
-const back = (msg: string): never => redirect(`/practice/new?error=${encodeURIComponent(msg)}`);
+const back = (msg: string, existing?: string): never =>
+  redirect(`/practice/new?error=${encodeURIComponent(msg)}${existing ? `&existing=${encodeURIComponent(existing)}` : ""}`);
 
 export async function createPractice(formData: FormData): Promise<void> {
   const parsed = parseNewPractice({
@@ -25,7 +26,7 @@ export async function createPractice(formData: FormData): Promise<void> {
   const id = practiceId(date, session);
   const exists = await supabase.from("practices").select("id").eq("id", id).maybeSingle();
   if (exists.error) return back(`Could not check for an existing practice: ${exists.error.message}`);
-  if (exists.data) return back(`There is already a ${session} practice on ${date}. Open it from the Practice list and edit it there.`);
+  if (exists.data) return back(`There is already a ${session} practice on that date.`, id);
 
   let source: Source | null = null;
   if (from) {

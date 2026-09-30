@@ -21,6 +21,9 @@ export default async function PracticePage({ params }: PageProps<"/practice/[id]
           <Link href={`/practice/${practice.id}/edit`} className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">
             Edit
           </Link>
+          <Link href={`/practice/new?from=${practice.id}`} className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-5 font-semibold text-green-900">
+            Copy to a new day
+          </Link>
           <Link href={`/practice/${practice.id}/print`} className="inline-flex min-h-12 items-center rounded-lg bg-green-900 px-5 font-semibold text-white">
             Print / PDF
           </Link>

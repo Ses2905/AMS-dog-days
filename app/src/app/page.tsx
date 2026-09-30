@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { availabilityOn } from "@/lib/availability";
 import { getPlayers, getPractices } from "@/lib/db";
+import { mondayOf, nowInSchool, slotStatus, weekSlots } from "@/lib/week";
 import { prettyDate } from "@/lib/time";
 
 const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
@@ -14,6 +15,8 @@ export default async function Home() {
   const sorted = [...practices].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   const todays = sorted.filter((p) => p.date === today);
   const next = todays[0] ?? sorted.find((p) => p.date > today);
+  const clock = nowInSchool();
+  const weekNeeds = weekSlots(mondayOf(today), practices).flatMap((d) => d.slots.map((s) => slotStatus(s.practice, d.date, clock.today, clock.minutes))).filter((s) => s === "needs-plan").length;
   const avail = availabilityOn(players, next?.date ?? today);
   const grade9 = players.filter((p) => p.grade === 9).length;
   const grade8 = players.filter((p) => p.grade === 8).length;
@@ -68,8 +71,8 @@ export default async function Home() {
           <p className="mt-1 text-sm">{avail.out.length + avail.limited.length + avail.excused.length === 0 ? "Everyone available" : `${avail.out.length} out · ${avail.limited.length} limited · ${avail.excused.length} excused`}{next && next.date !== today ? " for next practice" : " today"}</p>
         </Link>
         <Link href="/practice" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
-          <h2 className="font-semibold">All Practices</h2>
-          <p className="text-sm text-neutral-600">{practices.length} on file</p>
+          <h2 className="font-semibold">This week’s practices</h2>
+          <p className={`text-sm ${weekNeeds > 0 ? "font-semibold text-red-800" : "text-neutral-600"}`}>{weekNeeds > 0 ? `${weekNeeds} still need a plan` : "Everything is planned"}</p>
         </Link>
       </section>
     </div>
