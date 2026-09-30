@@ -44,4 +44,8 @@ export type Doc = {
   gameId: string | null;
   practiceId: string | null;
   created: string;
+  /** null = not read yet, 0 = read but no text found, more than 0 = text the assistant can use. */
+  textChars: number | null;
 };
+
+export type DocText = { id: string; name: string; category: Doc["category"]; gameId: string | null; text: string };

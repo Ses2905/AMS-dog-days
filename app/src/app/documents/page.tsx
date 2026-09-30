@@ -5,6 +5,8 @@ import { CATEGORIES, type Category } from "@/lib/documents";
 import { vsLabel } from "@/lib/games";
 import { prettyDate } from "@/lib/time";
 
+export const maxDuration = 60;
+
 export default async function DocumentsPage({ searchParams }: PageProps<"/documents">) {
   await connection();
   const q = await searchParams;

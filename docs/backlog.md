@@ -6,6 +6,8 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 1. Depth chart, finish it: waiting on Jordan's answer about units vs. position groups, one chart per team level, print view
 
 ## Done Recently
+- Assistant reads uploaded playbooks, scouting reports and practice documents (PDF, Word, text, CSV); answers point back to the file; school documents and contact details stay out
+- Automatic checks on every PR; friendly error, not-found and loading screens
 - Full-data export (Settings, Download Everything)
 - Calendar link (Settings): private subscribe URL for the iPhone and Google calendars; updates itself; can be reset
 - High school roster (68 players, varsity and JV) loaded with position, height and weight; scorers in JV and varsity games pick from it
@@ -24,7 +26,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Deeper game stats (yards, tackles, turnovers, per-quarter breakdown) once we know which ones Jordan actually tracks
 - Scoring log for JV/varsity players (they are not on the roster yet, so scorers are typed by name)
 - Offline read of today's plan (iPhone)
-- Document text extraction so the assistant can read the playbook and scouting files
+- Reading Excel, PowerPoint and photos of pages (needs OCR) for the assistant
 - Plaud transcripts: paste or upload straight into "Read a Transcript"
 - Morning summary and weather on Today
 - High school staff list from the roster PDF (head coach and coordinators) is not loaded; the coaches list is Jr. High only
