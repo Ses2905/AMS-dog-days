@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { setPlayerStatus } from "@/app/roster/actions";
 import { STATUSES, STATUS_LABEL, statusOn, type Status } from "@/lib/availability";
@@ -32,7 +33,7 @@ function Row({ p, today }: { p: Player; today: string }) {
   return (
     <li className="border-b border-neutral-200 last:border-0">
       <button className="flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left hover:bg-wash" aria-expanded={open} onClick={() => setOpen(!open)}>
-        <span className="w-9 font-mono tabular-nums text-neutral-500">{p.number}</span>
+        <span className="w-9 font-display text-lg font-semibold tabular-nums text-neutral-500">{p.number}</span>
         <span className="min-w-0 flex-1">
           <span className="font-medium">{p.first} {p.last}</span>
           <span className="text-sm text-neutral-500"> · {p.grade}th</span>
@@ -62,6 +63,7 @@ function Row({ p, today }: { p: Player; today: string }) {
           )}
           <div className="flex items-center gap-3">
             <p role="alert" className="flex-1 text-sm text-red-700">{error}</p>
+            <Link href={`/roster/${p.id}/edit`} className="inline-flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium">Edit details</Link>
             <button onClick={() => setOpen(false)} className="min-h-12 rounded-lg border border-neutral-300 bg-white px-4 text-sm font-medium">Cancel</button>
             <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : "Save"}</button>
           </div>

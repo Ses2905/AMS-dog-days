@@ -29,7 +29,7 @@ export default async function Home() {
           <p className="text-sm text-white/70">{next ? (next.date === today ? "Today" : "Next up") : "No practice scheduled"}</p>
           {next ? (
             <>
-              <h1 className="text-2xl font-semibold">{prettyDate(next.date)} · {next.session}</h1>
+              <h1 className="text-3xl">{prettyDate(next.date)} · {next.session}</h1>
               <p className="mt-1 text-white/80">
                 {next.blocks[0].start} to {next.blocks.at(-1)!.start} · {next.dress}
                 {next.opponent ? ` · vs ${next.opponent} week` : ""}
@@ -39,7 +39,7 @@ export default async function Home() {
               </Link>
             </>
           ) : (
-            <h1 className="text-2xl font-semibold">Good afternoon, Coach.</h1>
+            <h1 className="text-3xl">Good afternoon, Coach.</h1>
           )}
         </div>
       </section>

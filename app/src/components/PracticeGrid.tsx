@@ -27,7 +27,7 @@ export function PracticeGrid({ practice, compact = false }: { practice: Practice
             const first = i === 0;
             return (
               <tr key={`${bi}-${i}`} className={`border-b border-neutral-300 ${b.span ? "bg-[#f1ecd3] [print-color-adjust:exact] [-webkit-print-color-adjust:exact]" : ""}`}>
-                <td className={`${cell} font-mono tabular-nums`}>{t}</td>
+                <td className={`${cell} font-display text-lg font-semibold tabular-nums`}>{t}</td>
                 <td className={`${cell} text-neutral-500`}>{b.flex ? "Flex" : n}</td>
                 {b.span ? (
                   first ? (
