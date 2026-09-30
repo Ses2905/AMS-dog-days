@@ -100,7 +100,7 @@ function Row({ note, lookups, today }: { note: Note; lookups: Lookups; today: st
   const toggle = () => start(async () => { const r = await setNoteDone(note.id, !done); setError(r.error); });
 
   return (
-    <li className="border-b border-neutral-200 last:border-0">
+    <li>
       <div className="flex items-start gap-1 px-2 py-1">
         {action ? (
           <button onClick={toggle} disabled={pending} aria-label={done ? "Mark as not done" : "Mark as done"} aria-pressed={done} className="flex min-h-12 min-w-12 items-center justify-center">
@@ -142,7 +142,7 @@ export function NotesView({ notes, lookups, today, initial }: { notes: Note[]; l
       </PageHeader>
 
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>New Note</h2>
           <NoteForm note={null} initial={initial} lookups={lookups} onDone={() => setAdding(false)} />
         </section>
@@ -155,7 +155,7 @@ export function NotesView({ notes, lookups, today, initial }: { notes: Note[]; l
         summary={`Showing ${list.length} of ${notes.length}`} canReset={filtered} onReset={() => setFilters(NO_NOTE_FILTERS)}
       />
 
-      <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
         {list.map((n) => <Row key={n.id} note={n} lookups={lookups} today={today} />)}
         {list.length === 0 && <li className="px-3 py-6 text-center text-sm text-neutral-500">{notes.length === 0 ? "Nothing yet. Add the first note after practice." : "Nothing matches."}</li>}
       </ul>

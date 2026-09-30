@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { resetCalendarLink } from "@/app/settings/actions";
+import { Section } from "./Row";
 import { btnDanger, btnOutline } from "./ui";
 import { Icon } from "./Icon";
 
@@ -11,8 +12,8 @@ export function CalendarLink({ url }: { url: string }) {
   const [pending, start] = useTransition();
   const copy = async () => { try { await navigator.clipboard.writeText(url); setNote("Copied."); } catch { setNote("Couldn't copy. Press and hold the link to select it."); } };
   return (
-    <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-      <h2>Calendar Link</h2>
+    <Section title="Calendar Link">
+      <div className="space-y-4 p-5">
       <p className="text-sm text-neutral-700">Add every practice and game to the calendar app on a phone. It updates by itself. Anyone with this link can see the schedule (no player names), so keep it private.</p>
       <input readOnly value={url} onFocus={(e) => e.currentTarget.select()} aria-label="Private calendar link" className="min-h-12 w-full rounded-lg border border-neutral-300 bg-wash px-3 text-sm" />
       <div className="flex flex-wrap items-center gap-2">
@@ -28,6 +29,7 @@ export function CalendarLink({ url }: { url: string }) {
           <p>Practice times come from each plan&apos;s first period. A practice with no plan yet does not show up. Reminders are set in your own calendar app.</p>
         </div>
       </details>
-    </section>
+      </div>
+    </Section>
   );
 }

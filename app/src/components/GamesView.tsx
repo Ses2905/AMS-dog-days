@@ -8,6 +8,7 @@ import { prettyDate } from "@/lib/time";
 import { GameForm } from "./GameForm";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
+import { Row } from "./Row";
 import { btnOutline, btnPrimary } from "./ui";
 import { Icon } from "./Icon";
 import { Pill } from "./Pill";
@@ -36,7 +37,7 @@ export function GamesView({ games, today }: { games: Game[]; today: string }) {
       </PageHeader>
 
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Game</h2>
           <GameForm defaultDate={today} onDone={() => setAdding(false)} />
         </section>
@@ -53,26 +54,20 @@ export function GamesView({ games, today }: { games: Game[]; today: string }) {
         summary={`Showing ${list.length} of ${games.length}`} canReset={JSON.stringify(filters) !== JSON.stringify(NONE)} onReset={() => setFilters(NONE)}
       />
 
-      <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
         {list.map((g) => {
           const p = prepProgress(g.checklist);
           const res = resultLabel(g);
           // Jordan covers every level, so flag nights with more than one game.
           const sameNight = games.filter((o) => o.id !== g.id && o.date === g.date && o.status !== "cancelled");
           return (
-            <li key={g.id} className="border-b border-neutral-200 last:border-0">
-              <Link href={`/games/${g.id}`} className="flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-wash">
-                <span className="min-w-0 flex-1">
-                  <span className="font-display flex flex-wrap items-center gap-2 text-xl font-semibold uppercase tracking-wide">{vsLabel(g)}<Pill>{levelLabel(g.level)}</Pill></span>
-                  <span className="block text-sm text-neutral-600">{prettyDate(g.date)}{g.time ? ` · ${g.time}` : ""}{g.location ? ` · ${g.location}` : ""}{g.kind !== "game" ? ` · ${g.kind}` : ""}</span>
-                  {sameNight.length > 0 && <span className="mt-1 block text-xs font-semibold text-[#6b5b12]">Same night: {sameNight.map((o) => `${levelLabel(o.level)}${o.time ? ` ${o.time}` : ""}`).join(", ")}</span>}
-                </span>
-                {res ? (
-                  <Pill tone={res.startsWith("W") ? "green" : res.startsWith("L") ? "red" : "grey"}>{res}</Pill>
-                ) : (
-                  <Pill tone={p.done === p.total ? "green" : "grey"}>Prep {p.done}/{p.total}</Pill>
-                )}
-              </Link>
+            <li key={g.id}>
+              <Row
+                href={`/games/${g.id}`} lead={<><span className="block text-xs font-semibold uppercase tracking-wide text-neutral-500">{prettyDate(g.date).split(",")[0]}</span>{prettyDate(g.date).split(", ")[1]}</>}
+                title={vsLabel(g)}
+                meta={[levelLabel(g.level), g.time, g.location, g.kind !== "game" && g.kind, sameNight.length > 0 && `Same night: ${sameNight.map((o) => levelLabel(o.level)).join(", ")}`].filter(Boolean).join(" · ")}
+                status={res ? <Pill tone={res.startsWith("W") ? "green" : res.startsWith("L") ? "red" : "grey"}>{res}</Pill> : g.date >= today ? <Pill tone={p.done === p.total ? "green" : "grey"}>Prep {p.done}/{p.total}</Pill> : undefined}
+              />
             </li>
           );
         })}

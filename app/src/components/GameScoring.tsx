@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { addPlay, deletePlay, setFinalFromLog } from "@/app/games/plays-actions";
 import type { Game } from "@/lib/db-types";
 import { PLAY_TYPES, playLabel, QUARTERS, quarterLabel, totals, type Play } from "@/lib/plays";
-import { btnDanger, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { btnIconSm, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
 import { Icon } from "./Icon";
 import { Pill } from "./Pill";
 
@@ -33,7 +33,7 @@ export function GameScoring({ game, plays, roster }: { game: Game; plays: Play[]
   const finalize = () => start(async () => { const r = await setFinalFromLog(game.id); if (r.error) setError(r.error); else setError(""); });
 
   return (
-    <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center gap-3">
         <h2>Scoring</h2>
         <p className="font-display text-3xl font-semibold tabular-nums">Alma {t.us} <span className="text-neutral-400">–</span> {t.them} {game.opponent}</p>
@@ -47,7 +47,7 @@ export function GameScoring({ game, plays, roster }: { game: Game; plays: Play[]
             <li key={p.id} className="flex items-center gap-2 py-2">
               <span className="w-10 shrink-0 font-display text-lg font-semibold text-neutral-500">{quarterLabel(p.quarter)}</span>
               <span className="min-w-0 flex-1"><span className="font-medium">{p.team === "us" ? "" : "Opp. · "}{label(p)}</span> <span className="text-sm text-neutral-700">{playLabel(p.type)} (+{p.points})</span>{p.detail && <span className="block text-sm text-neutral-600">{p.detail}</span>}</span>
-              <button className={btnDanger} disabled={pending} aria-label="Delete score" onClick={() => remove(p)}>Delete</button>
+              <button className={btnIconSm} disabled={pending} aria-label="Delete score" onClick={() => remove(p)}><Icon name="trash" size={18} /></button>
             </li>
           ))}
         </ul>

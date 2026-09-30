@@ -44,20 +44,20 @@ export function WorkflowsPanel({ games, players, saved }: { games: Choice[]; pla
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-neutral-600">Pick a playbook. It uses what is already in Coach OS, adds what you tell it, and hands back something to review. Nothing changes until you save it.</p>
-      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <p className="text-base text-neutral-700">Pick a playbook. It uses what is already in Coach OS, adds what you tell it, and hands back something to review. Nothing changes until you save it.</p>
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {WORKFLOWS.map((x) => (
-          <li key={x.id}>
-            <button onClick={() => pick(x)} aria-pressed={w?.id === x.id} className={`flex min-h-20 w-full flex-col justify-center rounded-xl border p-3 text-left ${w?.id === x.id ? "border-green-900 bg-green-900 text-white" : "border-neutral-200 bg-white hover:shadow"}`}>
+          <li key={x.id} className="flex">
+            <button onClick={() => pick(x)} aria-pressed={w?.id === x.id} className={`flex min-h-28 w-full flex-col justify-start gap-1 rounded-2xl border p-4 text-left shadow-sm transition-colors ${w?.id === x.id ? "border-green-900 bg-green-900 text-white" : "border-neutral-200 bg-white hover:shadow"}`}>
               <span className="font-display text-xl font-semibold uppercase tracking-wide">{x.title}</span>
-              <span className={`text-sm ${w?.id === x.id ? "text-white/80" : "text-neutral-600"}`}>{x.blurb}</span>
+              <span className={`text-sm leading-snug ${w?.id === x.id ? "text-white/85" : "text-neutral-600"}`}>{x.blurb}</span>
             </button>
           </li>
         ))}
       </ul>
 
       {w && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>{w.title}</h2>
           {w.subject !== "none" && (
             <label className="block text-sm font-semibold">{w.subjectHint}
@@ -92,9 +92,9 @@ export function WorkflowsPanel({ games, players, saved }: { games: Choice[]; pla
       {saved.length > 0 && (
         <section className="space-y-2">
           <h2>Saved Results</h2>
-          <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+          <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
             {saved.map((s) => (
-              <li key={s.id} className="border-b border-neutral-200 last:border-0">
+              <li key={s.id}>
                 <button className="flex min-h-14 w-full items-center gap-3 px-4 py-2 text-left" aria-expanded={open === s.id} onClick={() => setOpen(open === s.id ? null : s.id)}>
                   <span className="min-w-0 flex-1"><span className="block truncate font-medium">{s.title}</span><span className="block text-xs text-neutral-600">{prettyDate(s.created.slice(0, 10))}</span></span>
                 </button>

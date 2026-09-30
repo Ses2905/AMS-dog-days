@@ -14,6 +14,7 @@ export function PracticeGrid({ practice, compact = false }: { practice: Practice
         <tr className="bg-green-900 text-white [print-color-adjust:exact] [-webkit-print-color-adjust:exact]">
           <th className={`${cell} w-14 text-left`}>Time</th>
           <th className={`${cell} w-8 text-left`}>#</th>
+          {coaches.length === 0 && <th className={`${cell} text-center font-semibold uppercase tracking-wide`}>Everyone</th>}
           {coaches.map((c) => (
             <th key={c} className={`${cell} text-left font-semibold uppercase tracking-wide`}>{c}</th>
           ))}
@@ -31,7 +32,7 @@ export function PracticeGrid({ practice, compact = false }: { practice: Practice
                 <td className={`${cell} text-neutral-500`}>{b.flex ? "Flex" : n}</td>
                 {b.span ? (
                   first ? (
-                    <td colSpan={coaches.length} rowSpan={b.periods} className={`${cell} text-center align-middle font-semibold uppercase tracking-wide`}>
+                    <td colSpan={Math.max(coaches.length, 1)} rowSpan={b.periods} className={`${cell} text-center align-middle font-semibold uppercase tracking-wide`}>
                       {b.span}
                     </td>
                   ) : null
@@ -65,11 +66,11 @@ export function PracticeMeta({ practice, compact = false }: { practice: Practice
     ["Situations", practice.situations],
   ];
   return (
-    <dl className={`flex flex-wrap gap-x-6 gap-y-1 ${compact ? "text-xs" : "text-sm"}`}>
+    <dl className={`flex flex-wrap ${compact ? "gap-x-5 gap-y-1 text-xs" : "gap-x-8 gap-y-3"}`}>
       {items.filter(([, v]) => v).map(([k, v]) => (
-        <div key={k} className="flex gap-1.5">
-          <dt className="font-semibold uppercase tracking-wide text-green-900">{k}</dt>
-          <dd>{v}</dd>
+        <div key={k} className={compact ? "flex gap-1.5" : "min-w-0"}>
+          <dt className={`font-semibold uppercase tracking-wider text-green-900 ${compact ? "" : "text-xs"}`}>{k}</dt>
+          <dd className={compact ? "" : "text-base font-medium"}>{v}</dd>
         </div>
       ))}
     </dl>

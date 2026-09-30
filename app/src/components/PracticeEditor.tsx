@@ -66,7 +66,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
 
   return (
     <div className="space-y-6 pb-28">
-      <section className="grid gap-3 rounded-xl bg-white p-4 shadow-sm sm:grid-cols-2">
+      <section className="grid gap-3 rounded-2xl bg-white p-5 shadow-sm sm:grid-cols-2">
         <label className="text-sm font-medium">Practice Starts (first period)<input className={input} value={start} onChange={(e) => setStart(e.target.value)} inputMode="numeric" placeholder="e.g. 6:55" /></label>
         <label className="text-sm font-medium">Dress<input className={input} value={dress} onChange={(e) => setDress(e.target.value)} /></label>
         <label className="text-sm font-medium">Lift<input className={input} value={lift} onChange={(e) => setLift(e.target.value)} /></label>
@@ -75,7 +75,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
         <label className="text-sm font-medium">Situations<input className={input} value={situations} onChange={(e) => setSituations(e.target.value)} /></label>
       </section>
 
-      <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">Coaches (columns)</h2>
         <ul className="flex flex-wrap gap-2">
           {coaches.map((c) => (
@@ -104,7 +104,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
         {blocks.map((b, i) => {
           const end = addMinutes(starts[i], b.periods * 5);
           return (
-            <div key={b.key} className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+            <div key={b.key} className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-display text-base font-semibold tabular-nums">{starts[i]} to {end}</span>
                 <span className="text-sm text-neutral-500">{b.periods * 5} min</span>
@@ -148,7 +148,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
         {blocks.length === 0 && <button className={btn} onClick={() => addBlock(-1)}><Icon name="plus" />Add a Period</button>}
       </section>
 
-      <section className="rounded-xl bg-white p-4 shadow-sm">
+      <section className="rounded-2xl bg-white p-5 shadow-sm">
         <label className="text-sm font-medium">Notes (one per line)
           <textarea className={`${input} min-h-32 py-2`} value={notes} onChange={(e) => setNotes(e.target.value)} />
         </label>

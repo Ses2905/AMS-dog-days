@@ -30,3 +30,9 @@ Shared code: `app/src/components/PageHeader.tsx`, `ListToolbar.tsx`, `ui.ts`, an
 - **Headline Case** for buttons, tabs, chips, page titles, section headings and short field labels (Add Note, Sign Out, Scouting & Notes). Sentence case for anything that reads as a sentence: descriptions, hints, empty states, placeholders. Small words stay lowercase (a, the, to, of, for, and, or).
 - **Placeholders** that show an example start with "e.g." so they never look like real data.
 - **Navigation order** follows how a coach works: Today, Calendar, Practice, Games, Team, Notes. Phones use a bottom tab bar (thumb reach) and put Assistant, Tools, Library, Settings and Sign Out behind Menu. Wide screens use the same tabs under the logo.
+
+## Design Pass 2
+- **Type:** Inter for body, Barlow Condensed for display. Scale tokens in `globals.css` (`text-xs` .8125rem to `text-xl` 1.375rem); body is 17px with 1.6 line height.
+- **Lists:** every list is a `Section` (white card, hairline dividers) of `Row`s (lead time or number, title, one meta line, status pill only when something needs attention). Use `narrow` for jersey numbers.
+- **Today:** one "Next Up" hero, then Needs Your Attention and Coming Up. Badges say why (Overdue, Today, Tomorrow); red only when urgent.
+- **Destructive actions in lists** are icon-only (`btnIconSm`), never full-width buttons.

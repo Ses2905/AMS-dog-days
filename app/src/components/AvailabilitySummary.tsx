@@ -16,7 +16,7 @@ export function AvailabilitySummary({ players, date, compact = false }: { player
       </p>
     );
   return (
-    <section className="space-y-2 rounded-xl bg-white p-4 shadow-sm">
+    <section className="space-y-2 rounded-2xl bg-white p-5 shadow-sm">
       <h2 className="font-semibold">Availability · {a.available} of {a.total} available</h2>
       {shown.map(([label, ps]) => (
         <p key={label} className="text-sm"><b>{label} ({ps.length}):</b> {names(ps)}</p>

@@ -121,7 +121,7 @@ function Row({ doc, lookups }: { doc: Doc; lookups: Lookups }) {
   const state = doc.textChars === null ? "unread" : doc.textChars === 0 ? "none" : "ready";
   const read = () => startReading(async () => { const r = await readDocument(doc.id); setReadNote(r.error || r.note || ""); });
   return (
-    <li className="border-b border-neutral-200 last:border-0">
+    <li>
       <div className="flex items-center gap-2 px-3 py-2">
         <a href={`/documents/${doc.id}/file`} target="_blank" rel="noopener noreferrer" className="min-h-14 min-w-0 flex-1 py-1">
           <span className="block truncate font-medium text-green-600 underline">{doc.name} <Icon name="external" size={14} /></span>
@@ -167,7 +167,7 @@ export function DocumentsView({ docs, lookups, initial }: { docs: Doc[]; lookups
       </PageHeader>
 
       {adding && (
-        <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+        <section className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
           <h2>Add a Document</h2>
           <Uploader lookups={lookups} initial={initial} onDone={() => setAdding(false)} />
         </section>
@@ -180,7 +180,7 @@ export function DocumentsView({ docs, lookups, initial }: { docs: Doc[]; lookups
         summary={`Showing ${list.length} of ${docs.length}`} canReset={filtered} onReset={() => { setQ(""); setCat("all"); }}
       />
 
-      <ul className="overflow-hidden rounded-xl bg-white shadow-sm">
+      <ul className="divide-y divide-neutral-200 overflow-hidden rounded-2xl bg-white shadow-sm">
         {list.map((d) => <Row key={d.id} doc={d} lookups={lookups} />)}
         {list.length === 0 && <li className="px-4 py-6 text-center text-sm text-neutral-500">{docs.length === 0 ? "Nothing here yet. Add your playbook or the next scouting report." : "Nothing matches."}</li>}
       </ul>

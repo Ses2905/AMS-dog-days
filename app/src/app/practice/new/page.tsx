@@ -26,7 +26,7 @@ export default async function NewPracticePage({ searchParams }: PageProps<"/prac
   return (
     <div className="mx-auto max-w-xl space-y-4">
       <PageHeader title="Plan a Practice"><Link href="/practice" className={btnOutline}><Icon name="arrow-left" />Week View</Link></PageHeader>
-      <form action={createPractice} className="space-y-4 rounded-xl bg-white p-4 shadow-sm">
+      <form action={createPractice} className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
         <label className="block text-sm font-medium">Date
           <input type="date" name="date" defaultValue={date} required className={field} />
         </label>

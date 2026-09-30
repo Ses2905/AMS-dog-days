@@ -1,18 +1,25 @@
-/** Brand color and letter for the tools page. Real logo files can replace these later; until then a colored tile keeps it quick to scan. */
-const BRANDS: { match: RegExp; bg: string; fg: string; mark: string }[] = [
-  { match: /hudl\.com$/, bg: "#FF6300", fg: "#fff", mark: "H" },
-  { match: /sportsyou\.com$/, bg: "#0B6BCB", fg: "#fff", mark: "S" },
-  { match: /(drive|docs|sheets|slides)\.google\.com$/, bg: "#1FA463", fg: "#fff", mark: "D" },
-  { match: /mail\.google\.com$/, bg: "#D93025", fg: "#fff", mark: "M" },
-  { match: /calendar\.google\.com$/, bg: "#4285F4", fg: "#fff", mark: "31" },
-  { match: /(^|\.)google\.com$/, bg: "#4285F4", fg: "#fff", mark: "G" },
-  { match: /almaairedales\.com$|almasd\.net$/, bg: "#003810", fg: "#C4B259", mark: "A" },
-  { match: /plaud\.ai$/, bg: "#111111", fg: "#fff", mark: "P" },
+import { GLYPHS } from "./tool-glyphs";
+
+export type ToolBrand = { bg: string; fg: string; mark: string; glyph?: string; logo?: string };
+
+/** Logo files dropped into app/public/tools/. Add a line here when a file is added. */
+export const LOGO_FILES: Record<string, string> = {
+  // hudl: "/tools/hudl.png",
+};
+
+const BRANDS: { match: RegExp; brand: ToolBrand }[] = [
+  { match: /hudl\.com$/, brand: { bg: "#FF6300", fg: "#fff", mark: "H", logo: LOGO_FILES.hudl } },
+  { match: /sportsyou\.com$/, brand: { bg: "#0B6BCB", fg: "#fff", mark: "S", logo: LOGO_FILES.sportsyou } },
+  { match: /(drive|docs|sheets|slides)\.google\.com$/, brand: { bg: "#1FA463", fg: "#fff", mark: "D", glyph: GLYPHS.drive } },
+  { match: /mail\.google\.com$/, brand: { bg: "#EA4335", fg: "#fff", mark: "M", glyph: GLYPHS.gmail } },
+  { match: /calendar\.google\.com$/, brand: { bg: "#4285F4", fg: "#fff", mark: "31", glyph: GLYPHS.calendar } },
+  { match: /(^|\.)google\.com$/, brand: { bg: "#4285F4", fg: "#fff", mark: "G" } },
+  { match: /almaairedales\.com$|almasd\.net$/, brand: { bg: "#003810", fg: "#C4B259", mark: "A", logo: "/brand/alma-gold-a-header.png" } },
+  { match: /plaud\.ai$/, brand: { bg: "#111111", fg: "#fff", mark: "P", logo: LOGO_FILES.plaud } },
 ];
 
-export function toolBrand(label: string, url: string): { bg: string; fg: string; mark: string } {
+export function toolBrand(label: string, url: string): ToolBrand {
   let host = "";
   try { host = new URL(url).hostname.replace(/^www\./, ""); } catch { /* fall through to the default tile */ }
-  const hit = BRANDS.find((b) => b.match.test(host));
-  return hit ?? { bg: "#006030", fg: "#fff", mark: (label.trim()[0] ?? "?").toUpperCase() };
+  return BRANDS.find((b) => b.match.test(host))?.brand ?? { bg: "#006030", fg: "#fff", mark: (label.trim()[0] ?? "?").toUpperCase() };
 }

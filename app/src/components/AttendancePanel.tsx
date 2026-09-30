@@ -42,7 +42,7 @@ export function AttendancePanel({ practiceId, date, players, initial }: { practi
   });
 
   return (
-    <section id="attendance" className="scroll-mt-4 space-y-3 rounded-xl bg-white p-4 shadow-sm">
+    <section id="attendance" className="scroll-mt-4 space-y-3 rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center gap-2">
         <h2>Attendance</h2>
         <p className="text-sm text-neutral-600">{t.marked} of {players.length} marked · {t.there} there{t.late ? ` (${t.late} late)` : ""} · {t.absent} absent · {t.excused} excused</p>

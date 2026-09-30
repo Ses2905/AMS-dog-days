@@ -16,7 +16,7 @@ export function SharedLink({ initialUrl, initialLabel, games, defaultGameId }: {
 
   if (saved)
     return (
-      <div className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+      <div className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
         <h2>Saved</h2>
         <div className="flex flex-wrap gap-2">
           {saved.gameId ? <Link href={`/games/${saved.gameId}`} className={btnPrimary}>Open the Game</Link> : <Link href="/notes" className={btnPrimary}>Open Notes</Link>}
@@ -26,7 +26,7 @@ export function SharedLink({ initialUrl, initialLabel, games, defaultGameId }: {
     );
 
   return (
-    <div className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
+    <div className="space-y-3 rounded-2xl bg-white p-5 shadow-sm">
       <label className="block text-sm font-medium">Link<input className={inputCls} value={url} onChange={(e) => setUrl(e.target.value)} inputMode="url" autoCapitalize="none" /></label>
       <label className="block text-sm font-medium">Name (optional)<input className={inputCls} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. Red Zone playlist" /></label>
       <label className="block text-sm font-medium">Put it on

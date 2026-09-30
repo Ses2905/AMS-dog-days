@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow, Barlow_Condensed } from "next/font/google";
+import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 import { OfflineSync } from "@/components/OfflineSync";
 import { SiteHeader } from "@/components/SiteHeader";
 import { signOut } from "./login/actions";
 
-const body = Barlow({ variable: "--font-body", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const body = Inter({ variable: "--font-body", subsets: ["latin"], display: "swap" });
 const display = Barlow_Condensed({ variable: "--font-display", subsets: ["latin"], weight: ["500", "600", "700"] });
 
 export const metadata: Metadata = {
