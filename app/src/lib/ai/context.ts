@@ -32,7 +32,8 @@ type Section = { title: string; items: string[] };
  * items at the end are dropped so it always fits.
  */
 export function buildContext(data: AssistantData, budget: number): { text: string; sources: Record<string, Source> } {
-  const { today, players, practices, games, notes, coaches, docs } = data;
+  const { today, players, practices, games, coaches, docs } = data;
+  const notes = data.notes.filter((n) => n.category !== "parent"); // parent contact stays out of the assistant
   const sources: Record<string, Source> = {};
   const nameOf = (list: { id: string }[]) => (id: string | null) => (id ? list.find((x) => x.id === id) : undefined);
   const playerById = nameOf(players) as (id: string | null) => Player | undefined;
