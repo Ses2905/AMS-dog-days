@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GameChecklist, GameHeader, GameLinks } from "@/components/GamePanels";
 import { btnOutline, btnPrimary } from "@/components/ui";
-import { getDocuments, getGame, getNotes, getPractices } from "@/lib/db";
+import { GameScoring } from "@/components/GameScoring";
+import { getDocuments, getGame, getNotes, getPlayers, getPlays, getPractices } from "@/lib/db";
 import { prettyDate } from "@/lib/time";
 
 const addDays = (iso: string, n: number) => {
@@ -15,7 +16,7 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
   const { id } = await params;
   const game = await getGame(id);
   if (!game) notFound();
-  const [notes, practices, allDocs] = await Promise.all([getNotes(), getPractices(), getDocuments()]);
+  const [notes, practices, allDocs, plays, players] = await Promise.all([getNotes(), getPractices(), getDocuments(), getPlays(game.id), getPlayers()]);
   const docs = allDocs.filter((d) => d.gameId === game.id);
   const about = notes.filter((n) => n.gameId === game.id);
   const week = practices.filter((p) => p.date >= addDays(game.date, -6) && p.date <= game.date).sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
@@ -23,6 +24,7 @@ export default async function GamePage({ params }: PageProps<"/games/[id]">) {
   return (
     <div className="space-y-4">
       <GameHeader game={game} />
+      <GameScoring game={game} plays={plays} roster={[...players].sort((a, b) => a.number - b.number).map((p) => ({ id: p.id, label: `#${p.number} ${p.first} ${p.last}` }))} />
       <div className="grid gap-4 lg:grid-cols-2">
         <GameChecklist gameId={game.id} initial={game.checklist} />
         <GameLinks gameId={game.id} initial={game.links} />

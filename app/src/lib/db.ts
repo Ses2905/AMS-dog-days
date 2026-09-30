@@ -1,3 +1,4 @@
+import type { Play } from "./plays";
 import type { AttendanceRow } from "./attendance";
 import { createClient } from "@/lib/supabase/server";
 import type { Coach, Doc, Game, GameLink, Note } from "@/lib/db-types";
@@ -109,4 +110,12 @@ export async function getAttendance(): Promise<AttendanceRow[]> {
   const { data, error } = await supabase.from("attendance").select("practice_id,player_id,status");
   if (error) throw new Error(`Could not load attendance: ${error.message}`);
   return data.map((r) => ({ practiceId: r.practice_id, playerId: r.player_id, mark: r.status }));
+}
+
+export async function getPlays(gameId?: string): Promise<Play[]> {
+  const supabase = await createClient();
+  const q = supabase.from("game_plays").select("*").order("quarter").order("created_at");
+  const { data, error } = await (gameId ? q.eq("game_id", gameId) : q);
+  if (error) throw new Error(`Could not load scoring plays: ${error.message}`);
+  return data.map((r) => ({ id: r.id, gameId: r.game_id, quarter: r.quarter, team: r.team, type: r.type, points: r.points, playerId: r.player_id, scorerName: r.scorer_name, detail: r.detail }));
 }

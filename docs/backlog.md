@@ -10,6 +10,8 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 - Attendance: tap Present / Late / Absent / Excused on a practice page, "Everyone Present", Today prompt, per-player history
 
 ## After That
+- Deeper game stats (yards, tackles, turnovers, per-quarter breakdown) once we know which ones Jordan actually tracks
+- Scoring log for JV/varsity players (they are not on the roster yet, so scorers are typed by name)
 - Offline read of today's plan (iPhone)
 - Document text extraction so the assistant can read the playbook and scouting files
 - Plaud transcripts: paste or upload straight into "Read a Transcript"

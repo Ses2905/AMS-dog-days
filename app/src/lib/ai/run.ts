@@ -9,12 +9,19 @@ export type Fail = { ok: false; error: string };
 
 const common = () => ({ maxOutputTokens: LIMITS.outputTokens, abortSignal: AbortSignal.timeout(LIMITS.timeoutMs), maxRetries: 1 });
 
-function explain(e: unknown): Fail {
-  const msg = e instanceof Error ? e.message : "";
-  if (/abort|timeout/i.test(msg)) return { ok: false, error: "That took too long. Try a shorter request." };
-  if (/unauthor|api key|401|403/i.test(msg)) return { ok: false, error: "The assistant's key was rejected. Check AI_GATEWAY_API_KEY in Vercel." };
-  if (/rate|429|credit|quota/i.test(msg)) return { ok: false, error: "The assistant is out of credits or rate limited. Try again in a minute." };
-  return { ok: false, error: "The assistant couldn't answer just now. Try again." };
+/** Plain-language reason first, then the provider's own words so a problem can be diagnosed from the screen. */
+export function explain(e: unknown): Fail {
+  const err = (e ?? {}) as { name?: string; statusCode?: number; message?: string; cause?: { message?: string } };
+  const msg = `${err.message ?? ""} ${err.cause?.message ?? ""}`.trim();
+  const status = err.statusCode;
+  const detail = [err.name, status, msg].filter(Boolean).join(" · ").replace(/\s+/g, " ").slice(0, 300);
+  const tail = detail ? ` (${detail})` : "";
+  if (err.name === "TimeoutError" || err.name === "AbortError" || /\baborted\b|\btimed? ?out\b/i.test(msg)) return { ok: false, error: "That took too long. Try a shorter request." };
+  if (status === 401 || err.name === "GatewayAuthenticationError") return { ok: false, error: `The assistant's key was rejected. Check AI_GATEWAY_API_KEY in Vercel.${tail}` };
+  if (err.name === "GatewayModelNotFoundError" || status === 404) return { ok: false, error: `The assistant's model wasn't found. Set AI_MODEL in Vercel to a model listed in AI Gateway.${tail}` };
+  if (/\b(credits?|balance|payment|billing|credit card)\b/i.test(msg)) return { ok: false, error: `AI Gateway needs credits or a payment method before it will answer.${tail}` };
+  if (status === 429 || err.name === "GatewayRateLimitError") return { ok: false, error: `The assistant is rate limited. Try again in a minute.${tail}` };
+  return { ok: false, error: `The assistant couldn't answer just now.${tail}` };
 }
 
 export async function runAsk(model: LanguageModel, data: AssistantData, question: string): Promise<Ok<{ answer: string; sources: Source[] }> | Fail> {
