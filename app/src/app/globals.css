@@ -38,6 +38,18 @@
 body {
   background: var(--wash);
   color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The parts the browser draws itself, themed to the palette. */
+::selection { background: var(--gold-500); color: var(--green-900); }
+:focus-visible { outline: 3px solid var(--green-600); outline-offset: 2px; border-radius: 4px; }
+header :focus-visible { outline-color: var(--gold-500); }
+button, a, select, summary { touch-action: manipulation; }
+h1, h2, h3 { text-wrap: balance; }
+html { scrollbar-color: var(--green-600) transparent; scroll-padding-top: 1rem; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
 /* Print: landscape letter, one clean sheet, no app chrome. */
