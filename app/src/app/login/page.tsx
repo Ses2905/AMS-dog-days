@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { signIn } from "./actions";
+import { btnPrimary } from "@/components/ui";
 
 export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const { error } = await searchParams;
@@ -20,7 +21,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
           <input name="password" type="password" autoComplete="current-password" required className={field} />
         </label>
         {error && <p role="alert" className="text-sm text-red-700">That email or password didn’t work.</p>}
-        <button className="min-h-12 w-full rounded-lg bg-green-900 font-semibold text-white">Sign in</button>
+        <button className={`${btnPrimary} w-full`}>Sign in</button>
       </form>
     </div>
   );

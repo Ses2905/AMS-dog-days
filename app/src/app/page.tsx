@@ -7,6 +7,8 @@ import { levelLabel, nextGame, prepProgress, vsLabel } from "@/lib/games";
 import { isOverdue, openActions } from "@/lib/notes";
 import { mondayOf, nowInSchool, slotStatus, weekSlots } from "@/lib/week";
 import { prettyDate } from "@/lib/time";
+import { Icon } from "@/components/Icon";
+import { Pill } from "@/components/Pill";
 
 const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
 
@@ -39,12 +41,12 @@ export default async function Home() {
                 {next.blocks[0].start} to {next.blocks.at(-1)!.start} · {next.dress}
                 {next.opponent ? ` · vs ${next.opponent} week` : ""}
               </p>
-              <Link href={`/practice/${next.id}`} className="mt-4 inline-flex min-h-12 items-center rounded-lg bg-gold-500 px-5 font-semibold text-green-900">
+              <Link href={`/practice/${next.id}`} className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-lg bg-gold-500 px-5 text-base font-semibold text-green-900 transition-colors hover:brightness-95">
                 Open Practice
               </Link>
             </>
           ) : (
-            <h1 className="text-3xl">Good afternoon, Coach.</h1>
+            <h1 className="text-3xl">{clock.minutes < 12 * 60 ? "Good Morning" : clock.minutes < 17 * 60 ? "Good Afternoon" : "Good Evening"}, Coach.</h1>
           )}
         </div>
       </section>
@@ -54,14 +56,14 @@ export default async function Home() {
         return (
           <Link key={p.id} href={`/practice/${p.id}#attendance`} className="flex min-h-16 items-center gap-3 rounded-xl bg-white p-4 shadow-sm hover:shadow">
             <span className="min-w-0 flex-1"><span className="block font-semibold">Attendance · {p.session}</span><span className="block text-sm text-neutral-600">{marked === 0 ? "Not taken yet" : `${marked} of ${players.length} marked`}</span></span>
-            <span className={`rounded-full px-3 py-1 text-sm font-semibold ${marked >= players.length ? "bg-green-900 text-white" : "bg-gold-500 text-green-900"}`}>{marked >= players.length ? "Done" : "Take it"}</span>
+            <Pill tone={marked >= players.length ? "solid" : "gold"}>{marked >= players.length ? "Done" : "Take Attendance"}</Pill>
           </Link>
         );
       })}
 
       {todays.length > 1 && (
         <section className="rounded-xl bg-white p-4 shadow-sm">
-          <h2 className="mb-2 font-semibold">Also today</h2>
+          <h2 className="mb-2 font-semibold">Also Today</h2>
           <ul className="space-y-1">
             {todays.slice(1).map((p) => (
               <li key={p.id}><Link className="text-green-600 underline" href={`/practice/${p.id}`}>{p.session} practice</Link></li>
@@ -90,8 +92,8 @@ export default async function Home() {
 
       <section className="rounded-xl bg-white p-4 shadow-sm">
         <div className="mb-2 flex items-center gap-3">
-          <h2>Open action items{actions.length > 0 ? ` · ${actions.length}` : ""}</h2>
-          <Link href="/notes?add=1&kind=action" className="ml-auto inline-flex min-h-10 items-center text-sm font-semibold text-green-600 underline">Add one</Link>
+          <h2>Open Action Items{actions.length > 0 ? ` · ${actions.length}` : ""}</h2>
+          <Link href="/notes?add=1&kind=action" className="ml-auto inline-flex min-h-10 items-center text-sm font-semibold text-green-600 underline"><Icon name="plus" />Add Action Item</Link>
         </div>
         {actions.length === 0 ? (
           <p className="text-sm text-neutral-600">Nothing open. Add a note or action item after practice.</p>
@@ -117,7 +119,7 @@ export default async function Home() {
           <p className="mt-1 text-sm">{avail.out.length + avail.limited.length + avail.excused.length === 0 ? "Everyone available" : `${avail.out.length} out · ${avail.limited.length} limited · ${avail.excused.length} excused`}{next && next.date !== today ? " for next practice" : " today"}</p>
         </Link>
         <Link href="/practice" className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
-          <h2 className="font-semibold">This week’s practices</h2>
+          <h2 className="font-semibold">This Week’s Practices</h2>
           <p className={`text-sm ${weekNeeds > 0 ? "font-semibold text-red-800" : "text-neutral-600"}`}>{weekNeeds > 0 ? `${weekNeeds} still need a plan` : "Everything is planned"}</p>
         </Link>
       </section>

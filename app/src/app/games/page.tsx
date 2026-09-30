@@ -13,7 +13,7 @@ export default async function GamesPage() {
     <div className="space-y-4">
       <GamesView games={games} today={nowInSchool().today} />
       <SeasonStats games={games} plays={plays} players={players} />
-      <LinksEditor initial={links} save={saveScheduleLinks} title="Schedules on the web" hint="Hudl and the school calendar" empty="Add the links to your team schedule pages so they are one tap away." />
+      <LinksEditor initial={links} save={saveScheduleLinks} title="Schedules On the Web" hint="Hudl and the school calendar" empty="Add the links to your team schedule pages so they are one tap away." />
     </div>
   );
 }

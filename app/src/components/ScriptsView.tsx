@@ -9,6 +9,7 @@ import { prettyDate } from "@/lib/time";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { btnPlain, btnPrimary, inputCls } from "./ui";
+import { Icon } from "./Icon";
 
 type Choice = { id: string; label: string };
 type Filters = { q: string; link: "all" | "practice" | "game" | "none" };
@@ -42,16 +43,16 @@ export function ScriptsView({ scripts, practices, games, initial }: { scripts: S
   return (
     <div className="space-y-4">
       <PageHeader title={`Scripts · ${scripts.length}`} subtitle="Plays by situation, ready for practice and game day">
-        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? "Close" : "Add script"}</button>
+        <button className={btnPrimary} onClick={() => setAdding(!adding)}>{adding ? <><Icon name="x" />Close</> : <><Icon name="plus" />Add Script</>}</button>
       </PageHeader>
 
       {adding && (
         <section className="space-y-3 rounded-xl bg-white p-4 shadow-sm">
-          <h2>Add a script</h2>
-          <label className="block text-sm font-medium">Name<input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder="Thursday install, Opening script vs. Pea Ridge" autoFocus /></label>
+          <h2>Add a Script</h2>
+          <label className="block text-sm font-medium">Name<input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder="e.g. Thursday install, Opening script vs. Pea Ridge" autoFocus /></label>
           <div className="grid gap-3 sm:grid-cols-3">
-            <label className="text-sm font-medium">For a practice (optional)<select className={inputCls} value={practiceId} onChange={(e) => setPracticeId(e.target.value)}><option value="">None</option>{practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
-            <label className="text-sm font-medium">For a game (optional)<select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)}><option value="">None</option>{games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
+            <label className="text-sm font-medium">For a Practice (optional)<select className={inputCls} value={practiceId} onChange={(e) => setPracticeId(e.target.value)}><option value="">None</option>{practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
+            <label className="text-sm font-medium">For a Game (optional)<select className={inputCls} value={gameId} onChange={(e) => setGameId(e.target.value)}><option value="">None</option>{games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
             <label className="text-sm font-medium">Start from (optional)<select className={inputCls} value={copyFrom} onChange={(e) => setCopyFrom(e.target.value)}><option value="">A blank script</option>{scripts.map((s) => <option key={s.id} value={s.id}>{s.name} · {s.rows.length} plays</option>)}</select></label>
           </div>
           <div className="flex items-center gap-2">
@@ -77,7 +78,7 @@ export function ScriptsView({ scripts, practices, games, initial }: { scripts: S
             <li key={s.id} className="border-b border-neutral-200 last:border-0">
               <Link href={`/scripts/${s.id}`} className="flex min-h-16 items-center gap-3 px-4 py-2 hover:bg-wash">
                 <span className="min-w-0 flex-1"><span className="font-display block text-xl font-semibold uppercase tracking-wide">{s.name}</span><span className="block text-sm text-neutral-600">{s.rows.length} plays{label(s) ? ` · ${label(s)}` : ""} · {prettyDate(s.updated.slice(0, 10))}</span></span>
-                <span aria-hidden className="text-neutral-400">›</span>
+                <Icon name="chevron-right" className="text-neutral-400" />
               </Link>
             </li>
           ))}

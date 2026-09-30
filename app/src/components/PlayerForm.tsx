@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { createPlayer, deletePlayer, mergePlayers, updatePlayer } from "@/app/roster/admin-actions";
 import { numberClashes } from "@/lib/roster-admin";
-import { btnDanger, btnPlain, inputCls } from "./ui";
+import { btnDanger, btnPlain, btnPrimary, inputCls } from "./ui";
 import type { Player } from "@/lib/types";
+import { Icon } from "./Icon";
 
 const input = inputCls;
 const btn = btnPlain;
@@ -39,16 +40,16 @@ export function PlayerForm({ player, players, onDone, team: teamProp }: { player
     <div className="space-y-4">
       <div className={player ? "space-y-4 rounded-xl bg-white p-4 shadow-sm" : "space-y-4"}>
         <div className="grid gap-3 sm:grid-cols-2">
-          <label className="text-sm font-medium">First name<input className={input} value={first} onChange={(e) => setFirst(e.target.value)} autoComplete="off" /></label>
-          <label className="text-sm font-medium">Last name<input className={input} value={last} onChange={(e) => setLast(e.target.value)} autoComplete="off" /></label>
+          <label className="text-sm font-medium">First Name<input className={input} value={first} onChange={(e) => setFirst(e.target.value)} autoComplete="off" /></label>
+          <label className="text-sm font-medium">Last Name<input className={input} value={last} onChange={(e) => setLast(e.target.value)} autoComplete="off" /></label>
           <label className="text-sm font-medium">Grade
             <select className={input} value={grade} onChange={(e) => setGrade(Number(e.target.value))}>{(team === "hs" ? [9, 10, 11, 12] : [8, 9]).map((g) => <option key={g} value={g}>{g}th</option>)}</select>
           </label>
-          <label className="text-sm font-medium">Jersey number<input className={input} value={number} onChange={(e) => setNumber(e.target.value)} inputMode="numeric" /></label>
+          <label className="text-sm font-medium">Jersey Number<input className={input} value={number} onChange={(e) => setNumber(e.target.value)} inputMode="numeric" /></label>
           {team === "hs" && (
             <>
-              <label className="text-sm font-medium">Position<input className={input} value={position} onChange={(e) => setPosition(e.target.value)} placeholder="WR/CB" maxLength={20} /></label>
-              <label className="text-sm font-medium">Height<input className={input} value={height} onChange={(e) => setHeight(e.target.value)} placeholder="5'10" maxLength={10} /></label>
+              <label className="text-sm font-medium">Position<input className={input} value={position} onChange={(e) => setPosition(e.target.value)} placeholder="e.g. WR/CB" maxLength={20} /></label>
+              <label className="text-sm font-medium">Height<input className={input} value={height} onChange={(e) => setHeight(e.target.value)} placeholder="e.g. 5'10" maxLength={10} /></label>
               <label className="text-sm font-medium">Weight (lbs)<input className={input} value={weight} onChange={(e) => setWeight(e.target.value)} inputMode="numeric" /></label>
             </>
           )}
@@ -65,7 +66,7 @@ export function PlayerForm({ player, players, onDone, team: teamProp }: { player
         <div className="flex flex-wrap items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
           {player ? <Link href={back} className={btn}>Cancel</Link> : <button className={btn} onClick={onDone}>Cancel</button>}
-          <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : player ? "Save" : "Add player"}</button>
+          <button onClick={save} disabled={pending} className={btnPrimary}>{pending ? "Saving…" : player ? <><Icon name="check" />Save</> : <><Icon name="plus" />Add Player</>}</button>
         </div>
       </div>
 

@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import type { GameLink } from "@/lib/db-types";
 import { btnDanger, btnPlain, inputCls } from "./ui";
+import { Icon } from "./Icon";
 
 /** A list of named web links that can be opened, added to and removed. Used for film, documents and schedule pages. */
 export function LinksEditor({ initial, save, title, hint, empty }: { initial: GameLink[]; save: (links: GameLink[]) => Promise<{ error: string }>; title: string; hint: string; empty: string }) {
@@ -28,7 +29,7 @@ export function LinksEditor({ initial, save, title, hint, empty }: { initial: Ga
           {links.map((l, i) => (
             <li key={`${l.url}-${i}`} className="flex items-center gap-2">
               <a href={l.url} target="_blank" rel="noopener noreferrer" className="flex min-h-12 min-w-0 flex-1 items-center gap-2 font-medium text-green-600 underline">
-                <span className="truncate">{l.label}</span><span aria-hidden className="text-xs">↗</span>
+                <span className="truncate">{l.label}</span><Icon name="external" size={14} />
               </a>
               <button className={btnDanger} disabled={pending} aria-label={`Remove ${l.label}`} onClick={() => commit(links.filter((_, j) => j !== i))}>Remove</button>
             </li>

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PrintButton } from "@/components/PrintButton";
 import { getScript } from "@/lib/db";
 import { situation } from "@/lib/scripts";
+import { Icon } from "@/components/Icon";
 
 export default async function ScriptPrint({ params }: PageProps<"/scripts/[id]/print">) {
   await connection();
@@ -14,7 +15,7 @@ export default async function ScriptPrint({ params }: PageProps<"/scripts/[id]/p
   return (
     <div className="space-y-3">
       <div className="no-print flex items-center gap-3">
-        <Link href={`/scripts/${script.id}`} className="text-green-600 underline">Back</Link>
+        <Link href={`/scripts/${script.id}`} className="text-green-600 underline"><Icon name="arrow-left" />Back</Link>
         <PrintButton />
         <span className="text-sm text-neutral-500">Landscape, letter. Choose “Save as PDF” to share.</span>
       </div>

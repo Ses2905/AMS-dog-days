@@ -5,6 +5,8 @@ import { addPlay, deletePlay, setFinalFromLog } from "@/app/games/plays-actions"
 import type { Game } from "@/lib/db-types";
 import { PLAY_TYPES, playLabel, QUARTERS, quarterLabel, totals, type Play } from "@/lib/plays";
 import { btnDanger, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { Icon } from "./Icon";
+import { Pill } from "./Pill";
 
 type Roster = { id: string; label: string }[];
 
@@ -36,7 +38,7 @@ export function GameScoring({ game, plays, roster }: { game: Game; plays: Play[]
         <h2>Scoring</h2>
         <p className="font-display text-3xl font-semibold tabular-nums">Alma {t.us} <span className="text-neutral-400">–</span> {t.them} {game.opponent}</p>
         {plays.length > 0 && !matchesFinal && <button className={`${btnOutline} ml-auto`} disabled={pending} onClick={finalize}>Set as Final Score</button>}
-        {matchesFinal && <span className="ml-auto rounded-full bg-green-900 px-3 py-1 text-sm font-semibold text-white">Final</span>}
+        {matchesFinal && <Pill tone="solid" className="ml-auto">Final</Pill>}
       </div>
 
       {plays.length === 0 ? <p className="text-sm text-neutral-600">Log each score as it happens, or after the game from the film. Season leaders build from these.</p> : (
@@ -61,17 +63,17 @@ export function GameScoring({ game, plays, roster }: { game: Game; plays: Play[]
           <label className="text-sm font-medium">Quarter<select className={inputCls} value={quarter} onChange={(e) => setQuarter(Number(e.target.value))}>{QUARTERS.map((q) => <option key={q} value={q}>{q === 5 ? "Overtime" : `Quarter ${q}`}</option>)}</select></label>
           <label className="text-sm font-medium">What<select className={inputCls} value={type} onChange={(e) => setType(e.target.value)}>{PLAY_TYPES.map((p) => <option key={p.value} value={p.value}>{p.label} (+{p.points})</option>)}</select></label>
           {team === "us" && (
-            <label className="text-sm font-medium">Who scored<select className={inputCls} value={playerId} onChange={(e) => setPlayerId(e.target.value)}><option value="">Not on the roster</option>{roster.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}</select></label>
+            <label className="text-sm font-medium">Who Scored<select className={inputCls} value={playerId} onChange={(e) => setPlayerId(e.target.value)}><option value="">Not on the roster</option>{roster.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}</select></label>
           )}
           {(team === "them" || !playerId) && (
-            <label className="text-sm font-medium">{team === "us" ? "Name (if not on the roster)" : "Name (optional)"}<input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} maxLength={60} placeholder={team === "us" ? "JV #22 Smith" : "#5"} /></label>
+            <label className="text-sm font-medium">{team === "us" ? "Name (if not on the roster)" : "Name (optional)"}<input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} maxLength={60} placeholder={team === "us" ? "e.g. JV #22 Smith" : "#5"} /></label>
           )}
-          <label className="text-sm font-medium sm:col-span-2">Details (optional)<input className={inputCls} value={detail} onChange={(e) => setDetail(e.target.value)} maxLength={200} placeholder="35-yard pass from #7" /></label>
+          <label className="text-sm font-medium sm:col-span-2">Details (optional)<input className={inputCls} value={detail} onChange={(e) => setDetail(e.target.value)} maxLength={200} placeholder="e.g. 35-yard pass from #7" /></label>
         </div>
         <div className="flex items-center gap-2">
           <p role="alert" className="min-w-0 flex-1 text-sm text-red-700">{error}</p>
           <button className={btnPlain} disabled={pending} onClick={() => { setTeam("us"); setQuarter(1); setType("touchdown"); setPlayerId(""); setName(""); setDetail(""); }}>Reset</button>
-          <button className={btnPrimary} disabled={pending} onClick={add}>{pending ? "Saving…" : "Add Score"}</button>
+          <button className={btnPrimary} disabled={pending} onClick={add}>{pending ? "Saving…" : <><Icon name="plus" />Add Score</>}</button>
         </div>
       </div>
     </section>

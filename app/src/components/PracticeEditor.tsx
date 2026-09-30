@@ -6,11 +6,13 @@ import { deletePractice, savePractice } from "@/app/practice/[id]/edit/actions";
 import { startTimes, type EditPayload } from "@/lib/practice-edit";
 import { addMinutes } from "@/lib/time";
 import type { Practice } from "@/lib/types";
+import { Icon } from "./Icon";
+import { btnIcon, btnPrimary, chip } from "./ui";
 
 type Draft = { key: number; mode: "span" | "lanes"; span: string; lanes: Record<string, string>; periods: number; flex: boolean };
 
 const input = "mt-1 min-h-12 w-full rounded-lg border border-neutral-300 bg-white px-3 text-base";
-const btn = "inline-flex min-h-12 min-w-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-3 text-sm font-medium disabled:opacity-40";
+const btn = btnIcon;
 
 export function PracticeEditor({ practice, directory = [] }: { practice: Practice; directory?: string[] }) {
   const [start, setStart] = useState(practice.blocks[0]?.start ?? "");
@@ -65,11 +67,11 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
   return (
     <div className="space-y-6 pb-28">
       <section className="grid gap-3 rounded-xl bg-white p-4 shadow-sm sm:grid-cols-2">
-        <label className="text-sm font-medium">Practice starts (first period)<input className={input} value={start} onChange={(e) => setStart(e.target.value)} inputMode="numeric" placeholder="6:55" /></label>
+        <label className="text-sm font-medium">Practice Starts (first period)<input className={input} value={start} onChange={(e) => setStart(e.target.value)} inputMode="numeric" placeholder="e.g. 6:55" /></label>
         <label className="text-sm font-medium">Dress<input className={input} value={dress} onChange={(e) => setDress(e.target.value)} /></label>
         <label className="text-sm font-medium">Lift<input className={input} value={lift} onChange={(e) => setLift(e.target.value)} /></label>
         <label className="text-sm font-medium">Opponent<input className={input} value={opponent} onChange={(e) => setOpponent(e.target.value)} /></label>
-        <label className="text-sm font-medium">O/D meeting<input className={input} value={odMeeting} onChange={(e) => setOdMeeting(e.target.value)} /></label>
+        <label className="text-sm font-medium">O/D Meeting<input className={input} value={odMeeting} onChange={(e) => setOdMeeting(e.target.value)} /></label>
         <label className="text-sm font-medium">Situations<input className={input} value={situations} onChange={(e) => setSituations(e.target.value)} /></label>
       </section>
 
@@ -79,7 +81,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
           {coaches.map((c) => (
             <li key={c} className="flex items-center gap-1 rounded-full bg-wash py-1 pl-3 pr-1 text-sm">
               {c}
-              <button aria-label={`Remove ${c}`} className="min-h-9 min-w-9 rounded-full text-lg leading-none hover:bg-white" onClick={() => setCoaches(coaches.filter((x) => x !== c))}>×</button>
+              <button aria-label={`Remove ${c}`} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full hover:bg-white" onClick={() => setCoaches(coaches.filter((x) => x !== c))}><Icon name="x" size={16} /></button>
             </li>
           ))}
         </ul>
@@ -87,13 +89,13 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="text-neutral-600">Add from your coaches:</span>
             {directory.filter((n) => !coaches.includes(n)).map((n) => (
-              <button key={n} className="min-h-10 rounded-full border border-neutral-300 bg-white px-3 font-medium" onClick={() => setCoaches([...coaches, n])}>+ {n}</button>
+              <button key={n} className={chip(false)} onClick={() => setCoaches([...coaches, n])}><Icon name="plus" size={14} />{n}</button>
             ))}
           </div>
         )}
         <div className="flex gap-2">
           <input className={`${input} mt-0`} value={newCoach} onChange={(e) => setNewCoach(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCoach())} placeholder="Add a coach" />
-          <button className={btn} onClick={addCoach}>Add</button>
+          <button className={btn} onClick={addCoach}><Icon name="plus" />Add</button>
         </div>
       </section>
 
@@ -107,8 +109,8 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
                 <span className="font-display text-base font-semibold tabular-nums">{starts[i]} to {end}</span>
                 <span className="text-sm text-neutral-500">{b.periods * 5} min</span>
                 <div className="ml-auto flex gap-1">
-                  <button className={btn} aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}>↑</button>
-                  <button className={btn} aria-label="Move down" disabled={i === blocks.length - 1} onClick={() => move(i, 1)}>↓</button>
+                  <button className={btn} aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}><Icon name="arrow-up" /></button>
+                  <button className={btn} aria-label="Move down" disabled={i === blocks.length - 1} onClick={() => move(i, 1)}><Icon name="arrow-down" /></button>
                   <button className={btn} aria-label="Delete period" onClick={() => setBlocks(blocks.filter((_, j) => j !== i))}>Delete</button>
                 </div>
               </div>
@@ -129,7 +131,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
               </div>
 
               {b.mode === "span" ? (
-                <input className={`${input} mt-0`} value={b.span} onChange={(e) => patch(i, { span: e.target.value })} placeholder="Break, Halftime, Team O…" />
+                <input className={`${input} mt-0`} value={b.span} onChange={(e) => patch(i, { span: e.target.value })} placeholder="e.g. Break, Halftime, Team O…" />
               ) : (
                 <div className="grid gap-2 sm:grid-cols-2">
                   {coaches.map((c) => (
@@ -139,11 +141,11 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
                   ))}
                 </div>
               )}
-              <button className="text-sm text-green-600 underline" onClick={() => addBlock(i)}>+ Add a period after this one</button>
+              <button className="text-sm text-green-600 underline" onClick={() => addBlock(i)}><Icon name="plus" />Add a Period After This One</button>
             </div>
           );
         })}
-        {blocks.length === 0 && <button className={btn} onClick={() => addBlock(-1)}>+ Add a period</button>}
+        {blocks.length === 0 && <button className={btn} onClick={() => addBlock(-1)}><Icon name="plus" />Add a Period</button>}
       </section>
 
       <section className="rounded-xl bg-white p-4 shadow-sm">
@@ -165,7 +167,7 @@ export function PracticeEditor({ practice, directory = [] }: { practice: Practic
             Delete
           </button>
           <Link href={`/practice/${practice.id}`} className={btn}>Cancel</Link>
-          <button onClick={save} disabled={pending} className="min-h-12 rounded-lg bg-green-900 px-6 font-semibold text-white disabled:opacity-60">{pending ? "Saving…" : "Save"}</button>
+          <button onClick={save} disabled={pending} className={btnPrimary}>{pending ? "Saving…" : <><Icon name="check" />Save</>}</button>
         </div>
       </div>
     </div>

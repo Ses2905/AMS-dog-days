@@ -6,11 +6,12 @@ import { useState, useTransition } from "react";
 import { deleteScript, saveScript, setRowRan } from "@/app/scripts/actions";
 import { blankRow, duplicateRow, groupBySection, moveRow, rowSummary, SECTIONS, situation, type Script, type ScriptRow } from "@/lib/scripts";
 import { PageHeader } from "./PageHeader";
-import { btnDanger, btnOutline, btnPlain, btnPrimary, inputCls } from "./ui";
+import { btnDanger, btnOutline, btnPlain, btnPrimary, chip, inputCls } from "./ui";
+import { Icon } from "./Icon";
 
 type Choice = { id: string; label: string };
 const SECTION_COLOR: Record<string, string> = { "Opening Script": "bg-gold-500 text-green-900", "Third Down": "bg-green-900 text-white", "Red Zone": "bg-red-700 text-white", "Goal Line": "bg-red-700 text-white", "Two Minute": "bg-blue-800 text-white", "Four Minute": "bg-blue-800 text-white" };
-const chip = (section: string) => SECTION_COLOR[section] ?? "bg-neutral-200 text-neutral-800";
+const sectionChip = (section: string) => SECTION_COLOR[section] ?? "bg-neutral-200 text-neutral-800";
 
 function Field({ label, value, onChange, max, placeholder }: { label: string; value: string; onChange: (v: string) => void; max: number; placeholder?: string }) {
   return <label className="text-sm font-medium">{label}<input className={inputCls} value={value} maxLength={max} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} /></label>;
@@ -21,13 +22,13 @@ function RowEditor({ row, set }: { row: ScriptRow; set: (patch: Partial<ScriptRo
     <div className="grid gap-3 sm:grid-cols-3">
       <label className="text-sm font-medium">Section<select className={inputCls} value={row.section} onChange={(e) => set({ section: e.target.value })}><option value="">None</option>{SECTIONS.map((s) => <option key={s}>{s}</option>)}</select></label>
       <label className="text-sm font-medium">Down<select className={inputCls} value={row.down ?? ""} onChange={(e) => set({ down: e.target.value ? Number(e.target.value) : null })}><option value="">Any</option>{[1, 2, 3, 4].map((d) => <option key={d} value={d}>{d}</option>)}</select></label>
-      <Field label="Distance" value={row.distance} onChange={(v) => set({ distance: v })} max={20} placeholder="6, 1-3, Long" />
+      <Field label="Distance" value={row.distance} onChange={(v) => set({ distance: v })} max={20} placeholder="e.g. 6, 1-3, Long" />
       <label className="text-sm font-medium">Hash<select className={inputCls} value={row.hash} onChange={(e) => set({ hash: e.target.value as ScriptRow["hash"] })}><option value="">Any</option><option value="L">Left</option><option value="M">Middle</option><option value="R">Right</option></select></label>
-      <Field label="Personnel" value={row.personnel} onChange={(v) => set({ personnel: v })} max={40} placeholder="11, 21, 12" />
-      <Field label="Formation" value={row.formation} onChange={(v) => set({ formation: v })} max={60} placeholder="Trips Right" />
+      <Field label="Personnel" value={row.personnel} onChange={(v) => set({ personnel: v })} max={40} placeholder="e.g. 11, 21, 12" />
+      <Field label="Formation" value={row.formation} onChange={(v) => set({ formation: v })} max={60} placeholder="e.g. Trips Right" />
       <Field label="Motion" value={row.motion} onChange={(v) => set({ motion: v })} max={60} />
-      <div className="sm:col-span-2"><Field label="Play" value={row.play} onChange={(v) => set({ play: v })} max={120} placeholder="Zone Read Left" /></div>
-      <Field label="Defense / scout look" value={row.defense} onChange={(v) => set({ defense: v })} max={60} placeholder="Cover 3" />
+      <div className="sm:col-span-2"><Field label="Play" value={row.play} onChange={(v) => set({ play: v })} max={120} placeholder="e.g. Zone Read Left" /></div>
+      <Field label="Defense / scout look" value={row.defense} onChange={(v) => set({ defense: v })} max={60} placeholder="e.g. Cover 3" />
       <div className="sm:col-span-3"><Field label="Emphasis / notes" value={row.notes} onChange={(v) => set({ notes: v })} max={300} /></div>
     </div>
   );
@@ -59,29 +60,29 @@ export function ScriptEditor({ script, practices, games }: { script: Script; pra
   const add = () => { const section = rows.at(-1)?.section ?? ""; edit([...rows, blankRow(section)]); setOpen(rows.length); setFilter("all"); };
 
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4 pb-16">
       <PageHeader title={name || "Script"} subtitle={`${rows.length} plays`}>
-        <Link href="/scripts" className={btnOutline}>All scripts</Link>
-        <Link href={`/scripts/${script.id}?view=sideline`} className={btnOutline}>Sideline view</Link>
-        <Link href={`/scripts/${script.id}/print`} className={btnPrimary}>Print / PDF</Link>
+        <Link href="/scripts" className={btnOutline}><Icon name="arrow-left" />All Scripts</Link>
+        <Link href={`/scripts/${script.id}?view=sideline`} className={btnOutline}><Icon name="eye" />Sideline View</Link>
+        <Link href={`/scripts/${script.id}/print`} className={btnPrimary}><Icon name="printer" />Print / PDF</Link>
       </PageHeader>
 
       <section className="grid gap-3 rounded-xl bg-white p-4 shadow-sm sm:grid-cols-3">
         <label className="text-sm font-medium sm:col-span-3">Name<input className={inputCls} value={name} maxLength={80} onChange={(e) => { setName(e.target.value); setDirty(true); }} /></label>
-        <label className="text-sm font-medium">For a practice<select className={inputCls} value={practiceId} onChange={(e) => { setPracticeId(e.target.value); setDirty(true); }}><option value="">None</option>{practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
-        <label className="text-sm font-medium">For a game<select className={inputCls} value={gameId} onChange={(e) => { setGameId(e.target.value); setDirty(true); }}><option value="">None</option>{games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
+        <label className="text-sm font-medium">For a Practice<select className={inputCls} value={practiceId} onChange={(e) => { setPracticeId(e.target.value); setDirty(true); }}><option value="">None</option>{practices.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</select></label>
+        <label className="text-sm font-medium">For a Game<select className={inputCls} value={gameId} onChange={(e) => { setGameId(e.target.value); setDirty(true); }}><option value="">None</option>{games.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
       </section>
 
       {sections.length > 1 && (
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by section">
-          {["all", ...sections].map((s) => <button key={s} aria-pressed={filter === s} onClick={() => setFilter(s)} className={`min-h-10 rounded-full px-4 text-sm font-semibold ${filter === s ? "bg-green-900 text-white" : "border border-neutral-300 bg-white"}`}>{s === "all" ? "All" : s}</button>)}
+          {["all", ...sections].map((s) => <button key={s} aria-pressed={filter === s} onClick={() => setFilter(s)} className={chip(filter === s)}>{s === "all" ? "All" : s}</button>)}
         </div>
       )}
 
       {rows.length === 0 && <p className="rounded-xl bg-white p-4 text-neutral-600 shadow-sm">No plays yet. Add the first one.</p>}
       {groups.map((g) => (
         <section key={g.section} className="overflow-hidden rounded-xl bg-white shadow-sm">
-          <h2 className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2 text-lg"><span className={`rounded-full px-3 py-0.5 text-sm font-semibold ${chip(g.section)}`}>{g.section}</span><span className="text-sm font-normal text-neutral-600">{g.items.length}</span></h2>
+          <h2 className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2 text-lg"><span className={`rounded-full px-3 py-0.5 text-sm font-semibold ${sectionChip(g.section)}`}>{g.section}</span><span className="text-sm font-normal text-neutral-600">{g.items.length}</span></h2>
           <ul>
             {g.items.map(({ row, index }) => (
               <li key={index} className="border-b border-neutral-200 last:border-0">
@@ -106,14 +107,14 @@ export function ScriptEditor({ script, practices, games }: { script: Script; pra
         </section>
       ))}
 
-      <button className={btnOutline} onClick={add}>Add play</button>
+      <button className={btnOutline} onClick={add}><Icon name="plus" />Add Play</button>
 
-      <div className="fixed inset-x-0 bottom-0 z-10 border-t border-neutral-300 bg-white/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur no-print">
+      <div className="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 md:bottom-0 border-t border-neutral-300 bg-white/95 px-4 pb-3 pt-3 backdrop-blur no-print">
         <div className="mx-auto flex max-w-6xl items-center gap-3">
           <p role="alert" className="min-w-0 flex-1 truncate text-sm text-red-700">{error || (saved ? "" : dirty ? "Unsaved changes" : "")}</p>
           {saved && !error && <span className="text-sm font-semibold text-green-900">Saved</span>}
-          <button className={btnDanger} disabled={pending} onClick={remove}>Delete script</button>
-          <button className={btnPrimary} disabled={pending || !dirty} onClick={save}>{pending ? "Saving…" : "Save"}</button>
+          <button className={btnDanger} disabled={pending} onClick={remove}><Icon name="trash" />Delete Script</button>
+          <button className={btnPrimary} disabled={pending || !dirty} onClick={save}>{pending ? "Saving…" : <><Icon name="check" />Save</>}</button>
         </div>
       </div>
     </div>
@@ -134,17 +135,17 @@ export function ScriptSideline({ script }: { script: Script }) {
   return (
     <div className="space-y-4">
       <PageHeader title={script.name} subtitle={`${ran.filter(Boolean).length} of ${script.rows.length} run`}>
-        <Link href={`/scripts/${script.id}`} className={btnOutline}>Back to editing</Link>
+        <Link href={`/scripts/${script.id}`} className={btnOutline}><Icon name="arrow-left" />Back to Editing</Link>
       </PageHeader>
       {error && <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
       {groups.map((g) => (
         <section key={g.section} className="space-y-2">
-          <h2 className="flex items-center gap-2"><span className={`rounded-full px-3 py-0.5 text-sm font-semibold ${chip(g.section)}`}>{g.section}</span></h2>
+          <h2 className="flex items-center gap-2"><span className={`rounded-full px-3 py-0.5 text-sm font-semibold ${sectionChip(g.section)}`}>{g.section}</span></h2>
           <ul className="space-y-2">
             {g.items.map(({ row, index }) => (
               <li key={index}>
                 <button onClick={() => toggle(index)} aria-pressed={ran[index]} className={`flex min-h-20 w-full items-center gap-4 rounded-xl p-4 text-left shadow-sm ${ran[index] ? "bg-neutral-200 text-neutral-500" : "bg-white"}`}>
-                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-lg font-bold ${ran[index] ? "border-green-900 bg-green-900 text-white" : "border-neutral-400"}`}>{ran[index] ? "✓" : ""}</span>
+                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-lg font-bold ${ran[index] ? "border-green-900 bg-green-900 text-white" : "border-neutral-400"}`}>{ran[index] ? <Icon name="check" size={20} /> : null}</span>
                   <span className="min-w-0 flex-1">
                     <span className="font-display block text-2xl font-semibold uppercase leading-tight tracking-wide">{index + 1}. {row.play || row.formation}</span>
                     <span className="block text-base">{[situation(row), row.formation && row.play ? row.formation : "", row.motion && `Motion ${row.motion}`, row.personnel && `Pers ${row.personnel}`, row.hash && `Hash ${row.hash}`].filter(Boolean).join(" · ")}</span>

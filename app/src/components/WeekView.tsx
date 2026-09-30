@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { prettyDate } from "@/lib/time";
 import { PageHeader } from "./PageHeader";
-import { btnOutline, btnPlain, btnPrimary } from "./ui";
+import { btnIcon, btnOutline, btnPlain, btnPrimary } from "./ui";
 import { mondayOf, shiftWeek, slotStatus, suggestSource, weekSlots, type SlotStatus } from "@/lib/week";
 import type { Practice } from "@/lib/types";
+import { Icon } from "./Icon";
+import { Pill, type PillTone } from "./Pill";
 
 const LABEL: Record<SlotStatus, string> = { done: "Done", "in-progress": "In progress", "later-today": "Later today", planned: "Planned", "needs-plan": "Needs a plan", "no-plan": "No plan on file" };
-const STYLE: Record<SlotStatus, string> = {
-  done: "bg-green-600/10 text-green-900",
-  "in-progress": "bg-gold-500 text-green-900",
-  "later-today": "bg-neutral-200 text-neutral-800",
-  planned: "bg-neutral-200 text-neutral-800",
-  "needs-plan": "bg-red-100 text-red-800",
-  "no-plan": "bg-neutral-100 text-neutral-500",
-};
+const TONE: Record<SlotStatus, PillTone> = { done: "green", "in-progress": "gold", "later-today": "grey", planned: "grey", "needs-plan": "red", "no-plan": "quiet" };
 
 export function WeekView({ practices, monday, now }: { practices: Practice[]; monday: string; now: { today: string; minutes: number } }) {
   const days = weekSlots(monday, practices);
@@ -25,15 +20,15 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
   return (
     <div className="space-y-5">
       <PageHeader subtitle="Plans, scripts and attendance for each session" title={`Week of ${prettyDate(monday).replace(/^\w+, /, "")}`}>
-        <Link href={`/calendar?date=${monday}`} className={btnOutline}>Calendar</Link>
+        <Link href={`/calendar?date=${monday}`} className={btnOutline}><Icon name="calendar" />Calendar</Link>
         <Link href="/scripts" className={btnOutline}>Scripts</Link>
-        <Link href="/practice/all" className={btnOutline}>All practices</Link>
-        <Link href="/practice/new" className={btnPrimary}>Plan a practice</Link>
+        <Link href="/practice/all" className={btnOutline}><Icon name="arrow-left" />All Practices</Link>
+        <Link href="/practice/new" className={btnPrimary}><Icon name="plus" />Plan a Practice</Link>
       </PageHeader>
       <div className="flex gap-2">
-        <Link href={`/practice?week=${shiftWeek(monday, -1)}`} className={`${btnPlain} min-w-12`} aria-label="Previous week">←</Link>
-        {monday !== thisMonday && <Link href="/practice" className={btnPlain}>This week</Link>}
-        <Link href={`/practice?week=${shiftWeek(monday, 1)}`} className={`${btnPlain} min-w-12`} aria-label="Next week">→</Link>
+        <Link href={`/practice?week=${shiftWeek(monday, -1)}`} className={btnIcon} aria-label="Previous week"><Icon name="chevron-left" /></Link>
+        {monday !== thisMonday && <Link href="/practice" className={btnPlain}>This Week</Link>}
+        <Link href={`/practice?week=${shiftWeek(monday, 1)}`} className={btnIcon} aria-label="Next week"><Icon name="chevron-right" /></Link>
       </div>
 
       <p className="text-sm text-neutral-700">
@@ -47,7 +42,7 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
         <section key={d.date} className="overflow-hidden rounded-xl bg-white shadow-sm">
           <h2 className="flex items-center gap-2 border-b border-neutral-200 px-4 py-2 font-semibold">
             {prettyDate(d.date)}
-            {d.date === now.today && <span className="rounded-full bg-gold-500 px-2 py-0.5 text-xs font-semibold text-green-900">Today</span>}
+            {d.date === now.today && <Pill tone="gold">Today</Pill>}
           </h2>
           <ul className="divide-y divide-neutral-200">
             {d.slots.map((s) => {
@@ -59,7 +54,7 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
                   <div className="min-w-0 flex-1 space-y-1">
                     <p className="flex flex-wrap items-center gap-2">
                       <span className="font-medium">{s.session}</span>
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STYLE[status]}`}>{LABEL[status]}</span>
+                      <Pill tone={TONE[status]}>{LABEL[status]}</Pill>
                       {s.practice?.imported && <span className="rounded bg-[#f8f4e3] px-1.5 py-0.5 text-xs text-neutral-700">review</span>}
                     </p>
                     <p className="text-sm text-neutral-600">
@@ -67,9 +62,9 @@ export function WeekView({ practices, monday, now }: { practices: Practice[]; mo
                     </p>
                   </div>
                   {s.practice ? (
-                    <Link href={`/practice/${s.practice.id}`} className="inline-flex min-h-12 items-center rounded-lg border border-green-900 px-4 text-sm font-semibold text-green-900">Open</Link>
+                    <Link href={`/practice/${s.practice.id}`} className={btnOutline}>Open<Icon name="chevron-right" /></Link>
                   ) : (
-                    <Link href={plan} className={`inline-flex min-h-12 items-center rounded-lg px-4 text-sm font-semibold ${status === "needs-plan" ? "bg-green-900 text-white" : "border border-neutral-300"}`}>{status === "needs-plan" ? "Plan it" : "Add"}</Link>
+                    <Link href={plan} className={`inline-flex min-h-12 items-center rounded-lg px-4 text-sm font-semibold ${status === "needs-plan" ? "bg-green-900 text-white" : "border border-neutral-300"}`}>{status === "needs-plan" ? "Plan It" : <><Icon name="plus" />Add</>}</Link>
                   )}
                 </li>
               );

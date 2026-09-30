@@ -8,6 +8,7 @@ import type { Practice } from "@/lib/types";
 import { ListToolbar } from "./ListToolbar";
 import { PageHeader } from "./PageHeader";
 import { btnOutline, btnPrimary } from "./ui";
+import { Icon } from "./Icon";
 
 const SORTS: { value: PracticeSort; label: string }[] = [{ value: "newest", label: "Newest first" }, { value: "oldest", label: "Oldest first" }];
 
@@ -21,8 +22,8 @@ export function PracticeListView({ practices }: { practices: Practice[] }) {
   return (
     <div className="space-y-4">
       <PageHeader title={`All practices · ${practices.length}`}>
-        <Link href="/practice" className={btnOutline}>Week view</Link>
-        <Link href="/practice/new" className={btnPrimary}>Plan a practice</Link>
+        <Link href="/practice" className={btnOutline}><Icon name="arrow-left" />Week View</Link>
+        <Link href="/practice/new" className={btnPrimary}><Icon name="plus" />Plan a Practice</Link>
       </PageHeader>
 
       <ListToolbar

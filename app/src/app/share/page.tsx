@@ -18,7 +18,7 @@ export default async function SharePage({ searchParams }: PageProps<"/share">) {
   const next = nextGame(games, nowInSchool().today);
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <PageHeader title="Save this link" />
+      <PageHeader title="Save This Link" />
       <SharedLink
         initialUrl={url} initialLabel={title.slice(0, 60)}
         games={[...games].sort((a, b) => b.date.localeCompare(a.date)).map((g) => ({ id: g.id, label: `${vsLabel(g)} · ${prettyDate(g.date)}` }))}
