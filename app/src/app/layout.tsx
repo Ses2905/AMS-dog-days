@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 import { OfflineSync } from "@/components/OfflineSync";
+import { OutboxSync } from "@/components/OutboxSync";
 import { SiteHeader } from "@/components/SiteHeader";
 import { signOut } from "./login/actions";
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full font-sans">
         <SiteHeader signOut={signOut} />
         <OfflineSync />
+        <OutboxSync />
         <main className="mx-auto max-w-6xl px-4 pb-28 pt-5 sm:pt-8 md:pb-10">{children}</main>
       </body>
     </html>

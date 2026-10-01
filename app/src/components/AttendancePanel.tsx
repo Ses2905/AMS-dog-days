@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useSyncExternalStore, useTransition } from "react";
 import { markEveryonePresent, setAttendance } from "@/app/practice/[id]/attendance-actions";
 import { MARKS, MARK_LABEL, tally, type Mark } from "@/lib/attendance";
 import { statusOn, STATUS_LABEL } from "@/lib/availability";
+import { withPending } from "@/lib/outbox";
+import { pendingFrom, pendingTap, queuePending, readOutboxRaw, subscribeOutbox } from "@/lib/outbox-store";
 import type { Player } from "@/lib/types";
 import { btnOutline, chip } from "./ui";
 
@@ -11,7 +13,9 @@ const ON: Record<Mark, string> = { present: "bg-green-900 text-white", late: "bg
 
 /** Tap a mark next to a name. Each tap saves on its own, so half-finished attendance is never lost. */
 export function AttendancePanel({ practiceId, date, players, initial }: { practiceId: string; date: string; players: Player[]; initial: Record<string, Mark> }) {
-  const [marks, setMarks] = useState(initial);
+  const [saved, setMarks] = useState(initial);
+  const raw = useSyncExternalStore(subscribeOutbox, readOutboxRaw, () => null);
+  const marks = useMemo(() => withPending(saved, pendingFrom(raw), practiceId), [saved, raw, practiceId]);
   const [error, setError] = useState("");
   const [grade, setGrade] = useState<"all" | 8 | 9>("all");
   const [onlyUnmarked, setOnlyUnmarked] = useState(false);
@@ -22,15 +26,22 @@ export function AttendancePanel({ practiceId, date, players, initial }: { practi
 
   const tap = (p: Player, m: Mark) => {
     const next = marks[p.id] === m ? null : m; // tapping the chosen mark again clears it
-    const before = marks;
+    const before = saved;
     setMarks((cur) => { const c = { ...cur }; if (next) c[p.id] = next; else delete c[p.id]; return c; });
+    const entry = pendingTap(practiceId, p.id, next);
     start(async () => {
-      const r = await setAttendance(practiceId, p.id, next);
-      if (r.error) { setError(r.error); setMarks(before); } else setError("");
+      // No signal at the field: keep the tap on this phone and let OutboxSync send it later.
+      if (!navigator.onLine) { queuePending(entry); setError(""); return; }
+      try {
+        const r = await setAttendance(practiceId, p.id, next);
+        if (r.error) { setError(r.error); setMarks(before); } else setError("");
+      } catch { queuePending(entry); setError(""); }
     });
   };
   const everyone = () => start(async () => {
-    const r = await markEveryonePresent(practiceId);
+    if (!navigator.onLine) { setError("Everyone Present needs a signal. Tap each player instead, or try again when you are back online."); return; }
+    let r: Awaited<ReturnType<typeof markEveryonePresent>>;
+    try { r = await markEveryonePresent(practiceId); } catch { setError("Could not reach the server. Tap each player instead, or try again in a moment."); return; }
     if (r.error) { setError(r.error); return; }
     setError("");
     // Re-read what the server decided by marking the same players locally.

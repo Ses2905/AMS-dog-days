@@ -86,3 +86,7 @@ Add ideas here as they come up. Newest thinking goes at the top of its section.
 ## Week Ahead (built)
 - `/week-ahead` (button on Today): practices with and without plans, games with prep, overdue and due-this-week action items, players not fully available. Saturday and Sunday look at the coming week. Built from existing data, no AI.
 - Later: optional "Draft Week Plan" assistant button that proposes plans for the empty practice slots.
+
+## Offline Attendance (built)
+- Attendance taps made without a signal are kept on the phone and sent when it is back (checked on reconnect and every 30 seconds). The last tap per player wins; entries older than 3 days are dropped. A gold bar says how many are waiting.
+- Not offline yet: Everyone Present, notes, action items, scores, roster edits. Notes and scores need duplicate protection before they can queue safely.
